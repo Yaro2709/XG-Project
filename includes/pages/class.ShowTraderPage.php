@@ -29,7 +29,11 @@ class ShowTraderPage
 			{
 				case 'metal':
 				{
-					if ($_POST['cristal'] <= 0 or $_POST['deut'] <= 0)
+					if ($_POST['cristal'] == 0 && $_POST['deut'] == 0)
+					{
+						message($lang['tr_must_put_something'], "game.php?page=trader",1);
+					}
+					elseif ($_POST['cristal'] < 0 or $_POST['deut'] < 0)
 					{
 						message($lang['tr_only_positive_numbers'], "game.php?page=trader",1);
 					}
@@ -73,7 +77,11 @@ class ShowTraderPage
 				}
 				case 'cristal':
 				{
-					if ($_POST['metal'] <= 0 or $_POST['deut'] <= 0)
+					if ($_POST['metal'] == 0 && $_POST['deut'] == 0)
+					{
+						message($lang['tr_must_put_something'], "game.php?page=trader",1);
+					}
+					elseif ($_POST['metal'] < 0 or $_POST['deut'] < 0)
 					{
 						message($lang['tr_only_positive_numbers'], "game.php?page=trader",1);
 					}
@@ -117,7 +125,11 @@ class ShowTraderPage
 				}
 				case 'deuterium':
 				{
-					if ($_POST['cristal'] <= 0 or $_POST['metal'] <= 0)
+					if ($_POST['cristal'] == 0 && $_POST['metal'] == 0)
+					{
+						message($lang['tr_must_put_something'], "game.php?page=trader",1);
+					}
+					elseif ($_POST['cristal'] < 0 or $_POST['metal'] < 0)
 					{
 						message($lang['tr_only_positive_numbers'], "game.php?page=trader",1);
 					}

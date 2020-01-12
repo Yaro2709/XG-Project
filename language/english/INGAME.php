@@ -379,6 +379,7 @@ $lang['tr_quota_exchange']					= 'Exchange rate';
 $lang['tr_exchange']						= 'Swap';
 $lang['tr_darkmatter_needed']				= 'You need at least <font color="#FF8900">%s of dark matter</font> too visit the dealer.';
 $lang['tr_full_storage']					= 'The %s is full';
+$lang['tr_must_put_something']				= 'You cannot exchange 0 resources';
 
 //----------------------------------------------------------------------------//
 //TECHTREE
