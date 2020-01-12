@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 // SETEADO PARA EVITAR ERRORRES EN VERSION DE PHP MAYORES A 5.3.0
@@ -57,14 +57,13 @@ if ( INSTALL != TRUE )
 	includeLang ( 'INGAME' );
 
 	if ( !isset ( $InLogin ) or $InLogin != TRUE )
-	{		
+	{	
 		include ( XGP_ROOT . 'includes/classes/class.CheckSession.php' );
 
 		$Result        	= new CheckSession();
 		$Result			= $Result->CheckUser ( $IsUserChecked );
 		$IsUserChecked 	= $Result['state'];
 		$user          	= $Result['record'];
-		
 		require ( XGP_ROOT . 'includes/classes/class.SecurePage.php' );
 		SecurePage::run(); 
 

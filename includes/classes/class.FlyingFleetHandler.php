@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 if (!defined('INSIDE'))die(header("location:../../"));
@@ -1884,7 +1884,7 @@ class FlyingFleetHandler
 			if ($FleetRow['fleet_mess'] == 0)
 			{
 				$planet = doquery('SELECT * FROM {{table}} WHERE `galaxy` = '.$FleetRow['fleet_end_galaxy'].' AND `system` = '.$FleetRow['fleet_end_system'].' AND `planet` = '.$FleetRow['fleet_end_planet'].' AND `planet_type` = '.$FleetRow['fleet_end_type'], 'planets', TRUE);
-				$Target = doquery('SELECT id, defence_tech FROM  {{table}} WHERE `galaxy` = '.$FleetRow['fleet_end_galaxy'].' AND  `system` = '.$FleetRow['fleet_end_system'].' AND `planet` =  '.$FleetRow['fleet_end_planet'], 'users', TRUE);
+				$Target= doquery("SELECT id, defence_tech FROM  {{table}} WHERE `id` = '".$planet['id_owner']."'", 'users', true); 
 
 				if ($planet['interceptor_misil'] >= $FleetRow['fleet_amount'])
 				{

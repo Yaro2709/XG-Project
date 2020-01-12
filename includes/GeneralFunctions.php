@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 function unset_vars ( $prefix )
@@ -50,31 +50,14 @@ function update_config ( $config_name, $config_value )
 // DETERMINES IF THE PLAYER IS WEAK
 function is_weak ( $current_points , $other_points )
 {
-	$weak	= NoobsProtection::getInstance();
-
-	if ( $weak->is_weak ( $current_points , $other_points ) )
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+    
+    return NoobsProtection::getInstance()->is_weak ( $current_points , $other_points );
 }
 
 // DETERMINES IF THE PLAYER IS STRONG
 function is_strong ( $current_points , $other_points )
 {
-	$strong	= NoobsProtection::getInstance();
-
-	if ( $strong->is_weak ( $current_points , $other_points ) )
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+	return NoobsProtection::getInstance()->is_strong( $current_points , $other_points );
 }
 
 // DETERMINES IF IS AN EMAIL
