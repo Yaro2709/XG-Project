@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 define('INSIDE'  , TRUE);
@@ -19,7 +19,7 @@ function check_updates()
 {
 	if ( function_exists ( 'file_get_contents' ) )
 	{
-		$last_v 	= file_get_contents ( 'http://xgproyect.xgproyect.net/current.php' );
+		$last_v 	= file_get_contents ( 'http://xgproyect.org/current.php' );
 		$system_v	= read_config ( 'version' );
 
 		return version_compare ( $system_v , $last_v , '<' );

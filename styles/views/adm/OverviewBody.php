@@ -23,9 +23,9 @@ th.lic{border:0px;}</style>
     <tr>
         <th>
         	<br />
-            <a href="http://xgproyect.net/2-10-x-bug-report/" target="_blank">Reporte de bugs (Bug Report)</a>
+            <a href="http://xgproyect.org/2-10-x-bug-report/" target="_blank">Reporte de bugs (Bug Report)</a>
         	<br />
-        	<a href="http://www.xgproyect.net/" target="_blank">XG Proyect {ow_forum}</a>
+        	<a href="http://www.xgproyect.org/" target="_blank">XG Proyect {ow_forum}</a>
         	<br />
             <br />
         </th>

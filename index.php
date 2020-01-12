@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 define('INSIDE'  , TRUE);
@@ -20,10 +20,12 @@ $parse = $lang;
 switch ( ( isset ( $_GET['page'] ) ) )
 {
 	case'lostpassword':
-		function sendnewpassword($mail)
+		function sendnewpassword($_mail)
 		{
 			global $lang;
 
+                        $mail = mysql_real_escape_string($_mail);
+                        
 			$ExistMail = doquery("SELECT `email` FROM {{table}} WHERE `email` = '". $mail ."' LIMIT 1;", 'users', TRUE);
 
 			if (empty($ExistMail['email']))

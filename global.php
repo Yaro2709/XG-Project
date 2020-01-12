@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 // SETEADO PARA EVITAR ERRORRES EN VERSION DE PHP MAYORES A 5.3.0
@@ -33,12 +33,8 @@ if ( filesize ( XGP_ROOT . 'config.php' ) === 0 && ( ( !defined ( 'INSTALL' ) ) 
 	exit ( header ( 'location:' . XGP_ROOT .  'install/' ) );
 }
 
-if ( filesize ( XGP_ROOT . 'config.php' ) != 0 )
-{
-	$game_version	=	read_config ( 'version' );
-
-	define ( 'VERSION' , ( $game_version == '' ) ? "		  " : "v" . $game_version );
-}
+$game_version   = read_config ( 'version' );
+define ( 'VERSION' , ( $game_version == '' ) ? "		  " : "v" . $game_version );
 
 if ( INSTALL != TRUE )
 {

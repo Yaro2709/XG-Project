@@ -14,7 +14,7 @@
 	<th><input type="text" name="user" value="" size="30" /></th>
 </tr>
 <tr>
-	<th>Contraseña: <br /> Ej: 12345 </th>
+	<th>ContraseÃ±a: <br /> Ej: 12345 </th>
 	<th><input type="password" name="passwort" value="" size="30" /></th>
 </tr>
 <tr>

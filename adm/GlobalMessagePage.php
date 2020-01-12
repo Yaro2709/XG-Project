@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 define('INSIDE'  , TRUE);
@@ -52,7 +52,7 @@ if ($ToolsCanUse != 1) die(message ($lang['404_page']));
 			}
 
 
-			$Log	.=	"\n".$lang['log_circular_message']."\n";
+			$Log	 =	"\n".$lang['log_circular_message']."\n";
 			$Log	.=	$lang['log_the_user'].$user['username'].$lang['log_message_specify'].":\n";
 			$Log	.=	$lang['log_mes_subject'].": ".$_POST["temat"]."\n";
 			$Log	.=	$lang['log_mes_text'].": ".$_POST["tresc"]."\n";

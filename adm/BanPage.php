@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 define('INSIDE'  , TRUE);
@@ -18,26 +18,32 @@ if ($EditUsers != 1) die(message ($lang['404_page']));
 
 $parse = $lang;
 
+$getOrder   = isset($_GET['order']) ? $_GET['order'] : null;
+$getOrder2  = isset($_GET['order2']) ? $_GET['order2'] : null;
+$getView    = isset($_GET['view']) ? $_GET['view'] : null;
 
-if ($_GET['order'] == 'id')
+if ($getOrder == 'id')
 	$ORDER	=	"id";
 else
 	$ORDER	=	"username";
 
 
+$ListWHERE  = '';
+$WHEREBANA  = '';
 
 if ($user['authlevel'] != 3)
 	$ListWHERE = "WHERE `authlevel` < '".($user['authlevel'])."'";
 
 
-if ($_GET['view'] == 'bana' && $user['authlevel'] != 3)
+if ($getView == 'bana' && $user['authlevel'] != 3)
 	$WHEREBANA	=	"AND `bana` = 1";
-elseif ($_GET['view'] == 'bana' && $user['authlevel'] == 3)
+elseif ($getView == 'bana' && $user['authlevel'] == 3)
 	$WHEREBANA	=	"WHERE `bana` = 1";
 
 $UserList		=	doquery("SELECT `username`, `id`, `bana` FROM {{table}} ".$ListWHERE." ".$WHEREBANA." ORDER BY ".$ORDER." ASC", "users");
 
-$Users	=	0;
+$Users          = 0;
+$parse['List']  = '';
 while ($a	=	mysql_fetch_array($UserList))
 {
 	if ($a['bana']	==	'1')
@@ -50,17 +56,18 @@ while ($a	=	mysql_fetch_array($UserList))
 }
 
 
-if ($_GET['order2'] == 'id')
+if ($getOrder2 == 'id')
 	$ORDER2	=	"id";
 else
 	$ORDER2	=	"username";
 
-$Banneds	=	0;
-$UserListBan	=	doquery("SELECT `username`, `id` FROM {{table}} WHERE `bana` = '1' ORDER BY ".$ORDER2." ASC", "users");
-while ($b	=	mysql_fetch_array($UserListBan))
+$Banneds            = 0;
+$parse['ListBan']   = '';
+$UserListBan        = doquery("SELECT `username`, `id` FROM {{table}} WHERE `bana` = '1' ORDER BY ".$ORDER2." ASC", "users");
+while ($b = mysql_fetch_array($UserListBan))
 {
-	$parse['ListBan']	.=	'<option value="'.$b['username'].'">'.$b['username'].'&nbsp;&nbsp;(ID:&nbsp;'.$b['id'].')</option>';
-	$Banneds++;
+    $parse['ListBan']	.=	'<option value="'.$b['username'].'">'.$b['username'].'&nbsp;&nbsp;(ID:&nbsp;'.$b['id'].')</option>';
+    $Banneds++;
 }
 
 $parse['userss']	=	"<font color=lime>".$Users."</font>";
@@ -70,7 +77,7 @@ $parse['banneds']	=	"<font color=lime>".$Banneds."</font>";
 mysql_free_result($UserList);
 mysql_free_result($UserListBan);
 
-if($_GET['panel'])
+if(isset($_GET['panel']))
 {
 	$QueryUserBan			=	doquery("SELECT * FROM {{table}} WHERE `who` = '".$_GET['ban_name']."'", "banned", TRUE);
 	$QueryUserBanVacation	=	doquery("SELECT urlaubs_modus FROM {{table}} WHERE `username` = '".$_GET['ban_name']."'", "users", TRUE);
@@ -101,21 +108,21 @@ if($_GET['panel'])
 	else
 		$parse['vacation']	=	'';
 
-	$parse['name']			=	$_GET['ban_name'];
+	$parse['name']			=	isset($_GET['ban_name']) ? $_GET['ban_name'] : '';
+        $name                           =       isset($_GET['ban_name']) ? $_GET['ban_name'] : '';
 
 
-
-	if ($_POST['bannow'])
+	if (isset($_POST['bannow']) && $_POST['bannow'])
 	{
 		if(!is_numeric($_POST['days']) || !is_numeric($_POST['hour']) || !is_numeric($_POST['mins']) || !is_numeric($_POST['secs']))
 			return display( parsetemplate(gettemplate("adm/BanOptionsResultBody"), $parse), FALSE, '', TRUE, FALSE);
 
-		$name              = $_POST['ban_name'];
-		$reas              = $_POST['why'];
-		$days              = $_POST['days'];
-		$hour              = $_POST['hour'];
-		$mins              = $_POST['mins'];
-		$secs              = $_POST['secs'];
+		$name              = isset($_POST['ban_name']) ? $_POST['ban_name'] : '';
+		$reas              = isset($_POST['why']) ? $_POST['why'] : '';
+		$days              = isset($_POST['days']) ? $_POST['days'] : '';
+		$hour              = isset($_POST['hour']) ? $_POST['hour'] : '';
+		$mins              = isset($_POST['mins']) ? $_POST['mins'] : '';
+		$secs              = isset($_POST['secs']) ? $_POST['secs'] : '';
 		$admin             = $user['username'];
 		$mail              = $user['email'];
 		$Now               = time();
@@ -198,7 +205,7 @@ if($_GET['panel'])
 
 		header ( 'location:BanPage.php?panel=ban_name&ban_name='.$_GET['ban_name'].'&succes=yes' );
 	}
-	if ($_GET['succes']	==	'yes')
+	if (isset($_GET['succes']) && $_GET['succes'] == 'yes')
 		$parse['display']	=	"<tr><th colspan=\"2\"><font color=lime>". $lang['bo_the_player'] . $name . $lang['bo_banned'] ."</font></th></tr>";
 	display( parsetemplate(gettemplate("adm/BanOptionsResultBody"), $parse), FALSE, '', TRUE, FALSE);
 }
@@ -215,10 +222,10 @@ elseif($_POST && $_POST['unban_name'])
 
 	LogFunction($Log, "GeneralLog", $LogCanWork);
 
-	header ( 'location:BanPage.php?succes2=yes' );
+	header ( 'location:BanPage.php?succes2=yes&u=' . $name );
 }
-	if ($_GET['succes2'] == 'yes')
-		$parse['display2']	=	"<tr><th colspan=\"2\"><font color=lime>". $lang['bo_the_player2'] . $name . $lang['bo_unbanned'] ."</font></th></tr>";
+	if (isset($_GET['succes2']) && $_GET['succes2'] == 'yes')
+		$parse['display2']	=	"<tr><th colspan=\"2\"><font color=lime>". $lang['bo_the_player2'] . (isset($_GET['u'])?$_GET['u']:'') . $lang['bo_unbanned'] ."</font></th></tr>";
 
 
 

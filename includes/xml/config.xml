@@ -2,7 +2,7 @@
 <configurations>
 	<config>
 		<name>version</name>
-		<value>2.10.8</value>
+		<value>2.10.9</value>
 	</config>
 	<config>
 		<name>users_amount</name>
@@ -118,7 +118,7 @@
 	</config>
 	<config>
 		<name>stat_last_update</name>
-		<value>1387493364</value>
+		<value>1453747902</value>
 	</config>
 	<config>
 		<name>stat_settings</name>

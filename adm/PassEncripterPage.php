@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 define('INSIDE'  , TRUE);
@@ -17,7 +17,7 @@ include('AdminFunctions/Autorization.php');
 if ($ToolsCanUse != 1) die(message ($lang['404_page']));
 
 	$parse = $lang;
-	if ($_POST['md5q'] != "")
+	if (isset($_POST['md5q']) && $_POST['md5q'] != "")
 	{
 		$parse['md5_md5'] = $_POST['md5q'];
 		$parse['md5_enc'] = md5 ($_POST['md5q']);

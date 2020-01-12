@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
@@ -116,8 +116,9 @@ class FlyingFleetsTable
 	{
 		global $lang;
 
-		$FlyingFleets = doquery ("SELECT * FROM {{table}} ORDER BY `fleet_end_time` ASC;", 'fleets');
-
+		$FlyingFleets   = doquery ("SELECT * FROM {{table}} ORDER BY `fleet_end_time` ASC;", 'fleets');
+                $table          = '';
+                
 		while ( $CurrentFleet = mysql_fetch_assoc( $FlyingFleets ) )
 		{
 			$FleetOwner       = doquery("SELECT `username` FROM {{table}} WHERE `id` = '". intval($CurrentFleet['fleet_owner']) ."';", 'users', TRUE);

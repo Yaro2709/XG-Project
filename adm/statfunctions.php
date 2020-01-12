@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2012
+ * @copyright Copyright (C) 2008 - 2016
  */
 
 function GetTechnoPoints ( $CurrentUser ) {
@@ -230,6 +230,7 @@ function MakeStats()
 		}
 		unset($CurPlanet, $parcial_data);
 		$old_stats		=	 doquery($sql_old_stats, 'statpoints');
+                $old_stats_array        = array();
 		while ($CurStats = mysql_fetch_assoc($old_stats))
 		{
 			$old_stats_array[$CurStats['id_owner']]	=	$CurStats;

@@ -4,6 +4,19 @@ $lang['Version']     = 'Versión';
 $lang['Description'] = 'Descripción';
 $lang['changelog']   = array(
 
+'2.10.9' => '28/01/2016
+- [Mejoras]
+- Más notices corregidos.-
+- Eliminados antiguos oficiales del panel de admin.-
+
+- [Seguridad]
+- Cerrado agujero de seguridad con posible SQL Injection.-
+
+- [Bugs]
+- Corregidos varios errores de PHP y caracteres durante la instalación.-
+- Corregidos errores menores gracias a la eliminación de notices.-
+',
+    
 '2.10.8' => '19/12/2013
 - [Mejoras]
 - Más notices corregidos.-
