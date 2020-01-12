@@ -64,7 +64,7 @@ if ($_POST)
 
 	$_POST['email'] = strip_tags($_POST['email']);
 
-	if (!is_email($_POST['email']))
+	if (!valid_email($_POST['email']))
 	{
 		$errorlist .= $lang['invalid_mail_adress'];
 		$errors++;
@@ -234,6 +234,7 @@ if ($_POST)
 }
 else
 {
+	$parse['year']		   = date ( "Y" );
 	$parse['version']	   = VERSION;
 	$parse['servername']   = read_config ( 'game_name' );
 	$parse['forum_url']    = read_config ( 'forum_url' );

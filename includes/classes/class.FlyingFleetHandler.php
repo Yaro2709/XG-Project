@@ -65,9 +65,9 @@ class FlyingFleetHandler
 			foreach($SortFleets as $FleetID => $Capacity)
 			{
 				$QryUpdateFleet = 'UPDATE {{table}} SET ';
-				$QryUpdateFleet .= '`fleet_resource_metal` = `fleet_resource_metal` + '.floattostring($steal['metal'] * ($Capacity / $AllCapacity)).', ';
-				$QryUpdateFleet .= '`fleet_resource_crystal` = `fleet_resource_crystal` +'.floattostring($steal['crystal'] * ($Capacity / $AllCapacity)).', ';
-				$QryUpdateFleet .= '`fleet_resource_deuterium` = `fleet_resource_deuterium` +'.floattostring($steal['deuterium'] * ($Capacity / $AllCapacity)).' ';
+				$QryUpdateFleet .= '`fleet_resource_metal` = `fleet_resource_metal` + '.Format::float_to_string($steal['metal'] * ($Capacity / $AllCapacity)).', ';
+				$QryUpdateFleet .= '`fleet_resource_crystal` = `fleet_resource_crystal` +'.Format::float_to_string($steal['crystal'] * ($Capacity / $AllCapacity)).', ';
+				$QryUpdateFleet .= '`fleet_resource_deuterium` = `fleet_resource_deuterium` +'.Format::float_to_string($steal['deuterium'] * ($Capacity / $AllCapacity)).' ';
 				$QryUpdateFleet .= 'WHERE fleet_id = '.$FleetID.' ';
 				$QryUpdateFleet .= 'LIMIT 1;';
 				doquery($QryUpdateFleet, 'fleets');
@@ -95,11 +95,11 @@ class FlyingFleetHandler
 			$String .= "[". $TargetPlanet["galaxy"] .":". $TargetPlanet["system"] .":". $TargetPlanet["planet"] ."]</a>";
 			$String .= $lang['sys_the'] . date("d-m-Y H:i:s", time()) ."</td>";
 			$String .= "</tr><tr>";
-			$String .= "<td width=220>". $lang['Metal']     ."</td><td width=220 align=right>". pretty_number($TargetPlanet['metal'])      ."</td><td>&nbsp;</td>";
-			$String .= "<td width=220>". $lang['Crystal']   ."</td></td><td width=220 align=right>". pretty_number($TargetPlanet['crystal'])    ."</td>";
+			$String .= "<td width=220>". $lang['Metal']     ."</td><td width=220 align=right>". Format::pretty_number($TargetPlanet['metal'])      ."</td><td>&nbsp;</td>";
+			$String .= "<td width=220>". $lang['Crystal']   ."</td></td><td width=220 align=right>". Format::pretty_number($TargetPlanet['crystal'])    ."</td>";
 			$String .= "</tr><tr>";
-			$String .= "<td width=220>". $lang['Deuterium'] ."</td><td width=220 align=right>". pretty_number($TargetPlanet['deuterium'])  ."</td><td>&nbsp;</td>";
-			$String .= "<td width=220>". $lang['Energy']    ."</td><td width=220 align=right>". pretty_number($TargetPlanet['energy_max']) ."</td>";
+			$String .= "<td width=220>". $lang['Deuterium'] ."</td><td width=220 align=right>". Format::pretty_number($TargetPlanet['deuterium'])  ."</td><td>&nbsp;</td>";
+			$String .= "<td width=220>". $lang['Energy']    ."</td><td width=220 align=right>". Format::pretty_number($TargetPlanet['energy_max']) ."</td>";
 			$String .= "</tr>";
 			$LookAtLoop = FALSE;
 		}
@@ -855,9 +855,9 @@ class FlyingFleetHandler
 		{
 			$Message         = sprintf( $lang['sys_fleet_won'],
 						$TargetName, GetTargetAdressLink($FleetRow, ''),
-						pretty_number($FleetRow['fleet_resource_metal']), $lang['Metal'],
-						pretty_number($FleetRow['fleet_resource_crystal']), $lang['Crystal'],
-						pretty_number($FleetRow['fleet_resource_deuterium']), $lang['Deuterium'] );
+						Format::pretty_number($FleetRow['fleet_resource_metal']), $lang['Metal'],
+						Format::pretty_number($FleetRow['fleet_resource_crystal']), $lang['Crystal'],
+						Format::pretty_number($FleetRow['fleet_resource_deuterium']), $lang['Deuterium'] );
 			SendSimpleMessage ( $FleetRow['fleet_owner'], '', $FleetRow['fleet_end_time'], 3, $lang['sys_mess_tower'], $lang['sys_mess_fleetback'], $Message);
 			$this->RestoreFleetToPlanet($FleetRow);
 			doquery ('DELETE FROM {{table}} WHERE `fleet_id`='.intval($FleetRow['fleet_id']),'fleets');
@@ -968,9 +968,9 @@ class FlyingFleetHandler
 
 				$TargetAdress         = sprintf ($lang['sys_adress_planet'], $FleetRow['fleet_end_galaxy'], $FleetRow['fleet_end_system'], $FleetRow['fleet_end_planet']);
 				$TargetAddedGoods     = sprintf ($lang['sys_stay_mess_goods'],
-				$lang['Metal'], pretty_number($FleetRow['fleet_resource_metal']),
-				$lang['Crystal'], pretty_number($FleetRow['fleet_resource_crystal']),
-				$lang['Deuterium'], pretty_number($FleetRow['fleet_resource_deuterium']));
+				$lang['Metal'], Format::pretty_number($FleetRow['fleet_resource_metal']),
+				$lang['Crystal'], Format::pretty_number($FleetRow['fleet_resource_crystal']),
+				$lang['Deuterium'], Format::pretty_number($FleetRow['fleet_resource_deuterium']));
 
 				$TargetMessage        = $lang['sys_stay_mess_start'] ."<a href=\"game.php?page=galaxy&mode=3&galaxy=". $FleetRow['fleet_end_galaxy'] ."&system=". $FleetRow['fleet_end_system'] ."\">";
 				$TargetMessage       .= $TargetAdress. "</a>". $lang['sys_stay_mess_end'] ."<br />". $TargetAddedGoods;
@@ -986,9 +986,9 @@ class FlyingFleetHandler
 			{
 				$TargetAdress         = sprintf ($lang['sys_adress_planet'], $FleetRow['fleet_start_galaxy'], $FleetRow['fleet_start_system'], $FleetRow['fleet_start_planet']);
 				$TargetAddedGoods     = sprintf ($lang['sys_stay_mess_goods'],
-				$lang['Metal'], pretty_number($FleetRow['fleet_resource_metal']),
-				$lang['Crystal'], pretty_number($FleetRow['fleet_resource_crystal']),
-				$lang['Deuterium'], pretty_number($FleetRow['fleet_resource_deuterium']));
+				$lang['Metal'], Format::pretty_number($FleetRow['fleet_resource_metal']),
+				$lang['Crystal'], Format::pretty_number($FleetRow['fleet_resource_crystal']),
+				$lang['Deuterium'], Format::pretty_number($FleetRow['fleet_resource_deuterium']));
 
 				$TargetMessage        = $lang['sys_stay_mess_back'] ."<a href=\"game.php?page=galaxy&mode=3&galaxy=". $FleetRow['fleet_start_galaxy'] ."&system=". $FleetRow['fleet_start_system'] ."\">";
 				$TargetMessage       .= $TargetAdress. "</a>". $lang['sys_stay_mess_bend'] ."<br />". $TargetAddedGoods;
@@ -1287,7 +1287,7 @@ class FlyingFleetHandler
 				$QryUpdateGalaxy .= "LIMIT 1;";
 				doquery( $QryUpdateGalaxy, 'galaxy');
 
-				$Message = sprintf($lang['sys_recy_gotten'], pretty_number($RecycledGoods["metal"]), $lang['Metal'], pretty_number($RecycledGoods["crystal"]), $lang['Crystal']);
+				$Message = sprintf($lang['sys_recy_gotten'], Format::pretty_number($RecycledGoods["metal"]), $lang['Metal'], Format::pretty_number($RecycledGoods["crystal"]), $lang['Crystal']);
 				SendSimpleMessage ( $FleetRow['fleet_owner'], '', $FleetRow['fleet_start_time'], 4, $lang['sys_mess_spy_control'], $lang['sys_recy_report'], $Message);
 
 				$QryUpdateFleet  = "UPDATE {{table}} SET ";
@@ -1306,9 +1306,9 @@ class FlyingFleetHandler
 			{
 				$Message         = sprintf( $lang['sys_tran_mess_owner'],
 				$TargetName, GetTargetAdressLink($FleetRow, ''),
-				pretty_number($FleetRow['fleet_resource_metal']), $lang['Metal'],
-				pretty_number($FleetRow['fleet_resource_crystal']), $lang['Crystal'],
-				pretty_number($FleetRow['fleet_resource_deuterium']), $lang['Deuterium'] );
+				Format::pretty_number($FleetRow['fleet_resource_metal']), $lang['Metal'],
+				Format::pretty_number($FleetRow['fleet_resource_crystal']), $lang['Crystal'],
+				Format::pretty_number($FleetRow['fleet_resource_deuterium']), $lang['Deuterium'] );
 				SendSimpleMessage ( $FleetRow['fleet_owner'], '', $FleetRow['fleet_end_time'], 4, $lang['sys_mess_spy_control'], $lang['sys_mess_fleetback'], $Message);
 				$this->RestoreFleetToPlanet ( $FleetRow, TRUE );
 				doquery("DELETE FROM {{table}} WHERE `fleet_id` = '". $FleetRow["fleet_id"] ."';", 'fleets');
@@ -2111,10 +2111,10 @@ class FlyingFleetHandler
 						doquery( $QryUpdateFleet, 'fleets');
 
 						$Message = sprintf($lang['sys_expe_found_goods'],
-						pretty_number($FoundMetal), $lang['Metal'],
-						pretty_number($FoundCrist), $lang['Crystal'],
-						pretty_number($FoundDeute), $lang['Deuterium'],
-						pretty_number($FoundDark), $lang['Darkmatter']);
+						Format::pretty_number($FoundMetal), $lang['Metal'],
+						Format::pretty_number($FoundCrist), $lang['Crystal'],
+						Format::pretty_number($FoundDeute), $lang['Deuterium'],
+						Format::pretty_number($FoundDark), $lang['Darkmatter']);
 
 						SendSimpleMessage ( $FleetOwner, '', $FleetRow['fleet_end_stay'], 15, $MessSender, $MessTitle, $Message );
 					}

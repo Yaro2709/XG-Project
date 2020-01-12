@@ -25,8 +25,8 @@ while ($ActivPlanet = mysql_fetch_array($ActivePlanets))
 	$parse['online_list'] .= "<tr>";
 	$parse['online_list'] .= "<th><center><b>". $ActivPlanet['name'] ."</b></center></th>";
 	$parse['online_list'] .= "<th><center><b>[". $ActivPlanet['galaxy'] .":". $ActivPlanet['system'] .":". $ActivPlanet['planet'] ."]</b></center></th>";
-	$parse['online_list'] .= "<th><center><b>". pretty_number($ActivPlanet['points'] / 1000) ."</b></center></th>";
-	$parse['online_list'] .= "<th><center><b>". pretty_time(time() - $ActivPlanet['last_update']) . "</b></center></th>";
+	$parse['online_list'] .= "<th><center><b>". Format::pretty_number($ActivPlanet['points'] / 1000) ."</b></center></th>";
+	$parse['online_list'] .= "<th><center><b>". Format::pretty_time(time() - $ActivPlanet['last_update']) . "</b></center></th>";
 	$parse['online_list'] .= "</tr>";
 	$Count++;
 }

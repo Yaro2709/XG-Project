@@ -51,29 +51,14 @@ class ShowResourcesPage
 			}
 		}
 
-		$parse['production_level'] = 100;
-		if       ($CurrentPlanet['energy_max'] == 0 && $CurrentPlanet['energy_used'] > 0)
-		{
-			$post_porcent = 0;
-		}
-		elseif ($CurrentPlanet['energy_max'] >  0 && ($CurrentPlanet['energy_used'] + $CurrentPlanet['energy_max']) < 0 )
-		{
-			$post_porcent = floor(($CurrentPlanet['energy_max']) / ($CurrentPlanet['energy_used']*-1) * 100);
-		}
-		else
-		{
-			$post_porcent = 100;
-		}
+		$CurrentPlanet['metal_max']			 = Production::max_storable ( $CurrentPlanet[ $resource[22] ]);
+		$CurrentPlanet['crystal_max']		 = Production::max_storable ( $CurrentPlanet[ $resource[23] ]);
+		$CurrentPlanet['deuterium_max']	     = Production::max_storable ( $CurrentPlanet[ $resource[24] ]);
 
-		if ($post_porcent > 100)
-		{
-			$post_porcent = 100;
-		}
-
-		$CurrentPlanet['metal_max']		=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[22] ])) -1));
-		$CurrentPlanet['crystal_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[23] ])) -1));
-		$CurrentPlanet['deuterium_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[24] ])) -1));
-
+		$parse['production_level'] 			 = 100;
+		$post_porcent 						 = Production::max_production ( $CurrentPlanet['energy_max'] , $CurrentPlanet['energy_used'] );
+		
+		
 		$parse['resource_row']               = "";
 		$CurrentPlanet['metal_perhour']      = 0;
 		$CurrentPlanet['crystal_perhour']    = 0;
@@ -81,23 +66,39 @@ class ShowResourcesPage
 		$CurrentPlanet['energy_max']         = 0;
 		$CurrentPlanet['energy_used']        = 0;
 		$BuildTemp                           = $CurrentPlanet[ 'temp_max' ];
-		$ResourcesRowTPL=gettemplate('resources/resources_row');
+		$ResourcesRowTPL					 = gettemplate('resources/resources_row');
 		foreach($reslist['prod'] as $ProdID)
 		{
 			if ($CurrentPlanet[$resource[$ProdID]] > 0 && isset($ProdGrid[$ProdID]))
 			{
-				$BuildLevelFactor                    = $CurrentPlanet[ $resource[$ProdID]."_porcent" ];
-				$BuildLevel                          = $CurrentPlanet[ $resource[$ProdID] ];
-				$metal     = floor( eval ( $ProdGrid[$ProdID]['formule']['metal']     ) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue']  * GEOLOGUE ) ) );
-				$crystal   = floor( eval ( $ProdGrid[$ProdID]['formule']['crystal']   ) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue']  * GEOLOGUE ) ) );
-				$deuterium = floor( eval ( $ProdGrid[$ProdID]['formule']['deuterium'] ) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue']  * GEOLOGUE ) ) );
-
-				if( $ProdID >= 4 )
-				{
-					$energy = floor( eval ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_ingenieur'] * ENGINEER_ENERGY ) ) );
+				$BuildLevelFactor	= $CurrentPlanet[ $resource[$ProdID]."_porcent" ];
+				$BuildLevel			= $CurrentPlanet[ $resource[$ProdID] ];
+				
+				// BOOST
+				$geologe_boost		= 1 + ( $CurrentUser['rpg_geologue']  * GEOLOGUE );
+				$engineer_boost		= 1 + ( $CurrentUser['rpg_ingenieur'] * ENGINEER_ENERGY );
+				
+				// PRODUCTION FORMULAS
+				$metal_prod			= eval ( $ProdGrid[$ProdID]['formule']['metal'] );
+				$crystal_prod		= eval ( $ProdGrid[$ProdID]['formule']['crystal'] );
+				$deuterium_prod		= eval ( $ProdGrid[$ProdID]['formule']['deuterium'] );
+				$energy_prod		= eval ( $ProdGrid[$ProdID]['formule']['energy'] );
+				
+				// PRODUCTION
+				$metal				= Production::production_amount ( $metal_prod , $geologe_boost );
+				$crystal			= Production::production_amount ( $crystal_prod , $geologe_boost );
+				$deuterium			= Production::production_amount ( $deuterium_prod , $geologe_boost );
+				
+				if ( $ProdID >= 4 )
+				{							
+					$energy			= Production::production_amount ( $energy_prod , $engineer_boost );
 				}
-				else $energy = floor( eval ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_resource_multiplier ) );
-				if ($energy > 0)
+				else 
+				{
+					$energy			= Production::production_amount ( $energy_prod , 1 );
+				}
+				
+				if ( $energy > 0 )
 				{
 					$CurrentPlanet['energy_max']    += $energy;
 				}
@@ -110,126 +111,67 @@ class ShowResourcesPage
 				$CurrentPlanet['crystal_perhour']   += $crystal;
 				$CurrentPlanet['deuterium_perhour'] += $deuterium;
 
-				$metal                               = $metal     * 0.01 * $post_porcent;
-				$crystal                             = $crystal   * 0.01 * $post_porcent;
-				$deuterium                           = $deuterium * 0.01 * $post_porcent;
-				$energy                              = $energy    * 0.01 * $post_porcent;
+				$metal                               = Production::current_production ( $metal , $post_porcent );
+				$crystal                             = Production::current_production ( $crystal , $post_porcent );
+				$deuterium                           = Production::current_production ( $deuterium , $post_porcent );
+				$energy                              = Production::current_production ( $energy , $post_porcent );
 				$Field                               = $resource[$ProdID] ."_porcent";
 				$CurrRow                             = array();
 				$CurrRow['name']                     = $resource[$ProdID];
-				$CurrRow['porcent']                  = $CurrentPlanet[$Field];
-
-				for ($Option = 10; $Option >= 0; $Option--)
-				{
-					$OptValue = $Option * 10;
-
-					if ($Option == $CurrRow['porcent'])
-					{
-						$OptSelected    = " selected=selected";
-					}
-					else
-					{
-						$OptSelected    = "";
-					}
-					$CurrRow['option'] .= "<option value=\"".$OptValue."\"".$OptSelected.">".$OptValue."%</option>";
-				}
-
+				$CurrRow['porcent']                  = $CurrentPlanet[$Field];				
+				$CurrRow['option']					 = $this->build_options ( $CurrRow['porcent'] );
 				$CurrRow['type']                     = $lang['tech'][$ProdID];
 				$CurrRow['level']                    = ($ProdID > 200) ? $lang['rs_amount'] : $lang['rs_lvl'];
 				$CurrRow['level_type']               = $CurrentPlanet[ $resource[$ProdID] ];
-				$CurrRow['metal_type']               = pretty_number ( $metal     );
-				$CurrRow['crystal_type']             = pretty_number ( $crystal   );
-				$CurrRow['deuterium_type']           = pretty_number ( $deuterium );
-				$CurrRow['energy_type']              = pretty_number ( $energy    );
-				$CurrRow['metal_type']               = colorNumber ( $CurrRow['metal_type']     );
-				$CurrRow['crystal_type']             = colorNumber ( $CurrRow['crystal_type']   );
-				$CurrRow['deuterium_type']           = colorNumber ( $CurrRow['deuterium_type'] );
-				$CurrRow['energy_type']              = colorNumber ( $CurrRow['energy_type']    );
+				$CurrRow['metal_type']               = Format::pretty_number ( $metal     );
+				$CurrRow['crystal_type']             = Format::pretty_number ( $crystal   );
+				$CurrRow['deuterium_type']           = Format::pretty_number ( $deuterium );
+				$CurrRow['energy_type']              = Format::pretty_number ( $energy    );
+				$CurrRow['metal_type']               = Format::color_number ( $CurrRow['metal_type']     );
+				$CurrRow['crystal_type']             = Format::color_number ( $CurrRow['crystal_type']   );
+				$CurrRow['deuterium_type']           = Format::color_number ( $CurrRow['deuterium_type'] );
+				$CurrRow['energy_type']              = Format::color_number ( $CurrRow['energy_type']    );
 				$parse['resource_row']              .= parsetemplate ($ResourcesRowTPL , $CurrRow );
 			}
 		}
 
 		$parse['Production_of_resources_in_the_planet'] = str_replace('%s', $CurrentPlanet['name'], $lang['rs_production_on_planet']);
-
-		if ($CurrentPlanet['energy_max'] == 0 && $CurrentPlanet['energy_used'] > 0)
-		{
-			$parse['production_level'] = 0;
-		}
-		elseif ($CurrentPlanet['energy_max']  > 0 && abs($CurrentPlanet['energy_used']) > $CurrentPlanet['energy_max'])
-		{
-			$parse['production_level'] = floor(($CurrentPlanet['energy_max']) / ($CurrentPlanet['energy_used']*-1) * 100);
-		}
-		elseif ($CurrentPlanet['energy_max'] == 0 && abs($CurrentPlanet['energy_used']) > $CurrentPlanet['energy_max'])
-		{
-			$parse['production_level'] = 0;
-		}
-		else
-		{
-			$parse['production_level'] = 100;
-		}
-
-		if ($parse['production_level'] > 100)
-		{
-			$parse['production_level'] = 100;
-		}
-
+		
+		$parse['production_level']		 = $this->prod_level ( $CurrentPlanet['energy_used'] , $CurrentPlanet['energy_max'] );
 		$parse['metal_basic_income']     = $game_metal_basic_income;
 		$parse['crystal_basic_income']   = $game_crystal_basic_income;
 		$parse['deuterium_basic_income'] = $game_deuterium_basic_income;
 		$parse['energy_basic_income']    = $game_energy_basic_income;
+		$parse['metal_max']             .= $this->resource_color ( $CurrentPlanet['metal'] , $CurrentPlanet['metal_max'] );
+		$parse['crystal_max']           .= $this->resource_color ( $CurrentPlanet['crystal'] , $CurrentPlanet['crystal_max'] );
+		$parse['deuterium_max']         .= $this->resource_color ( $CurrentPlanet['deuterium'] , $CurrentPlanet['deuterium_max'] );
 
-		if ($CurrentPlanet['metal_max'] < $CurrentPlanet['metal'])
-		{
-			$parse['metal_max']         = "<font color=\"#ff0000\">";
-		}
-		else
-		{
-			$parse['metal_max']         = "<font color=\"#00ff00\">";
-		}
-		$parse['metal_max']            .= pretty_number($CurrentPlanet['metal_max'] / 1000) ."k</font>";
+		$parse['metal_total']           = Format::color_number( Format::pretty_number( floor( ( ($CurrentPlanet['metal_perhour']     * 0.01 * $parse['production_level'] ) + $parse['metal_basic_income']))));
+		$parse['crystal_total']         = Format::color_number( Format::pretty_number( floor( ( ($CurrentPlanet['crystal_perhour']   * 0.01 * $parse['production_level'] ) + $parse['crystal_basic_income']))));
+		$parse['deuterium_total']       = Format::color_number( Format::pretty_number( floor( ( ($CurrentPlanet['deuterium_perhour'] * 0.01 * $parse['production_level'] ) + $parse['deuterium_basic_income']))));
+		$parse['energy_total']          = Format::color_number( Format::pretty_number( floor( ( $CurrentPlanet['energy_max'] + $parse['energy_basic_income']    ) + $CurrentPlanet['energy_used'] ) ) );
+			
+			
+		$parse['daily_metal']			= $this->calculate_daily ( $CurrentPlanet['metal_perhour'] , $parse['production_level'] , $parse['metal_basic_income'] );	
+		$parse['weekly_metal']			= $this->calculate_weekly ( $CurrentPlanet['metal_perhour'] , $parse['production_level'] , $parse['metal_basic_income'] );	
+		
+		
+		$parse['daily_crystal']			= $this->calculate_daily ( $CurrentPlanet['crystal_perhour'] , $parse['production_level'] , $parse['crystal_basic_income'] );
+		$parse['weekly_crystal']		= $this->calculate_weekly ( $CurrentPlanet['crystal_perhour'] , $parse['production_level'] , $parse['crystal_basic_income'] );		
+			
+		
+		$parse['daily_deuterium']		= $this->calculate_daily ( $CurrentPlanet['deuterium_perhour'] , $parse['production_level'] , $parse['deuterium_basic_income'] );
+		$parse['weekly_deuterium']		= $this->calculate_weekly ( $CurrentPlanet['deuterium_perhour'] , $parse['production_level'] , $parse['deuterium_basic_income'] );
 
-		if ($CurrentPlanet['crystal_max'] < $CurrentPlanet['crystal'])
-		{
-			$parse['crystal_max']       = "<font color=\"#ff0000\">";
-		}
-		else
-		{
-			$parse['crystal_max']       = "<font color=\"#00ff00\">";
-		}
-		$parse['crystal_max']          .= pretty_number($CurrentPlanet['crystal_max'] / 1000) ."k</font>";
 
-		if ($CurrentPlanet['deuterium_max'] < $CurrentPlanet['deuterium'])
-		{
-			$parse['deuterium_max']     = "<font color=\"#ff0000\">";
-		}
-		else
-		{
-			$parse['deuterium_max']     = "<font color=\"#00ff00\">";
-		}
-		$parse['deuterium_max']        .= pretty_number($CurrentPlanet['deuterium_max'] / 1000) ."k</font>";
+		$parse['daily_metal']           = Format::color_number(Format::pretty_number($parse['daily_metal']));
+		$parse['weekly_metal']          = Format::color_number(Format::pretty_number($parse['weekly_metal']));
 
-		$parse['metal_total']           = colorNumber( pretty_number( floor( ( ($CurrentPlanet['metal_perhour']     * 0.01 * $parse['production_level'] ) + $parse['metal_basic_income']))));
-		$parse['crystal_total']         = colorNumber( pretty_number( floor( ( ($CurrentPlanet['crystal_perhour']   * 0.01 * $parse['production_level'] ) + $parse['crystal_basic_income']))));
-		$parse['deuterium_total']       = colorNumber( pretty_number( floor( ( ($CurrentPlanet['deuterium_perhour'] * 0.01 * $parse['production_level'] ) + $parse['deuterium_basic_income']))));
-		$parse['energy_total']          = colorNumber( pretty_number( floor( ( $CurrentPlanet['energy_max'] + $parse['energy_basic_income']    ) + $CurrentPlanet['energy_used'] ) ) );
+		$parse['daily_crystal']         = Format::color_number(Format::pretty_number($parse['daily_crystal']));
+		$parse['weekly_crystal']        = Format::color_number(Format::pretty_number($parse['weekly_crystal']));
 
-		$parse['daily_metal']           = floor($CurrentPlanet['metal_perhour']     * 24      * 0.01 * $parse['production_level']  + $parse['metal_basic_income']      * 24      );
-		$parse['weekly_metal']          = floor($CurrentPlanet['metal_perhour']     * 24 * 7  * 0.01 * $parse['production_level']  + $parse['metal_basic_income']      * 24 * 7  );
-
-		$parse['daily_crystal']         = floor($CurrentPlanet['crystal_perhour']   * 24      * 0.01 * $parse['production_level']  + $parse['crystal_basic_income']    * 24      );
-		$parse['weekly_crystal']        = floor($CurrentPlanet['crystal_perhour']   * 24 * 7  * 0.01 * $parse['production_level']  + $parse['crystal_basic_income']    * 24 * 7  );
-
-		$parse['daily_deuterium']       = floor($CurrentPlanet['deuterium_perhour'] * 24      * 0.01 * $parse['production_level']  + $parse['deuterium_basic_income']  * 24      );
-		$parse['weekly_deuterium']      = floor($CurrentPlanet['deuterium_perhour'] * 24 * 7  * 0.01 * $parse['production_level']  + $parse['deuterium_basic_income']  * 24 * 7  );
-
-		$parse['daily_metal']           = colorNumber(pretty_number($parse['daily_metal']));
-		$parse['weekly_metal']          = colorNumber(pretty_number($parse['weekly_metal']));
-
-		$parse['daily_crystal']         = colorNumber(pretty_number($parse['daily_crystal']));
-		$parse['weekly_crystal']        = colorNumber(pretty_number($parse['weekly_crystal']));
-
-		$parse['daily_deuterium']       = colorNumber(pretty_number($parse['daily_deuterium']));
-		$parse['weekly_deuterium']      = colorNumber(pretty_number($parse['weekly_deuterium']));
+		$parse['daily_deuterium']       = Format::color_number(Format::pretty_number($parse['daily_deuterium']));
+		$parse['weekly_deuterium']      = Format::color_number(Format::pretty_number($parse['weekly_deuterium']));
 
 
 		$QryUpdatePlanet  = "UPDATE {{table}} SET ";
@@ -240,6 +182,107 @@ class ShowResourcesPage
 		doquery( $QryUpdatePlanet, 'planets');
 
 		return display(parsetemplate( gettemplate('resources/resources'), $parse));
+	}
+	
+	/**
+	 * method build_options
+	 * param $current_porcentage
+	 * return porcentage options for the select element
+	 */
+	private function build_options ( $current_porcentage )
+	{
+		for ( $option = 10 ; $option >= 0 ; $option-- )
+		{
+			$opt_value			= $option * 10;
+			
+			if ( $option == $current_porcentage )
+			{
+				$opt_selected	= " selected=selected";
+			}
+			else
+			{
+				$opt_selected	= "";
+			}
+			
+			$option_row .= "<option value=\"" . $opt_value . "\"" . $opt_selected . ">" . $opt_value . "%</option>";
+		}
+		
+		return $option_row;
+	}
+	
+	/**
+	 * method calculate_daily
+	 * param1 $prod_per_hour
+	 * param2 $prod_level
+	 * param3 $basic_income
+	 * return production per day
+	 */
+	private function calculate_daily ( $prod_per_hour , $prod_level , $basic_income )
+	{	
+		return floor ( ( $basic_income + ( $prod_per_hour * 0.01 * $prod_level ) ) * 24 );		
+	}
+	
+	/**
+	 * method calculate_weekly
+	 * param1 $prod_per_hour
+	 * param2 $prod_level
+	 * param3 $basic_income
+	 * return production per week
+	 */
+	private function calculate_weekly ( $prod_per_hour , $prod_level , $basic_income )
+	{		
+		return floor ( ( $basic_income + ( $prod_per_hour * 0.01 * $prod_level ) ) * 24 * 7 );
+	}
+	
+	/**
+	 * method resource_color
+	 * param1 $current_amount
+	 * param2 $max_amount
+	 * return color depending on the current storage capacity
+	 */
+	private function resource_color ( $current_amount , $max_amount )
+	{
+		if ( $max_amount < $current_amount )
+		{
+			return ( Format::color_red ( Format::pretty_number ( $max_amount / 1000 ) . 'k' ) );
+		}
+		else
+		{
+			return ( Format::color_green ( Format::pretty_number ( $max_amount / 1000 ) . 'k' ) );
+		}
+	}
+	
+	/**
+	 * method prod_level
+	 * param1 $energy_used
+	 * param2 $energy_max
+	 * return the production level based on the energy consumption
+	 */
+	private function prod_level ( $energy_used , $energy_max )
+	{
+		if ( $energy_max == 0 && $energy_used > 0 )
+		{
+			$prod_level	= 0;
+		}
+		elseif ( $energy_max > 0 && abs ( $energy_used ) > $energy_max )
+		{
+			$prod_level	= floor ( ( $energy_max ) / ( $energy_used * -1 ) * 100 );
+		}
+		elseif ($energy_max == 0 && abs ( $energy_used ) > $energy_max )
+		{
+			$prod_level = 0;
+		}
+		else
+		{
+			$prod_level = 100;
+		}
+
+		if ( $prod_level > 100 )
+		{
+			$prod_level	= 100;
+		}
+		
+		return $prod_level;
 	}
 }
 ?>

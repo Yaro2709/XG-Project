@@ -192,7 +192,7 @@ function MakeStats()
 	$amount_per_block	= (($game_stat_amount<$game_users_amount)?$game_users_amount:$game_stat_amount);
 	if ($total_users['count'] > $amount_per_block)
 	{
-		$LastQuery = roundUp($total_users['count'] / $amount_per_block);
+		$LastQuery = Format::round_up($total_users['count'] / $amount_per_block);
 	}
 	else
 	{
@@ -385,7 +385,7 @@ function MakeStats()
 		$amount_per_block	= (($game_stat_amount<$game_users_amount)?$game_users_amount:$game_stat_amount);
 		if ($total_ally > $amount_per_block)
 		{
-			$LastQuery = roundUp($total_ally / $amount_per_block);
+			$LastQuery = Format::round_up($total_ally / $amount_per_block);
 		}
 		else
 		{

@@ -18,7 +18,7 @@ class ShowGalaxyPage extends GalaxyRows
 	{
 		global $resource, $lang;
 
-		$fleetmax      	= get_max_fleets ( $CurrentUser['computer_tech'] , $CurrentUser['rpg_amiral'] );
+		$fleetmax      	= Fleets::get_max_fleets ( $CurrentUser['computer_tech'] , $CurrentUser['rpg_amiral'] );
 		$CurrentPlID   	= $CurrentPlanet['id'];
 		$CurrentMIP    	= $CurrentPlanet['interplanetary_misil'];
 		$CurrentRC     	= $CurrentPlanet['recycler'];
@@ -210,8 +210,8 @@ class ShowGalaxyPage extends GalaxyRows
 		$parse['currentmip']		= $CurrentMIP;
 		$parse['maxfleetcount']		= $maxfleet_count;
 		$parse['fleetmax']			= $fleetmax;
-		$parse['recyclers']   		= pretty_number($CurrentRC);
-		$parse['spyprobes']   		= pretty_number($CurrentSP);
+		$parse['recyclers']   		= Format::pretty_number($CurrentRC);
+		$parse['spyprobes']   		= Format::pretty_number($CurrentSP);
 		$parse['missile_count']		= sprintf($lang['gl_missil_to_launch'], $CurrentMIP);
 		$parse['current']			= $_GET['current'];
 		$parse['current_galaxy']	= $CurrentPlanet["galaxy"];

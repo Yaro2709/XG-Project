@@ -138,12 +138,12 @@ class ShowFleet2Page
 		$fleetarray    		= unserialize(base64_decode(str_rot13($_POST["usedfleet"])));
 		$mission       		= $_POST['target_mission'];
 		$SpeedFactor   		= $_POST['speedfactor'];
-		$AllFleetSpeed 		= GetFleetMaxSpeed ($fleetarray, 0, $CurrentUser);
+		$AllFleetSpeed 		= Fleets::fleet_max_speed ($fleetarray, 0, $CurrentUser);
 		$GenFleetSpeed 		= $_POST['speed'];
 		$MaxFleetSpeed 		= min($AllFleetSpeed);
-		$distance      		= GetTargetDistance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
-		$duration      		= GetMissionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-		$consumption   		= GetFleetConsumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $CurrentUser);
+		$distance      		= Fleets::target_distance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
+		$duration      		= Fleets::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
+		$consumption   		= Fleets::fleet_consumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $CurrentUser);
 
 		#####################################################################################################
 		// INPUTS DATA
@@ -179,8 +179,8 @@ class ShowFleet2Page
 			$input_parse['ship']		=	$Ship;
 			$input_parse['amount']		=	$Count;
 			$input_parse['capacity']	=	$pricelist[$Ship]['capacity'];
-			$input_parse['consumption']	=	GetShipConsumption ( $Ship , $CurrentUser );
-			$input_parse['speed']		=	GetFleetMaxSpeed ( "" , $Ship , $CurrentUser );
+			$input_parse['consumption']	=	Fleets::ship_consumption ( $Ship , $CurrentUser );
+			$input_parse['speed']		=	Fleets::fleet_max_speed ( "" , $Ship , $CurrentUser );
 
 			$input_extra .= parsetemplate ( $input_template , $input_parse );
 		}

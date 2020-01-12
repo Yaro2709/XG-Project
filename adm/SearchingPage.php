@@ -131,7 +131,7 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 			$Search['LIST']	 .=	"<tr>";
 			if ($Table == "users"){
 				if ($_GET['search'] == "online")
-					$WhileResult[3]	=	pretty_time( time() - $WhileResult[3] );
+					$WhileResult[3]	=	Format::pretty_time( time() - $WhileResult[3] );
 				else
 					$WhileResult[3]	=	date("d-m-Y H:i:s", $WhileResult[3] );
 
@@ -151,7 +151,7 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 				$WhileResult[4]	=	date("d-m-Y H:i:s", $WhileResult[4]);
 
 			if ($Table == "planets")
-				$WhileResult[3]	=	pretty_time(time() - $WhileResult[3]);
+				$WhileResult[3]	=	Format::pretty_time(time() - $WhileResult[3]);
 
 
 			for ($i = 0; $i < $CountArray; $i++)

@@ -39,12 +39,12 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 
 				if ($cost > $planet[$ResType])
 				{
-					$text .= "<b style=\"color:red;\"> <t title=\"-" . pretty_number ($cost - $planet[$ResType]) . "\">";
-					$text .= "<span class=\"noresources\">" . pretty_number($cost) . "</span></t></b> ";
+					$text .= "<b style=\"color:red;\"> <t title=\"-" . Format::pretty_number ($cost - $planet[$ResType]) . "\">";
+					$text .= "<span class=\"noresources\">" . Format::pretty_number($cost) . "</span></t></b> ";
 					$is_buyeable = FALSE;
 				}
 				else
-					$text .= "<b style=\"color:lime;\">" . pretty_number($cost) . "</b> ";
+					$text .= "<b style=\"color:lime;\">" . Format::pretty_number($cost) . "</b> ";
 			}
 		}
 		return $text;

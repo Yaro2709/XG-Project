@@ -72,7 +72,7 @@ class ShowFleetACSPage
 			$EnvoiMaxExpedition = 0;
 		}
 
-		$MaxFlottes 		= get_max_fleets ( $CurrentUser[$resource[108]] , $CurrentUser['rpg_amiral'] );
+		$MaxFlottes 		= Fleets::get_max_fleets ( $CurrentUser[$resource[108]] , $CurrentUser['rpg_amiral'] );
 
 		if ( !is_numeric ( $fleetid ) or empty ( $fleetid ) )
 		{
@@ -230,12 +230,12 @@ class ShowFleetACSPage
 						}
 					}
 
-					$parse['fleet_amount']		=	pretty_number ( $f[fleet_amount] );
+					$parse['fleet_amount']		=	Format::pretty_number ( $f[fleet_amount] );
 					$parse['fleet_start']		=	"[".$f[fleet_start_galaxy].":".$f[fleet_start_system].":".$f[fleet_start_planet]."]";
 					$parse['fleet_start_time']	=	date ( "d M Y H:i:s" , $f['fleet_start_time'] );
 					$parse['fleet_end']			=	"[".$f[fleet_end_galaxy].":".$f[fleet_end_system].":".$f[fleet_end_planet]."]";
 					$parse['fleet_end_time']	=	date ( "d M Y H:i:s" , $f['fleet_end_time'] );
-					$parse['fleet_arrival']		=	pretty_time ( floor ( $f['fleet_end_time'] + 1 - time() ) );
+					$parse['fleet_arrival']		=	Format::pretty_time ( floor ( $f['fleet_end_time'] + 1 - time() ) );
 
 					if ($f['fleet_mess'] == 0 or $f['fleet_mess'] == 2)
 					{
@@ -327,19 +327,19 @@ class ShowFleetACSPage
 				{
 					if ( $i == 212 )
 					{
-						$ships['fleet_max_speed'] 	= '-';
+						$ships['fleet_max_speed'] 	= 	'-';
 					}
 					else
 					{
-						$ships['fleet_max_speed']	= GetFleetMaxSpeed ( "" , $i , $CurrentUser );
+						$ships['fleet_max_speed']	=  	Fleets::fleet_max_speed ( "" , $i , $CurrentUser );
 					}
 
 					$ships['ship']					= 	$lang['tech'][$i];
-					$ships['amount']				= 	pretty_number ( $CurrentPlanet[$resource[$i]] );
+					$ships['amount']				= 	Format::pretty_number ( $CurrentPlanet[$resource[$i]] );
 					$inputs['i']					=	$i;
 					$inputs['maxship']				=	$CurrentPlanet[$resource[$i]];
-					$inputs['consumption']			=	GetShipConsumption ( $i, $CurrentUser );
-					$inputs['speed']				=	GetFleetMaxSpeed ("", $i, $CurrentUser );
+					$inputs['consumption']			=	Fleets::ship_consumption ( $i, $CurrentUser );
+					$inputs['speed']				=	Fleets::fleet_max_speed ("", $i, $CurrentUser );
 					$inputs['capacity']				=	$pricelist[$i]['capacity'];
 
 					if ($i == 212)

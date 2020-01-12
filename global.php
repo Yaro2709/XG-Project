@@ -19,6 +19,11 @@ include_once ( XGP_ROOT . 'includes/GeneralFunctions.php' );
 include_once ( XGP_ROOT . 'includes/classes/class.simple_html_dom.php' );
 include_once ( XGP_ROOT . 'includes/classes/class.debug.php' );
 include_once ( XGP_ROOT . 'includes/classes/class.xml.php' );
+include_once ( XGP_ROOT . 'includes/classes/class.Format.php' );
+include_once ( XGP_ROOT . 'includes/classes/class.NoobsProtection.php' );
+include_once ( XGP_ROOT . 'includes/classes/class.Production.php' );
+include_once ( XGP_ROOT . 'includes/classes/class.Fleets.php' );
+
 $debug 		= new debug();
 
 if ( filesize ( XGP_ROOT . 'config.php' ) == 0 && INSTALL != TRUE )

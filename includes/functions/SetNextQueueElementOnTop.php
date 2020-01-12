@@ -69,12 +69,12 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 						{
 							$Needed      = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 							$Message     = sprintf ($lang['sys_notenough_money'], $ElementName,
-							pretty_number ($CurrentPlanet['metal']), $lang['Metal'],
-							pretty_number ($CurrentPlanet['crystal']), $lang['Crystal'],
-							pretty_number ($CurrentPlanet['deuterium']), $lang['Deuterium'],
-							pretty_number ($Needed['metal']), $lang['Metal'],
-							pretty_number ($Needed['crystal']), $lang['Crystal'],
-							pretty_number ($Needed['deuterium']), $lang['Deuterium']);
+							Format::pretty_number ($CurrentPlanet['metal']), $lang['Metal'],
+							Format::pretty_number ($CurrentPlanet['crystal']), $lang['Crystal'],
+							Format::pretty_number ($CurrentPlanet['deuterium']), $lang['Deuterium'],
+							Format::pretty_number ($Needed['metal']), $lang['Metal'],
+							Format::pretty_number ($Needed['crystal']), $lang['Crystal'],
+							Format::pretty_number ($Needed['deuterium']), $lang['Deuterium']);
 						}
 
 						SendSimpleMessage ( $CurrentUser['id'], '', '', 99, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $Message);

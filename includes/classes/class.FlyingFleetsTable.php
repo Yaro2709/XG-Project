@@ -18,11 +18,11 @@ class FlyingFleetsTable
 		if ($FleetTotalC <> 0)
 		{
 			$FRessource   = "<table width=200>";
-			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Metal']."<font></td><td width=50% align=right><font color=white>". pretty_number($FleetRow['fleet_resource_metal']) ."<font></td></tr>";
-			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Crystal']."<font></td><td width=50% align=right><font color=white>". pretty_number($FleetRow['fleet_resource_crystal']) ."<font></td></tr>";
-			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Deuterium']."<font></td><td width=50% align=right><font color=white>". pretty_number($FleetRow['fleet_resource_deuterium']) ."<font></td></tr>";
+			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Metal']."<font></td><td width=50% align=right><font color=white>". Format::pretty_number($FleetRow['fleet_resource_metal']) ."<font></td></tr>";
+			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Crystal']."<font></td><td width=50% align=right><font color=white>". Format::pretty_number($FleetRow['fleet_resource_crystal']) ."<font></td></tr>";
+			$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Deuterium']."<font></td><td width=50% align=right><font color=white>". Format::pretty_number($FleetRow['fleet_resource_deuterium']) ."<font></td></tr>";
 			if($FleetRow['fleet_resource_darkmatter'] > 0)
-				$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Darkmatter']."<font></td><td width=50% align=right><font color=white>". pretty_number($FleetRow['fleet_resource_darkmatter']) ."<font></td></tr>";
+				$FRessource  .= "<tr><td width=50% align=left><font color=white>".$lang['Darkmatter']."<font></td><td width=50% align=right><font color=white>". Format::pretty_number($FleetRow['fleet_resource_darkmatter']) ."<font></td></tr>";
 			$FRessource  .= "</table>";
 		}
 		else
@@ -67,13 +67,13 @@ class FlyingFleetsTable
 					{
 						$Ship    = explode(",", $Group);
 						if($FleetRow['fleet_owner'] == $user['id'])
-							$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". pretty_number($Ship[1]) ."<font></td></tr>";
+							$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". Format::pretty_number($Ship[1]) ."<font></td></tr>";
 						elseif($FleetRow['fleet_owner'] != $user['id'])
 						{
 							if($user['spy_tech'] >= 4 && $user['spy_tech'] < 8)
 								$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] ."<font></td></tr>";
 							elseif($user['spy_tech'] >= 8)
-								$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". pretty_number($Ship[1]) ."<font></td></tr>";
+								$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". Format::pretty_number($Ship[1]) ."<font></td></tr>";
 						}
 					}
 				}
@@ -86,7 +86,7 @@ class FlyingFleetsTable
 				if ($Group  != '')
 				{
 					$Ship    = explode(",", $Group);
-					$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". pretty_number($Ship[1]) ."<font></td></tr>";
+					$FleetPopup .= "<tr><td width=50% align=left><font color=white>". $lang['tech'][$Ship[0]] .":<font></td><td width=50% align=right><font color=white>". Format::pretty_number($Ship[1]) ."<font></td></tr>";
 				}
 			}
 		}

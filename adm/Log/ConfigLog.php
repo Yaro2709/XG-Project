@@ -1,11 +1,9 @@
 
-El usuario  cambio la siguiente configuraci&oacute;n:
-&iquest;Servidor cerrado? : 
-&iquest;Modo DEBUG activado? : 
-Nombre del juego : XG Proyect
-URL del foro : http://www.xgproyect.net/
-Velocidad del juego : x1
-Velocidad de flota : x1
+El usuario lucky ha cambiado los parametros de estadisticas:
+&iquest;La administraci&oacute;n puede figurar en el ranking?: 
+&iquest;Hasta que rango pueden figurar en el ranking?: 
+Operaci&oacute;n realizada el: 26-04-2012 22:04:21
+x1
 Velocidad de producci&oacute;n : x1
 Campos iniciales : 163
 B&aacute;sico de metal por hora : 20
@@ -19,4 +17,5 @@ Naves a escombros : 30%
 &iquest;Protecci&oacute;n contra novatos activado? : 
 Tiempo de protecci&oacute;n contra novato : 5000
 Limite de puntos para la protecci&oacute;n de novato : 5
-Operaci&oacute;n realizada el: 02-04-2012 19:04:23
+Operaci&oacute;n realizada el: 26-04-2012 21:00:00
+:05

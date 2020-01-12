@@ -16,6 +16,9 @@
  *   $c->write_config('version','blabla');
  *   echo $c->get_config('version');
  */
+ 
+if(!defined('INSIDE')){ die(header("location:../../"));} 
+ 
 class xml
 {
     //an istance of this class: see singleton pattern

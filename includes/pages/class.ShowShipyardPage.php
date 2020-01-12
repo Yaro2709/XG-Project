@@ -69,7 +69,7 @@ class ShowShipyardPage
 		$parse['b'] 					= $NamePerType;
 		$parse['c'] 					= $TimePerType;
 		$parse['b_hangar_id_plus'] 		= $CurrentPlanet['b_hangar'];
-		$parse['pretty_time_b_hangar'] 	= pretty_time($QueueTime - $CurrentPlanet['b_hangar']);
+		$parse['pretty_time_b_hangar'] 	= Format::pretty_time($QueueTime - $CurrentPlanet['b_hangar']);
 		$text .= parsetemplate(gettemplate('buildings/buildings_script'), $parse);
 
 		return $text;
@@ -176,7 +176,7 @@ class ShowShipyardPage
 					$CanBuildOne         			= IsElementBuyable($CurrentUser, $CurrentPlanet, $Element, FALSE);
 					$BuildOneElementTime 			= GetBuildingTime($CurrentUser, $CurrentPlanet, $Element);
 					$ElementCount        			= $CurrentPlanet[$resource[$Element]];
-					$ElementNbre         			= ($ElementCount == 0) ? "" : " (". $lang['bd_available'] . pretty_number($ElementCount) . ")";
+					$ElementNbre         			= ($ElementCount == 0) ? "" : " (". $lang['bd_available'] . Format::pretty_number($ElementCount) . ")";
 
 					$parse['dpath']					= DPATH;
 					$parse['add_element']			= '';
@@ -381,7 +381,7 @@ class ShowShipyardPage
 					$CanBuildOne         			= IsElementBuyable($CurrentUser, $CurrentPlanet, $Element, FALSE);
 					$BuildOneElementTime 			= GetBuildingTime($CurrentUser, $CurrentPlanet, $Element);
 					$ElementCount        			= $CurrentPlanet[$resource[$Element]];
-					$ElementNbre         			= ($ElementCount == 0) ? "" : " (". $lang['bd_available'] . pretty_number($ElementCount) . ")";
+					$ElementNbre         			= ($ElementCount == 0) ? "" : " (". $lang['bd_available'] . Format::pretty_number($ElementCount) . ")";
 
 					$parse['add_element']			= '';
 					$parse['dpath']					= DPATH;

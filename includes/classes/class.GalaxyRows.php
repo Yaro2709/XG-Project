@@ -418,7 +418,7 @@ class GalaxyRows
 
 		if ($GalaxyInfo['last_update'] > (time()-59 * 60) && $GalaxyInfo['id'] != $user['id'])
 		{
-			$Inactivity = pretty_time_hour(time() - $GalaxyInfo['last_update']);
+			$Inactivity = Format::pretty_time_hour(time() - $GalaxyInfo['last_update']);
 		}
 
 		if ($GalaxyInfo && $GalaxyInfo["destruyed"] == 0)
@@ -471,9 +471,6 @@ class GalaxyRows
 
 		if ($GalaxyInfo && $GalaxyInfo["destruyed"] == 0)
 		{
-			$protection      	= read_config ( 'noobprotection' );
-			$protectiontime  	= read_config ( 'noobprotectiontime' );
-			$protectionmulti 	= read_config ( 'noobprotectionmulti' );
 			$MyGameLevel		= $user['total_points'];
 			$HeGameLevel		= $GalaxyInfo['total_points'];
 
@@ -502,12 +499,12 @@ class GalaxyRows
 				$Systemtatus2 	= "<span class=\"inactive\">".$lang['gl_i']."</span><span class=\"longinactive\">".$lang['gl_I']."</span>";
 				$Systemtatus 	= "<span class=\"longinactive\">";
 			}
-			elseif (($MyGameLevel > ($HeGameLevel * $protectionmulti)) && $protection == 1 && ($HeGameLevel < $protectiontime))
+			elseif ( is_weak ( $MyGameLevel , $HeGameLevel ) )
 			{
 				$Systemtatus2 	= "<span class=\"noob\">".$lang['gl_w']."</span>";
 				$Systemtatus 	= "<span class=\"noob\">";
 			}
-			elseif ((($MyGameLevel * $protectionmulti) < $HeGameLevel) && $protection == 1 && ($MyGameLevel < $protectiontime))
+			elseif ( is_strong ( $MyGameLevel , $HeGameLevel ) )
 			{
 				$Systemtatus2 	= $lang['gl_s'];
 				$Systemtatus 	= "<span class=\"strong\">";

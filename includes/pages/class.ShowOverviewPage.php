@@ -123,7 +123,7 @@ class ShowOverviewPage
 					elseif($CurrentUser['new_message'] > 1)
 					{
 						$Have_new_message .= "<th colspan=4><a href=game.php?page=messages>";
-						$Have_new_message .= str_replace('%m',pretty_number($CurrentUser['new_message']),$lang['ov_have_new_messages']);
+						$Have_new_message .= str_replace('%m',Format::pretty_number($CurrentUser['new_message']),$lang['ov_have_new_messages']);
 						$Have_new_message .= "</a></th>";
 					}
 					$Have_new_message .= "</tr>";
@@ -293,7 +293,7 @@ class ShowOverviewPage
 								$CurrentBuild = explode(",",$QueueArray[0]);
 								$BuildElement = $CurrentBuild[0];
 								$BuildLevel = $CurrentBuild[1];
-								$BuildRestTime = pretty_time($CurrentBuild[3] - time());
+								$BuildRestTime = Format::pretty_time($CurrentBuild[3] - time());
 								$AllPlanets .= '' . $lang['tech'][$BuildElement] . ' (' . $BuildLevel . ')';
 								$AllPlanets .= "<br><font color=\"#7f7f7f\">(" . $BuildRestTime . ")</font>";
 							}
@@ -343,7 +343,7 @@ class ShowOverviewPage
 					$parse['moon'] = "";
 				}
 
-				$parse['planet_diameter'] = pretty_number($CurrentPlanet['diameter']);
+				$parse['planet_diameter'] = Format::pretty_number($CurrentPlanet['diameter']);
 				$parse['planet_field_current'] = $CurrentPlanet['field_current'];
 				$parse['planet_field_max'] = CalculateMaxPlanetFields($CurrentPlanet);
 				$parse['planet_temp_min'] = $CurrentPlanet['temp_min'];
@@ -375,7 +375,7 @@ class ShowOverviewPage
 						$PlanetID = $CurrentPlanet['id'];
 						$Build = InsertBuildListScript("overview");
 						$Build .= $lang['tech'][$CurrBuild[0]] . ' (' . ($CurrBuild[1]) . ')';
-						$Build .= "<br /><div id=\"blc\" class=\"z\">" . pretty_time($RestTime) . "</div>";
+						$Build .= "<br /><div id=\"blc\" class=\"z\">" . Format::pretty_time($RestTime) . "</div>";
 						$Build .= "\n<script language=\"JavaScript\">";
 						$Build .= "\n	pp = \"" . $RestTime . "\";\n";
 						$Build .= "\n	pk = \"" . 1 . "\";\n";
@@ -401,9 +401,9 @@ class ShowOverviewPage
 				$parse['anothers_planets'] = $AllPlanets;
 				$parse["dpath"] = DPATH;
 				if(read_config ( 'stat' ) == 0)
-					$parse['user_rank'] = pretty_number($StatRecord['total_points']) . " (" . $lang['ov_place'] . " <a href=\"game.php?page=statistics&range=" . $StatRecord['total_rank'] . "\">" . $StatRecord['total_rank'] . "</a> " . $lang['ov_of'] . " " . read_config ( 'users_amount' ) . ")";
+					$parse['user_rank'] = Format::pretty_number($StatRecord['total_points']) . " (" . $lang['ov_place'] . " <a href=\"game.php?page=statistics&range=" . $StatRecord['total_rank'] . "\">" . $StatRecord['total_rank'] . "</a> " . $lang['ov_of'] . " " . read_config ( 'users_amount' ) . ")";
 				elseif(read_config ( 'stat' ) == 1 && $CurrentUser['authlevel'] < read_config ( 'stat_level' ))
-					$parse['user_rank'] = pretty_number($StatRecord['total_points']) . " (" . $lang['ov_place'] . " <a href=\"game.php?page=statistics&range=" . $StatRecord['total_rank'] . "\">" . $StatRecord['total_rank'] . "</a> " . $lang['ov_of'] . " " . read_config ( 'users_amount' ) . ")";
+					$parse['user_rank'] = Format::pretty_number($StatRecord['total_points']) . " (" . $lang['ov_place'] . " <a href=\"game.php?page=statistics&range=" . $StatRecord['total_rank'] . "\">" . $StatRecord['total_rank'] . "</a> " . $lang['ov_of'] . " " . read_config ( 'users_amount' ) . ")";
 				else
 					$parse['user_rank'] = "-";
 

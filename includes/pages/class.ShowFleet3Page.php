@@ -58,16 +58,6 @@ class ShowFleet3Page
 		$TargetPlanet  		= doquery("SELECT `id_owner`,`id_level`,`destruyed`,`ally_deposit` FROM {{table}} WHERE `galaxy` = '". intval($_POST['galaxy']) ."' AND `system` = '". intval($_POST['system']) ."' AND `planet` = '". intval($_POST['planet']) ."' AND `planet_type` = '". intval($_POST['planettype']) ."';", 'planets', TRUE);
 		$MyDBRec       		= doquery("SELECT `id`,`onlinetime`,`ally_id`,`urlaubs_modus` FROM {{table}} WHERE `id` = '". intval($CurrentUser['id'])."';", 'users', TRUE);
 
-		$protection      	= read_config ( 'noobprotection' );
-		$protectiontime  	= read_config ( 'noobprotectiontime' );
-		$protectionmulti 	= read_config ( 'noobprotectionmulti' );
-
-		if ( $protectiontime < 1 )
-		{
-			$protectiontime = 9999999999999999;
-		}
-
-
 		$fleetarray  = unserialize ( base64_decode ( str_rot13 ( $_POST["usedfleet"] ) ) );
 
 		if ( $TargetPlanet["destruyed"] != 0 )
@@ -236,20 +226,16 @@ class ShowFleet3Page
 
 		if($HeDBRec['onlinetime'] >= (time()-60 * 60 * 24 * 7))
 		{
-			if ($MyGameLevel > ($HeGameLevel * $protectionmulti)
-				&& $TargetPlanet['id_owner'] != ''
-				&& ($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9)
-				&& $protection == 1
-				&& $HeGameLevel < $protectiontime)
+			if ( is_weak ( $MyGameLevel , $HeGameLevel ) && 
+					$TargetPlanet['id_owner'] != '' && 
+					($_POST['mission'] == 1 or $_POST['mission'] == 6 or $_POST['mission'] == 9))
 			{
 				message("<font color=\"lime\"><b>".$lang['fl_week_player']."</b></font>", "game.php?page=fleet", 2);
 			}
 
-			if (($MyGameLevel * $protectionmulti) < $HeGameLevel
-				&& $TargetPlanet['id_owner'] != ''
-				&& ($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9)
-				&& $protection == 1
-				&& $MyGameLevel < $protectiontime)
+			if ( is_strong ( $MyGameLevel , $HeGameLevel ) &&
+					$TargetPlanet['id_owner'] != '' &&
+					($_POST['mission'] == 1 or $_POST['mission'] == 5 or $_POST['mission'] == 6 or $_POST['mission'] == 9))
 			{
 				message("<font color=\"red\"><b>".$lang['fl_strong_player']."</b></font>", "game.php?page=fleet", 2);
 			}
@@ -263,7 +249,7 @@ class ShowFleet3Page
 		$FlyingFleets = mysql_fetch_assoc(doquery("SELECT COUNT(fleet_id) as Number FROM {{table}} WHERE `fleet_owner`='".intval($CurrentUser['id'])."'", 'fleets'));
 		$ActualFleets = $FlyingFleets["Number"];
 
-		if ((get_max_fleets ( $CurrentUser[$resource[108]] , $CurrentUser['rpg_amiral'] ) ) <= $ActualFleets)
+		if ((Fleets::get_max_fleets ( $CurrentUser[$resource[108]] , $CurrentUser['rpg_amiral'] ) ) <= $ActualFleets)
 		{
 			message($lang['fl_no_slots'], "game.php?page=fleet", 1);
 		}
@@ -350,7 +336,7 @@ class ShowFleet3Page
 									);
 
 		$speed_possible	= array(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
-		$AllFleetSpeed	= GetFleetMaxSpeed ($fleetarray, 0, $CurrentUser);
+		$AllFleetSpeed	= Fleets::fleet_max_speed ($fleetarray, 0, $CurrentUser);
 		$GenFleetSpeed  = $_POST['speed'];
 		$SpeedFactor    = read_config ( 'fleet_speed' ) / 2500;
 		$MaxFleetSpeed  = min($AllFleetSpeed);
@@ -398,9 +384,9 @@ class ShowFleet3Page
 			exit ( header ( "location:game.php?page=fleet" ) );
 		}
 
-		$distance      = GetTargetDistance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
-		$duration      = GetMissionDuration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
-		$consumption   = GetFleetConsumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $CurrentUser);
+		$distance      = Fleets::target_distance($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
+		$duration      = Fleets::mission_duration($GenFleetSpeed, $MaxFleetSpeed, $distance, $SpeedFactor);
+		$consumption   = Fleets::fleet_consumption($fleetarray, $SpeedFactor, $duration, $distance, $MaxFleetSpeed, $CurrentUser);
 
 		$fleet['start_time'] = $duration + time();
 
@@ -515,12 +501,12 @@ class ShowFleet3Page
 
 		if (!$StockOk)
 		{
-			message ("<font color=\"red\"><b>". $lang['fl_no_enought_deuterium'] . pretty_number($consumption) ."</b></font>", "game.php?page=fleet", 2);
+			message ("<font color=\"red\"><b>". $lang['fl_no_enought_deuterium'] . Format::pretty_number($consumption) ."</b></font>", "game.php?page=fleet", 2);
 		}
 
 		if ( $StorageNeeded > $FleetStorage)
 		{
-			message ("<font color=\"red\"><b>". $lang['fl_no_enought_cargo_capacity'] . pretty_number($StorageNeeded - $FleetStorage) ."</b></font>", "game.php?page=fleet", 2);
+			message ("<font color=\"red\"><b>". $lang['fl_no_enought_cargo_capacity'] . Format::pretty_number($StorageNeeded - $FleetStorage) ."</b></font>", "game.php?page=fleet", 2);
 		}
 
 		if ($TargetPlanet['id_level'] > $CurrentUser['authlevel'] && read_config ( 'adm_attack' ) == 0)
@@ -583,9 +569,9 @@ class ShowFleet3Page
 		doquery ($QryUpdatePlanet, "planets");
 
 		$parse['mission'] 		= $missiontype[$_POST['mission']];
-		$parse['distance'] 		= pretty_number($distance);
-		$parse['speedallsmin'] 	= pretty_number($_POST['speedallsmin']);
-		$parse['consumption'] 	= pretty_number($consumption);
+		$parse['distance'] 		= Format::pretty_number($distance);
+		$parse['speedallsmin'] 	= Format::pretty_number($_POST['speedallsmin']);
+		$parse['consumption'] 	= Format::pretty_number($consumption);
 		$parse['from']	 		= $_POST['thisgalaxy'] .":". $_POST['thissystem']. ":". $_POST['thisplanet'];
 		$parse['destination']	= $_POST['galaxy'] .":". $_POST['system'] .":". $_POST['planet'];
 		$parse['start_time'] 	= date("M D d H:i:s", $fleet['start_time']);
@@ -596,7 +582,7 @@ class ShowFleet3Page
 		foreach ( $fleetarray as $Ship => $Count )
 		{
 			$fleet_list['ship']		=	$lang['tech'][$Ship];
-			$fleet_list['amount']	=	pretty_number ( $Count );
+			$fleet_list['amount']	=	Format::pretty_number ( $Count );
 
 			$ships_list			   .=	parsetemplate ( $ships_row_template , $fleet_list );
 		}

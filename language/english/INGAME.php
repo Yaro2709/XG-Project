@@ -88,7 +88,7 @@ $lang['lm_banned']							= 'Banned';
 $lang['lm_contact']							= 'Contact';
 $lang['lm_forums']							= 'Forum';
 $lang['lm_logout']							= 'Logout';
-$lang['lm_administration']					= 'Administation';
+$lang['lm_administration']					= 'Administration';
 $lang['lm_game_speed']						= 'Game';
 $lang['lm_fleet_speed']						= 'Fleets';
 $lang['lm_resources_speed']					= 'Resources';
@@ -113,7 +113,7 @@ $lang['ov_diameter']						= 'Diameter';
 $lang['ov_distance_unit']					= 'km';
 $lang['ov_temperature']						= 'Temperature';
 $lang['ov_aprox']							= 'approx.';
-$lang['ov_temp_unit']						= '°C';
+$lang['ov_temp_unit']						= '&#186;C';
 $lang['ov_to']								= 'to';
 $lang['ov_position']						= 'Position';
 $lang['ov_points']							= 'Points';
@@ -319,13 +319,13 @@ $lang['bd_add_to_list']						= 'Add to list';
 $lang['bd_no_more_fields']					= 'No more room on the planet';
 $lang['bd_remaining']						= 'Remaining';
 $lang['bd_lab_required']					= 'You need to build a research laboratory on this planet first!';
-$lang['bd_building_lab']					= 'No se puede investigar cuando se esta ampliando el laboratorio';
+$lang['bd_building_lab']					= 'Can not research when the laboratory is expanding';
 $lang['bd_lvl']								= 'level';
 $lang['bd_spy']								= ' spy';
 $lang['bd_commander']						= ' commander';
 $lang['bd_research']						= 'research';
 $lang['bd_shipyard_required']				= 'You need to build a shipyard on this planet first!';
-$lang['bd_building_shipyard']				= 'No puedes fabricar naves durante la ampliación del hangar';
+$lang['bd_building_shipyard']				= 'You can not build ships when the shipyard is upgrading';
 $lang['bd_available']						= 'Available: ';
 $lang['bd_build_ships']						= 'Build';
 $lang['bd_protection_shield_only_one']		= 'The shield can be built only once!';
@@ -351,10 +351,10 @@ $lang['rs_weekly']							= 'Res per week:';
 
 //----------------------------------------------------------------------------//
 //OFFICIERS
-$lang['of_title']							= 'Oficiales';
-$lang['of_recruit']							= 'Reclutar';
-$lang['of_active']							= '<strong><font color="lime">Activo</font></strong>';
-$lang['of_inactive']						= '<strong><font color="red">Inactivo</font></strong>';
+$lang['of_title']							= 'Officers';
+$lang['of_recruit']							= 'Recrute';
+$lang['of_active']							= '<strong><font color="lime">Active</font></strong>';
+$lang['of_inactive']						= '<strong><font color="red">Inactive</font></strong>';
 
 //----------------------------------------------------------------------------//
 //TRADER
@@ -461,69 +461,69 @@ $lang['res']['descriptions'] = array(
 2 => "Crystals are the main resource used to build electronic circuits and form certain alloy compounds.",
 3 => "Deuterium is used as fuel for spaceships and is harvested in the deep sea. Deuterium is a rare substance and is thus relatively expensive.",
 4 => "Solar power plants absorb energy from solar radiation. All mines need energy to operate.",
-12 => "Un reactor de fusión nuclear que produce un átomo de helio a partir de dos átomos de deuterio usando una presión extremadamente alta y una elevadísima temperatura.",
+12 => "A nuclear fusion reactor which produces a helium atom from two deuterium atoms using an extremely high pressure and a very high temperature.",
 14 => "Robotic factories provide construction robots to aid in the construction of buildings. Each level increases the speed of the upgrade of buildings.",
-15 => "La fábrica de nanobots es la última evolución de la robótica. Cada mejora proporciona nanobots más y más eficientes que incrementan la velocidad de construcción.",
-21 => "El hangar es el lugar donde se construyen naves y estructuras de defensa planetaria.",
+15 => "nanobots factory is the latest evolution of robotics. Each enhancement provides more and more efficient nanobots that speed of construction.",
+21 => "The hangar is where structures are built ships and planetary defense.",
 22 => "Provides storage for excess metal.",
 23 => "Provides storage for excess crystal.",
 24 => "Giant tanks for storing newly-extracted deuterium.",
 31 => "A research lab is required in order to conduct research into new technologies.",
-33 => "El Terraformer es necesario para habilitar áreas inaccesibles de tu planeta para edificar infraestructuras.",
-34 => "The alliance depot supplies fuel to friendly fleets in orbit helping with defense.",
-41 => "Dado que la luna no tiene atmósfera, se necesita una base lunar para generar espacio habitable.",
-42 => "Usando el sensor phalanx, las flotas de otros imperios pueden ser descubiertas y observadas. Cuanto mayor sea la cadena de sensores phalanx, mayor el rango que pueda escanear.",
-43 => "El saltos cuánticos son transmisores enormes que son capaces de enviar grandes flotas a través del universo sin perdida de tiempo.",
-44 => "El silo es un lugar de almacenamiento y lanzamiento de misiles planetarios.",
+33 => "The Terraformer is required to enable inaccessible areas of your planet to build infrastructure.",
+34 => "The alliance depot supplies fuel to friendly Fleets in orbit helping with defense.",
+41 => "Because the moon has no atmosphere, you need a moon base to generate living space.",
+42 => "Using the sensor phalanx, the fleets of other empires can be discovered and observed. The larger the sensor chain phalanx, the greater the range to scan.",
+43 => "The huge quantum leaps are transmitters that are capable of sending large fleets throughout the universe without loss of time.",
+44 => "The silo is a storage and planetary missile launch.",
 
-106 => "Usando esta tecnolog&iacute;a, puede obtenerse informaci&oacute;n sobre otros planetas.",
-108 => "Cuanto m&aacute;s elevado sea el nivel de tecnolog&iacute;a de computaci&oacute;n, m&aacute;s flotas podr&aacute;s controlar simultaneamente. Cada nivel adicional de esta tecnologia, aumenta el numero de flotas en 1.",
-109 => "Este tipo de tecnolog&iacute;a incrementa la eficiencia de tus sistemas de armamento. Cada mejora de la tecnolog&iacute;a militar a&ntilde;ade un 10% de potencia a la base de da&ntilde;o de cualquier arma disponible.",
-110 => "La tecnolog&iacute;a de defensa se usa para generar un escudo de part&iacute;culas protectoras alrededor de tus estructuras.
-Cada nivel de esta tecnolog&iacute;a aumenta el escudo efectivo en un 10% (basado en el nivel de una estructura dada).",
-111 => "Las aleaciones altamente sofisticadas ayudan a incrementar el blindaje de una nave a&ntilde;adiendo el 10% de su fuerza en cada nivel a la fuerza base.",
-113 => "Entendiendo la tecnolog&iacute;a de diferentes tipos de energ&iacute;a, muchas investigaciones nuevas y avanzadas pueden ser adaptadas. La tecnolog&iacute;a de energ&iacute;a es de gran importancia para un laboratorio de investigaci&oacute;n moderno.",
-114 => "Incorporando la cuarta y quinta dimensi&oacute;n en la tecnolog&iacute;a de propulsi&oacute;n, se puede disponer de un nuevo tipo de motor; que es m&aacute;s eficiente y usa menos combustible que los convencionales.",
-115 => "Ejecutar investigaciones en esta tecnolog&iacute;a proporciona motores de combusti&oacute;n siempre m&aacute;s rapido, aunque cada nivel aumenta solamente la velocidad en un 10% de la velocidad base de una nave dada.",
-117 => "El sistema del motor de impulso se basa en el principio de la repulsi&oacute;n de part&iacute;culas. La materia repelida es basura generada por el reactor de fusi&oacute;n usado para proporcionar la energ&iacute;a necesaria para este tipo de motor de propulsi&oacute;n.",
-118 => "Los motores de hiperespacio permiten entrar al mismo a trav&eacute;s de una ventana hiperespacial para reducir dr&aacute;sticamente el tiempo de viaje. El hiperespacio es un espacio alternativo con m&aacute;s de 3 dimensiones.",
-120 => "La Tecnolog&iacute;a l&aacute;ser es un importante conocimiento; conduce a la luz monocrom&aacute;tica firmemente enfocada sobre un objetivo. El da&ntilde;o puede ser ligero o moderado dependiendo de la potencia del rayo...",
-121 => "La Tecnolog&iacute;a i&oacute;nica enfoca un rayo de iones acelerados en un objetivo, lo que puede provocar un gran da&ntilde;o debido a su naturaleza de electrones cargados de energ&iacute;a.",
-122 => "Las armas de plasma son incluso m&aacute;s peligrosas que cualquier otro sistema de armamento conocido, debido a la naturaleza agresiva del plasma.",
-123 => "Los cient&iacute;ficos de tus planetas pueden comunicarse entre ellos a trav&eacute;s de esta red.",
-124 => "Las naves son equipadas con equipo cientifico para tomar datos en largas expediciones.",
-199 => "A trav&eacute;s del disparo de part&iacute;culas concentradas de gravit&oacute;n se genera un campo gravitacional artificial con suficiente potencia y poder de atracci&oacute;n para destruir no solo naves, sino lunas enteras.",
+106 => "Using this technology, information can be obtained on other planets.",
+108 => "The higher the level of computer technology, more fleets you can control simultaneously. Each additional level of this technology increases the number of fleets to 1.",
+109 => "This technology increases the efficiency of your weapon systems. Each improvement of military technology adds 10% power to the base damage of any weapon available.",
+110 => "The defense technology is used to generate a protective shield around your particle structures.
+Each level of this technology increases the effective shield by 10% (based on the level of a given structure).",
+111 => "highly sophisticated alloys help to increase the armor of a ship by adding 10% of its strength at each level to the base strength.",
+113 => "Understanding the technology of different types of energy, many new and advanced research can be adapted. Energy technology is of great importance for a modern research laboratory.",
+114 => "Incorporating the fourth and fifth dimension in propulsion technology, you can have a new type of motor is more efficient and uses less fuel than conventional ones.",
+115 => "Run research in this technology provides combustion engines always faster, although each level only increases the speed by 10% of base speed of a given ship.",
+117 => "The pulse motor system is based on the principle of repulsion of particles. Matter is repelled waste generated by the fusion reactor used to provide the energy necessary for this type of propulsion engine.",
+118 => "hyperspace engines allow you to enter it through a hyperspace window to dramatically reduce travel time. Hyperspace is an alternative space with more than 3 dimensions.",
+120 => "The laser technology is an important knowledge, leads to monochromatic light tightly focused on a target. The damage can be mild or moderate depending on the power of lightning ...",
+121 => "The Ionic technology focuses a beam of accelerated ions in a target, which can cause great damage because of the nature of energized electrons.",
+122 => "plasma weapons are even more dangerous than any known weapon system due to the aggressive nature of plasma.",
+123 => "Scientists of your planets can communicate with each other through this network.",
+124 => "The ships are equipped with scientific equipment to collect data on long expeditions.",
+199 => "Through the firing of graviton particles concentrated gravitational field is generated artificially with enough power and attractiveness to destroy not only ships but entire moons.",
 
-202 => "Las naves peque&ntilde;as de carga son naves muy &aacute;giles usadas para transportar recursos desde un planeta a otro",
-203 => "La nave grande de carga es una versi&oacute;n avanzada de las naves peque&ntilde;as de carga, permitiendo as&iacute; una mayor capacidad de almacenamiento y velocidades m&aacute;s altas gracias a un mejor sistema de propulsi&oacute;n.",
-204 => "El cazador ligero es una nave maniobrable que puedes encontrar en casi cualquier planeta. El coste no es particularmente alto, pero asimismo el escudo y la capacidad de carga son muy bajas.",
-205 => "El cazador pesado es la evoluci&oacute;n logica del ligero, ofreciendo escudos reforzados y una mayor potencia de ataque.",
-206 => "Los cruceros de combate tienen un escudo casi tres veces m&aacute;s fuerte que el de los cazadores pesados y m&aacute;s del doble de potencia de ataque. Su velocidad de desplazamiento est&aacute; tambi&eacute;n entre las m&aacute;s r&aacute;pidas jam&aacute;s vista. ",
-207 => "Las naves de batalla son la espina dorsal de cualquier flota militar. Blindaje pesado, potentes sistemas de armamento y una alta velocidad de viaje, as&iacute; como una gran capacidad de carga hace de esta nave un duro rival contra el que luchar.",
-208 => "Esta nave proporciona lo necesario para ir a donde ning&uacute;n hombre ha llegado antes y colonizar nuevos mundos.",
-209 => "Los recicladores se usan para recolectar escombros flotando en el espacio para reciclarlos en recursos &uacute;tiles.",
-210 => "Las sondas de espionaje son peque&ntilde;os droides no tripulados con un sistema de propulsi&oacute;n excepcionalmente r&aacute;pido usado para espiar en planetas enemigos.",
-211 => "El Bombardero es una nave de prop&oacute;sito especial, desarrollado para atravesar las defensas planetarias m&aacute;s pesadas.",
-212 => "Los sat&eacute;lites solares son simples sat&eacute;lites en &oacute;rbita equipados con c&eacute;lulas fotovoltaicas y transmisores para llevar la energ&iacute;a al planeta. Se transmite por este medio a la tierra usando un rayo l&aacute;ser especial.",
-213 => "El destructor es la nave m&aacute;s pesada jam&aacute;s vista y posee un potencial de ataque sin precedentes.",
-214 => "No hay nada tan grande y peligroso como una estrella de la muerte aproxim&aacute;ndose.",
-215 => "El Acorazado es una nave altamente especializada en la intercepci&oacute;n de flotas hostiles.",
+202 => "The small ships are cargo ships used to transport very agile resources from one planet to another.",
+203 => "The big ship loading is an advanced version of the small cargo ships, allowing for greater storage capacity and higher speeds through improved propulsion system.",
+204 => "The hunter is a lightweight maneuverable craft that you can find in almost any planet. The cost is not particularly high, but also the shield and carrying capacity are very low.",
+205 => "The Hunter heavy is the logical evolution of lightweight shields provide reinforced and increased attack power.",
+206 => "The battle cruisers have a shield nearly three times stronger than the heavier and more hunters double attack power. Its travel speed is also among the more rational ; ask for ever.",
+207 => "The battleships are the backbone of any military fleet. Heavy armor, powerful weapons systems and high travel speed and a high load capacity makes this ship a tough opponent to fight against.",
+208 => "This ship provides a facility to go where no man has gone before and colonize new worlds.",
+209 => "The recyclers are used to collect debris floating in space to recycle them into useful resources.",
+210 => "espionage probes are small unmanned droids with an exceptionally fast propulsion system used to spy on enemy planets.",
+211 => "The Bomber is a special purpose ship, developed to cut through heavier planetary defenses.",
+212 => "Are simple solar satellites orbiting satellites equipped with photovoltaic panels and transmitters to bring energy to the planet. Hereby is transmitted to the ground using a special laser.",
+213 => "The destroyer is the heaviest spacecraft ever seen and has an unprecedented attack potential.",
+214 => "There is nothing as big and dangerous as an approaching Death Star.",
+215 => "Battleship is a highly specialized craft to intercept hostile fleets.",
 
-401 => "El lanzamisiles es un sistema de defensa sencillo, pero barato.",
-402 => "Por medio de un rayo l&aacute;ser concentrado, se puede provocar m&aacute;s da&ntilde;o que con las armas bal&iacute;sticas normales.",
-403 => "Los l&aacute;sers grandes posee una mejor salida de energ&iacute;a y una mayor integridad estructural que los l&aacute;sers peque&ntilde;os.",
-404 => "Usando una inmensa aceleraci&oacute;n electromagn&eacute;tica, los ca&ntilde;ones gauss aceleran proyectiles pesados.",
-405 => "Los ca&ntilde;ones i&oacute;nicos disparan rayos de iones altamente energ&eacute;ticos contra su objetivo, desestabilizando los escudos y destruyendo los componentes electr&oacute;nicos.",
-406 => "Los ca&ntilde;ones de plasma liberan la energ&iacute;a de una peque&ntilde;a erupci&oacute;n solar en una bala de plasma. La energ&iacute;a destructiva es incluso superior a la del Destructor.",
-407 => "La c&uacute;pula peque&ntilde;a de protecci&oacute;n cubre el planeta con un delgado campo protector que puede absorber inmensas cantidades de energ&iacute;a.",
-408 => "La c&uacute;pula grande de protecci&oacute;n proviene de una tecnolog&iacute;a de defensa mejorada que absorbe incluso m&aacute;s energ&iacute;a antes de colapsarse.",
-502 => "Los misiles de intercepci&oacute;n destruyen los misiles interplanetarios.",
-503 => "Los misiles interplanetarios destruyen los sistemas de defensa del enemigo.",
+401 => "The missile defense system is a simple but cheap.",
+402 => "Through a focused laser beam, it can cause more damage than normal ballistic weapons.",
+403 => "large lasers have an output better energi'ay greater structural integrity than the small lasers.",
+404 => "Using a vast electromagnetic acceleration, gauss cannons accelerate heavy projectiles.",
+405 => "The ion cannons fired high-energy ion beams its target, destabilizing and destroying shields the electronics.",
+406 => "The Guns of plasma free energy of a small solar flare in a ball of plasma. Destructive energy is even higher than that of the Destroyer.",
+407 => "Small Shield Dome covers the planet with a thin protective shield that can absorb huge amounts of energy.",
+408 => "The great dome of protection comes from an enhanced defense technology that absorbs even more energy before collapsing.",
+502 => "Destroy interceptor missiles interplanetary missiles.",
+503 => "The interplanetary missile defense systems destroy the enemy.",
 
 601 => 'Geologist is an expert in mining and astro crystallography. Attend their equipment in metallurgy and chemistry and is also responsible for interplanetary communications to optimize the use and refinement of raw material throughout the empire.<br><br><strong><font color="lime">+10% mine production</font></strong>',
 602 => 'The Admiral is an experienced veteran and a skillful strategist. The hardest battle is able to get an idea of the situation and contact their admirals subordinates. A wise emperor could rely on their help during the fighting.<br><br><strong><font color="lime">+2 max. fleet slots</font></strong>',
-603 => 'The Engineer is a specialist in energy management. In peacetime, it increases the energy of all the colonies. In case of attack, ensuring the supply of energy to the cannons, and avoid a possible overload, leading to a reduction in defense lost battle.<br><br><strong><font color="lime">Minimizes losses in half defenses,<br />+10% energy production</font></strong>',
-604 => 'The guild is composed of technocrats authentic genius, and always find that dangerous edge where it all explode into a thousand pieces before they could find an explanation and technology rational. No normal human being ever try to decode the code of a technocrat, with its presence, the researchers modeled the rule.<br><br><strong><font color="lime">+2 Espionage level,<br/>-25% Less time for research</font></strong>',
+603 => 'The Engineer is a specialist in energy management. In peacetime, it increases the energy of all the colonies. In case of attack, ensuring the supply of energy to the cannons, and avoid a possible overload, leading to a reduction in defense lost battle.<br><br><strong><font color="lime">Minimizes losses in half defenses<br />+10% energy production</font></strong>',
+604 => 'The guild is composed of technocrats authentic genius, and always find that dangerous edge where it all explode into a thousand pieces before they could find an explanation and technology rational. No normal human being ever try to decode the code of a technocrat, with its presence, the researchers modeled the rule.<br><br><strong><font color="lime">+2 Espionage level<br/>-25% Less time for research</font></strong>',
 );
 
 //----------------------------------------------------------------------------//
@@ -689,6 +689,16 @@ $lang['info'][502]['name']        			= "Anti-Ballistic Missiles";
 $lang['info'][502]['description'] 			= "Anti Ballistic Missiles (ABM) are your only line of defense when attacked by Interplanetary Missiles (IPM). When a launch of IPMs is detected, these missiles automatically arm, process a launch code in their flight computers, target the inbound IPM, and launch to intercept. During the flight, the target IPM is constantly tracked and course corrections are applied until the ABM reaches the target and destroys the attacking IPM. Each ABM destroys one incoming IPM. <br><br>Each level of your missile silo developed can store 10 ABMs, 5 IPMs, or a combination of both missile types.";
 $lang['info'][503]['name']        			= "Interplanetary Missiles";
 $lang['info'][503]['description'] 			= "Interplanetary Missiles (IPM) are your offensive weapon to destroy the defenses of your target. Using state of the art tracking technology, each missile targets a certain number of defenses for destruction. Tipped with an anti-matter bomb, they deliver a destructive force so severe that destroyed shields and defenses cannot be repaired. The only way to counter these missiles is with APMs.<br><br> Each level of your missile silo developed can store 10 ABMs, 5 IPMs, or a combination of both missile types.";
+
+$lang['info'][601]['name']        			= "Geologist";
+$lang['info'][601]['description'] 			= 'Geologist is an expert in mining and astro crystallography. Attend their equipment in metallurgy and chemistry and is also responsible for interplanetary communications to optimize the use and refinement of raw material throughout the empire.';
+$lang['info'][602]['name']        			= "Admiral";
+$lang['info'][602]['description'] 			= "The Admiral is an experienced veteran and a skillful strategist. The hardest battle is able to get an idea of the situation and contact their admirals subordinates. A wise emperor could rely on their help during the fighting.";
+$lang['info'][603]['name']        			= "Engineer";
+$lang['info'][603]['description'] 			= "The Engineer is a specialist in energy management. In peacetime, it increases the energy of all the colonies. In case of attack, ensuring the supply of energy to the cannons, and avoid a possible overload, leading to a reduction in defense lost battle.";
+$lang['info'][604]['name']        			= "Technocrat";
+$lang['info'][604]['description'] 			= "The guild is composed of technocrats authentic genius, and always find that dangerous edge where it all explode into a thousand pieces before they could find an explanation and technology rational. No normal human being ever try to decode the code of a technocrat, with its presence, the researchers modeled the rule.";
+
 
 //----------------------------------------------------------------------------//
 //MESSAGES
@@ -1150,7 +1160,7 @@ $lang['cff_goes']							= ' goes ';
 $lang['cff_toward']							= ' toward ';
 $lang['cff_with_the_mission_of']			= '. With the mission of: ';
 $lang['cff_to_explore']						= ' to explore ';
-$lang['cff_comming_back']					= ' back ';
+$lang['cff_comming_back']					= ' comes back from ';
 $lang['cff_back']							= 'Comming back';
 $lang['cff_to_destination']					= 'Heading to destination';
 

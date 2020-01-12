@@ -9,32 +9,30 @@
 class ShowOptionsPage
 {
 	private function CheckIfIsBuilding($CurrentUser)
-	{
-		$query = doquery("SELECT * FROM {{table}} WHERE id_owner = '".intval($CurrentUser['id'])."'", 'planets');
-
-		while($id = mysql_fetch_array($query))
+	{	
+		$activity	= doquery ( "SELECT (
+											(
+												SELECT COUNT( fleet_id ) AS quantity 
+													FROM {{table}}fleets 
+														WHERE fleet_owner = '" . intval ( $CurrentUser['id'] ) . "'
+											)
+										+
+											(
+												SELECT COUNT(id) AS quantity 
+													FROM {{table}}planets 
+														WHERE id_owner = '" . intval ( $CurrentUser['id'] ) . "' AND 
+														(b_building <> 0 OR b_tech <> 0 OR b_hangar <> 0)
+											)
+										) as total" , '' , TRUE );
+	
+		if ( $activity['total'] > 0 )
 		{
-			if($id['b_building'] != 0)
-			{
-				if($id['b_building'] != "")
-					return TRUE;
-			}
-			elseif($id['b_tech'] != 0)
-			{
-				if($id['b_tech'] != "")
-					return TRUE;
-			}
-			elseif($id['b_hangar'] != 0)
-			{
-				if($id['b_hangar'] != "")
-					return TRUE;
-			}
-		}
-		$fleets = doquery("SELECT * FROM {{table}} WHERE `fleet_owner` = '".intval($CurrentUser['id'])."'", 'fleets',TRUE);
-		if($fleets != 0)
 			return TRUE;
-
-		return FALSE;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 	public function __construct($CurrentUser)
@@ -72,7 +70,7 @@ class ShowOptionsPage
 				else
 					doquery ("UPDATE {{table}} SET `id_level` = '0' WHERE `id_owner` = '".intval($CurrentUser['id'])."';", 'planets');
 			}
-			// < ------------------------------------------------------------------- EL SKIN ------------------------------------------------------------------- >
+			// < ------------------------------------------------------- EL SKIN ------------------------------------------------------- >
 			if (isset($_POST["design"]) && $_POST["design"] == 'on')
 			{
 				$design = "1";
@@ -81,7 +79,7 @@ class ShowOptionsPage
 			{
 				$design = "0";
 			}
-			// < ------------------------------------------------------------- COMPROBACION DE IP ------------------------------------------------------------- >
+			// < ------------------------------------------------- COMPROBACION DE IP -------------------------------------------------- >
 			if (isset($_POST["noipcheck"]) && $_POST["noipcheck"] == 'on')
 			{
 				$noipcheck = "1";
@@ -90,7 +88,7 @@ class ShowOptionsPage
 			{
 				$noipcheck = "0";
 			}
-			// < ------------------------------------------------------------- NOMBRE DE USUARIO ------------------------------------------------------------- >
+			// < ------------------------------------------------- NOMBRE DE USUARIO --------------------------------------------------- >
 			if (isset($_POST["db_character"]) && $_POST["db_character"] != '')
 			{
 				$username = mysql_escape_string ( $_POST['db_character'] );
@@ -99,7 +97,7 @@ class ShowOptionsPage
 			{
 				$username = mysql_escape_string ( $CurrentUser['username'] );
 			}
-			// < ------------------------------------------------------------- DIRECCION DE EMAIL ------------------------------------------------------------- >
+			// < ------------------------------------------------- DIRECCION DE EMAIL -------------------------------------------------- >
 
 			if (isset($_POST["db_email"]) && $_POST["db_email"] != '')
 			{
@@ -109,7 +107,7 @@ class ShowOptionsPage
 			{
 				$db_email = mysql_escape_string ( $CurrentUser['email'] );
 			}
-			// < ------------------------------------------------------------- CANTIDAD DE SONDAS ------------------------------------------------------------- >
+			// < ------------------------------------------------- CANTIDAD DE SONDAS -------------------------------------------------- >
 			if (isset($_POST["spio_anz"]) && is_numeric($_POST["spio_anz"]))
 			{
 				$spio_anz = intval($_POST["spio_anz"]);
@@ -118,7 +116,7 @@ class ShowOptionsPage
 			{
 				$spio_anz = "1";
 			}
-			// < ------------------------------------------------------------- TIEMPO TOOLTIP ------------------------------------------------------------- >
+			// < ------------------------------------------------- TIEMPO TOOLTIP ------------------------------------------------------ >
 			if (isset($_POST["settings_tooltiptime"]) && is_numeric($_POST["settings_tooltiptime"]))
 			{
 				$settings_tooltiptime = intval($_POST["settings_tooltiptime"]);
@@ -127,7 +125,7 @@ class ShowOptionsPage
 			{
 				$settings_tooltiptime = "1";
 			}
-			// < ------------------------------------------------------------- MENSAJES DE FLOTAS ------------------------------------------------------------- >
+			// < ------------------------------------------------- MENSAJES DE FLOTAS -------------------------------------------------- >
 			if (isset($_POST["settings_fleetactions"]) && is_numeric($_POST["settings_fleetactions"]))
 			{
 				$settings_fleetactions = intval($_POST["settings_fleetactions"]);
@@ -136,7 +134,7 @@ class ShowOptionsPage
 			{
 				$settings_fleetactions = "1";
 			}
-			// < ------------------------------------------------------------ SONDAS DE ESPIONAJE ------------------------------------------------------------ >
+			// < ------------------------------------------------- SONDAS DE ESPIONAJE ------------------------------------------------- >
 			if (isset($_POST["settings_esp"]) && $_POST["settings_esp"] == 'on')
 			{
 				$settings_esp = "1";
@@ -145,7 +143,7 @@ class ShowOptionsPage
 			{
 				$settings_esp = "0";
 			}
-			// < ------------------------------------------------------------ ESCRIBIR MENSAJE ------------------------------------------------------------ >
+			// < ------------------------------------------------- ESCRIBIR MENSAJE ---------------------------------------------------- >
 			if (isset($_POST["settings_wri"]) && $_POST["settings_wri"] == 'on')
 			{
 				$settings_wri = "1";
@@ -154,7 +152,7 @@ class ShowOptionsPage
 			{
 				$settings_wri = "0";
 			}
-			// < ------------------------------------------------------------ AÑADIR A LISTA DE AMIGOS ------------------------------------------------------------ >
+			// < --------------------------------------------- AÑADIR A LISTA DE AMIGOS ------------------------------------------------ >
 			if (isset($_POST["settings_bud"]) && $_POST["settings_bud"] == 'on')
 			{
 				$settings_bud = "1";
@@ -164,7 +162,7 @@ class ShowOptionsPage
 				$settings_bud = "0";
 			}
 
-			// < ------------------------------------------------------------ ATAQUE CON MISILES ------------------------------------------------------------ >
+			// < ------------------------------------------------- ATAQUE CON MISILES -------------------------------------------------- >
 			if (isset($_POST["settings_mis"]) && $_POST["settings_mis"] == 'on')
 			{
 				$settings_mis = "1";
@@ -173,7 +171,7 @@ class ShowOptionsPage
 			{
 				$settings_mis = "0";
 			}
-			// < ------------------------------------------------------------ VER REPORTE ------------------------------------------------------------ >
+			// < ------------------------------------------------- VER REPORTE --------------------------------------------------------- >
 			if (isset($_POST["settings_rep"]) && $_POST["settings_rep"] == 'on')
 			{
 				$settings_rep = "1";
@@ -182,12 +180,12 @@ class ShowOptionsPage
 			{
 				$settings_rep = "0";
 			}
-			// < ------------------------------------------------------------ MODO VACACIONES ------------------------------------------------------------ >
+			// < ------------------------------------------------- MODO VACACIONES ----------------------------------------------------- >
 			if (isset($_POST["urlaubs_modus"]) && $_POST["urlaubs_modus"] == 'on')
 			{
 				if($this->CheckIfIsBuilding($CurrentUser))
 				{
-					message($lang['op_cant_activate_vacation_mode'], "game.php?page=options",1);
+					message($lang['op_cant_activate_vacation_mode'], "game.php?page=options",2);
 				}
 
 				$urlaubs_modus = "1";
@@ -219,7 +217,7 @@ class ShowOptionsPage
 			else
 				$urlaubs_modus = "0";
 
-			// < ------------------------------------------------------------ BORRAR CUENTA ------------------------------------------------------------ >
+			// < ------------------------------------------------- BORRAR CUENTA ------------------------------------------------------- >
 			if (isset($_POST["db_deaktjava"]) && $_POST["db_deaktjava"] == 'on')
 			{
 				$db_deaktjava = time();
@@ -231,7 +229,7 @@ class ShowOptionsPage
 
 			$SetSort  = mysql_escape_string($_POST['settings_sort']);
 			$SetOrder = mysql_escape_string($_POST['settings_order']);
-			// < ---------------------------------------------------- ACTUALIZAR TODO LO SETEADO ANTES ---------------------------------------------------- >
+			//// < -------------------------------------- ACTUALIZAR TODO LO SETEADO ANTES --------------------------------------------- >
 			doquery("UPDATE {{table}} SET
 			`email` = '$db_email',
 			`dpath` = '$_POST[dpath]',
@@ -251,7 +249,7 @@ class ShowOptionsPage
 			`urlaubs_modus` = '$urlaubs_modus',
 			`db_deaktjava` = '$db_deaktjava'
 			WHERE `id` = '".$CurrentUser["id"]."' LIMIT 1", "users");
-			// < ------------------------------------------------------------- CAMBIO DE CLAVE ------------------------------------------------------------- >
+			// < ------------------------------------------------- CAMBIO DE CLAVE ----------------------------------------------------- >
 			if (isset($_POST["db_password"]) && md5($_POST["db_password"]) == $CurrentUser["password"])
 			{
 				if ($_POST["newpass1"] == $_POST["newpass2"])
@@ -265,7 +263,7 @@ class ShowOptionsPage
 					}
 				}
 			}
-			// < ------------------------------------------------------- CAMBIO DE NOMBRE DE USUARIO ------------------------------------------------------ >
+			// < --------------------------------------------- CAMBIO DE NOMBRE DE USUARIO --------------------------------------------- >
 			if ($CurrentUser['username'] != $_POST["db_character"])
 			{
 				$query = doquery("SELECT id FROM {{table}} WHERE username='".mysql_escape_string ($_POST["db_character"])."'", 'users', TRUE);

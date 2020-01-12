@@ -492,7 +492,7 @@ class ShowAlliancePage extends bbCode
 					}
 
 					$u["dpath"] 			= DPATH;
-					$u['points'] 			= pretty_number ( $UserPoints['total_points'] );
+					$u['points'] 			= Format::pretty_number ( $UserPoints['total_points'] );
 
 					if ( $u['ally_register_time'] > 0 )
 					{
@@ -954,7 +954,7 @@ class ShowAlliancePage extends bbCode
 
 					$i++;
 					$u['i'] 			= $i;
-					$u['points'] 		= pretty_number ( $UserPoints['total_points'] );					
+					$u['points'] 		= Format::pretty_number ( $UserPoints['total_points'] );					
 					$days 				= floor ( ( time() - $u["onlinetime"] ) / ( 3600 * 24 ) );
 					
 					$u["onlinetime"]	= str_replace ( "%s" , $days , "%s d" );

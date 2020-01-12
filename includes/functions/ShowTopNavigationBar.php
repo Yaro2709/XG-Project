@@ -56,35 +56,35 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			}
 		}
 
-		$energy = pretty_number($CurrentPlanet["energy_max"] + $CurrentPlanet["energy_used"]) . "/" . pretty_number($CurrentPlanet["energy_max"]);
+		$energy = Format::pretty_number($CurrentPlanet["energy_max"] + $CurrentPlanet["energy_used"]) . "/" . Format::pretty_number($CurrentPlanet["energy_max"]);
 		// Energie
 		if (($CurrentPlanet["energy_max"] + $CurrentPlanet["energy_used"]) < 0) {
-			$parse['energy'] = colorRed($energy);
+			$parse['energy'] = Format::color_red($energy);
 		} else {
 			$parse['energy'] = $energy;
 		}
 		// Metal
-		$metal = pretty_number($CurrentPlanet["metal"]);
+		$metal = Format::pretty_number($CurrentPlanet["metal"]);
 		if (($CurrentPlanet["metal"] >= $CurrentPlanet["metal_max"])) {
-			$parse['metal'] = colorRed($metal);
+			$parse['metal'] = Format::color_red($metal);
 		} else {
 			$parse['metal'] = $metal;
 		}
 		// Cristal
-		$crystal = pretty_number($CurrentPlanet["crystal"]);
+		$crystal = Format::pretty_number($CurrentPlanet["crystal"]);
 		if (($CurrentPlanet["crystal"] >= $CurrentPlanet["crystal_max"])) {
-			$parse['crystal'] = colorRed($crystal);
+			$parse['crystal'] = Format::color_red($crystal);
 		} else {
 			$parse['crystal'] = $crystal;
 		}
 		// Deuterium
-		$deuterium = pretty_number($CurrentPlanet["deuterium"]);
+		$deuterium = Format::pretty_number($CurrentPlanet["deuterium"]);
 		if (($CurrentPlanet["deuterium"] >= $CurrentPlanet["deuterium_max"])) {
-			$parse['deuterium'] = colorRed($deuterium);
+			$parse['deuterium'] = Format::color_red($deuterium);
 		} else {
 			$parse['deuterium'] = $deuterium;
 		}
-		$parse['darkmatter'] 		= pretty_number($CurrentUser["darkmatter"]);
+		$parse['darkmatter'] 		= Format::pretty_number($CurrentUser["darkmatter"]);
 		$TopBar 			 		= parsetemplate(gettemplate('general/topnav'), $parse);
 
 		return $TopBar;

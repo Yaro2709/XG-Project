@@ -113,7 +113,7 @@ if ($_GET)
 			$parse['suspen'] = $lang['one_is_yes'][0];
 		}
 
-		$parse['mo'] = "<a title=\"" . pretty_number ( $UserQuery['darkmatter'] ) . "\">" . shortly_number ( $UserQuery['darkmatter'] ) . "</a>";
+		$parse['mo'] = "<a title=\"" . Format::pretty_number ( $UserQuery['darkmatter'] ) . "\">" . Format::shortly_number ( $UserQuery['darkmatter'] ) . "</a>";
 
 		$Log	.=	"\n" . $lang['log_info_detail_title'] . "\n";
 		$Log	.=	$lang['log_the_user'] . $user['username'] . $lang['log_searchto_1'] . $UserQuery['username'] . "\n";
@@ -161,22 +161,22 @@ if ($_GET)
 
 		$StatQuery	=	doquery ( "SELECT " . $SpecifyItemsS . " FROM {{table}} WHERE `id_owner` = '" .$id_u . "' AND `stat_type` = '1'" , "statpoints" , TRUE );
 
-		$parse['count_tecno']		=	pretty_number ( $StatQuery['tech_count'] );
-		$parse['count_def']			=	pretty_number ( $StatQuery['defs_count'] );
-		$parse['count_fleet']		=	pretty_number ( $StatQuery['fleet_count'] );
-		$parse['count_builds']		=	pretty_number ( $StatQuery['build_count'] );
+		$parse['count_tecno']		=	Format::pretty_number ( $StatQuery['tech_count'] );
+		$parse['count_def']			=	Format::pretty_number ( $StatQuery['defs_count'] );
+		$parse['count_fleet']		=	Format::pretty_number ( $StatQuery['fleet_count'] );
+		$parse['count_builds']		=	Format::pretty_number ( $StatQuery['build_count'] );
 
-		$parse['point_builds']		=	pretty_number ( $StatQuery['build_points'] );
-		$parse['point_tecno']		=	pretty_number ( $StatQuery['tech_points'] );
-		$parse['point_def']			=	pretty_number ( $StatQuery['defs_points'] );
-		$parse['point_fleet']		=	pretty_number ( $StatQuery['fleet_points'] );
+		$parse['point_builds']		=	Format::pretty_number ( $StatQuery['build_points'] );
+		$parse['point_tecno']		=	Format::pretty_number ( $StatQuery['tech_points'] );
+		$parse['point_def']			=	Format::pretty_number ( $StatQuery['defs_points'] );
+		$parse['point_fleet']		=	Format::pretty_number ( $StatQuery['fleet_points'] );
 
 		$parse['ranking_tecno']		=	$StatQuery['tech_rank'];
 		$parse['ranking_builds']	=	$StatQuery['build_rank'];
 		$parse['ranking_def']		=	$StatQuery['defs_rank'];
 		$parse['ranking_fleet']		=	$StatQuery['fleet_rank'];
 
-		$parse['total_points']		=	pretty_number ( $StatQuery['total_points'] );
+		$parse['total_points']		=	Format::pretty_number ( $StatQuery['total_points'] );
 
 		// COMIENZA EL SAQUEO DE DATOS DE LA ALIANZA
 		$AliID	= $UserQuery['ally_id'];
@@ -265,22 +265,22 @@ if ($_GET)
 
 			$StatQueryAlly			=	doquery("SELECT " . $SpecifyItemsS . " FROM {{table}} WHERE `id_owner` = '".$ali_lider."' AND `stat_type` = '2'" , "statpoints" , TRUE );
 
-			$parse['count_tecno_ali']		=	pretty_number ( $StatQueryAlly['tech_count'] );
-			$parse['count_def_ali']			=	pretty_number ( $StatQueryAlly['defs_count'] );
-			$parse['count_fleet_ali']		=	pretty_number ( $StatQueryAlly['fleet_count'] );
-			$parse['count_builds_ali']		=	pretty_number ( $StatQueryAlly['build_count'] );
+			$parse['count_tecno_ali']		=	Format::pretty_number ( $StatQueryAlly['tech_count'] );
+			$parse['count_def_ali']			=	Format::pretty_number ( $StatQueryAlly['defs_count'] );
+			$parse['count_fleet_ali']		=	Format::pretty_number ( $StatQueryAlly['fleet_count'] );
+			$parse['count_builds_ali']		=	Format::pretty_number ( $StatQueryAlly['build_count'] );
 
-			$parse['point_builds_ali']		=	pretty_number ( $StatQueryAlly['build_points'] );
-			$parse['point_tecno_ali']		=	pretty_number ( $StatQueryAlly['tech_points'] );
-			$parse['point_def_ali']			=	pretty_number ( $StatQueryAlly['defs_points'] );
-			$parse['point_fleet_ali']		=	pretty_number ( $StatQueryAlly['fleet_points'] );
+			$parse['point_builds_ali']		=	Format::pretty_number ( $StatQueryAlly['build_points'] );
+			$parse['point_tecno_ali']		=	Format::pretty_number ( $StatQueryAlly['tech_points'] );
+			$parse['point_def_ali']			=	Format::pretty_number ( $StatQueryAlly['defs_points'] );
+			$parse['point_fleet_ali']		=	Format::pretty_number ( $StatQueryAlly['fleet_points'] );
 
-			$parse['ranking_tecno_ali']		=	pretty_number ( $StatQueryAlly['tech_rank'] );
-			$parse['ranking_builds_ali']	=	pretty_number ( $StatQueryAlly['build_rank'] );
-			$parse['ranking_def_ali']		=	pretty_number ( $StatQueryAlly['defs_rank'] );
-			$parse['ranking_fleet_ali']		=	pretty_number ( $StatQueryAlly['fleet_rank'] );
+			$parse['ranking_tecno_ali']		=	Format::pretty_number ( $StatQueryAlly['tech_rank'] );
+			$parse['ranking_builds_ali']	=	Format::pretty_number ( $StatQueryAlly['build_rank'] );
+			$parse['ranking_def_ali']		=	Format::pretty_number ( $StatQueryAlly['defs_rank'] );
+			$parse['ranking_fleet_ali']		=	Format::pretty_number ( $StatQueryAlly['fleet_rank'] );
 
-			$parse['total_points_ali']		=	pretty_number ( $StatQueryAlly['total_points'] );
+			$parse['total_points_ali']		=	Format::pretty_number ( $StatQueryAlly['total_points'] );
 		}
 
 		// COMIENZA EL SAQUEO DE DATOS DE LOS PLANETAS
@@ -315,90 +315,90 @@ if ($_GET)
 				<tr>
 				<th>" .$Planettt . "</th>
 				<th>" . $PlanetsWhile['id'] . "</th>
-				<th>" . pretty_number ( $PlanetsWhile['diameter'] ) . "</th>
-				<th>" . pretty_number ( $PlanetsWhile['field_current'] ) . "/" . pretty_number ( $PlanetsWhile['field_max'] ) ."</th>
-				<th>" . pretty_number ( $PlanetsWhile['temp_min'] ) . "/" . pretty_number ( $PlanetsWhile['temp_max'] ) ."</th>
+				<th>" . Format::pretty_number ( $PlanetsWhile['diameter'] ) . "</th>
+				<th>" . Format::pretty_number ( $PlanetsWhile['field_current'] ) . "/" . Format::pretty_number ( $PlanetsWhile['field_max'] ) ."</th>
+				<th>" . Format::pretty_number ( $PlanetsWhile['temp_min'] ) . "/" . Format::pretty_number ( $PlanetsWhile['temp_max'] ) ."</th>
 				</tr>";
 
 				$SumOfEnergy = ( $PlanetsWhile['energy_max'] + $PlanetsWhile['energy_used'] );
 
 				if ( $SumOfEnergy < 0 )
 				{
-					$Color	=	"<font color=#FF6600>" . shortly_number ( $SumOfEnergy ) . "</font>";
+					$Color	=	"<font color=#FF6600>" . Format::shortly_number ( $SumOfEnergy ) . "</font>";
 				}
 
 				elseif ($SumOfEnergy > 0)
 				{
-					$Color	=	"<font color=lime>" . shortly_number ( $SumOfEnergy ) . "</font>";
+					$Color	=	"<font color=lime>" . Format::shortly_number ( $SumOfEnergy ) . "</font>";
 				}
 
 				else
 				{
-					$Color	=	shortly_number ( $SumOfEnergy );
+					$Color	=	Format::shortly_number ( $SumOfEnergy );
 				}
 
 				$parse['resources']	.=	"
 				<tr>
 				<th>".$Planettt."</th>
-				<th><a title=\"".pretty_number($PlanetsWhile['metal'])."\">".shortly_number($PlanetsWhile['metal'])."</a></th>
+				<th><a title=\"".Format::pretty_number($PlanetsWhile['metal'])."\">".Format::shortly_number($PlanetsWhile['metal'])."</a></th>
 
-				<th><a title=\"".pretty_number($PlanetsWhile['crystal'])."\">".shortly_number($PlanetsWhile['crystal'])."</a></th>
-				<th><a title=\"".pretty_number($PlanetsWhile['deuterium'])."\">".shortly_number($PlanetsWhile['deuterium'])."</a></th>
-				<th><a title=\"".pretty_number($SumOfEnergy)."\">".$Color."</a>/<a title=\"".pretty_number($PlanetsWhile['energy_max'])."\">".shortly_number($PlanetsWhile['energy_max'])."</a></th>
+				<th><a title=\"".Format::pretty_number($PlanetsWhile['crystal'])."\">".Format::shortly_number($PlanetsWhile['crystal'])."</a></th>
+				<th><a title=\"".Format::pretty_number($PlanetsWhile['deuterium'])."\">".Format::shortly_number($PlanetsWhile['deuterium'])."</a></th>
+				<th><a title=\"".Format::pretty_number($SumOfEnergy)."\">".$Color."</a>/<a title=\"".Format::pretty_number($PlanetsWhile['energy_max'])."\">".Format::shortly_number($PlanetsWhile['energy_max'])."</a></th>
 				</tr>";
 
 				$parse['ships']	.=	"
 				<tr>
 				<th width=\"10%\">".$Planettt."</th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['small_ship_cargo'])."\">".shortly_number($PlanetsWhile['small_ship_cargo'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['big_ship_cargo'])."\">".shortly_number($PlanetsWhile['big_ship_cargo'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['light_hunter'])."\">".shortly_number($PlanetsWhile['light_hunter'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['heavy_hunter'])."\">".shortly_number($PlanetsWhile['heavy_hunter'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['crusher'])."\">".shortly_number($PlanetsWhile['crusher'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['battle_ship'])."\">".shortly_number($PlanetsWhile['battle_ship'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['colonizer'])."\">".shortly_number($PlanetsWhile['colonizer'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['recycler'])."\">".shortly_number($PlanetsWhile['recycler'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['spy_sonde'])."\">".shortly_number($PlanetsWhile['spy_sonde'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['bomber_ship'])."\">".shortly_number($PlanetsWhile['bomber_ship'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['solar_satelit'])."\">".shortly_number($PlanetsWhile['solar_satelit'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['destructor'])."\">".shortly_number($PlanetsWhile['destructor'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['dearth_star'])."\">".shortly_number($PlanetsWhile['dearth_star'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['battleship'])."\">".shortly_number($PlanetsWhile['battleship'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['small_ship_cargo'])."\">".Format::shortly_number($PlanetsWhile['small_ship_cargo'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['big_ship_cargo'])."\">".Format::shortly_number($PlanetsWhile['big_ship_cargo'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['light_hunter'])."\">".Format::shortly_number($PlanetsWhile['light_hunter'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['heavy_hunter'])."\">".Format::shortly_number($PlanetsWhile['heavy_hunter'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['crusher'])."\">".Format::shortly_number($PlanetsWhile['crusher'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['battle_ship'])."\">".Format::shortly_number($PlanetsWhile['battle_ship'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['colonizer'])."\">".Format::shortly_number($PlanetsWhile['colonizer'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['recycler'])."\">".Format::shortly_number($PlanetsWhile['recycler'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['spy_sonde'])."\">".Format::shortly_number($PlanetsWhile['spy_sonde'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['bomber_ship'])."\">".Format::shortly_number($PlanetsWhile['bomber_ship'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['solar_satelit'])."\">".Format::shortly_number($PlanetsWhile['solar_satelit'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['destructor'])."\">".Format::shortly_number($PlanetsWhile['destructor'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['dearth_star'])."\">".Format::shortly_number($PlanetsWhile['dearth_star'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['battleship'])."\">".Format::shortly_number($PlanetsWhile['battleship'])."</a></th>
 				</tr>";
 
 				$parse['defenses']	.=	"
 				<tr>
 				<th width=\"10%\">".$Planettt."</th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['misil_launcher'])."\">".shortly_number($PlanetsWhile['misil_launcher'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['small_laser'])."\">".shortly_number($PlanetsWhile['small_laser'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['big_laser'])."\">".shortly_number($PlanetsWhile['big_laser'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['gauss_canyon'])."\">".shortly_number($PlanetsWhile['gauss_canyon'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['ionic_canyon'])."\">".shortly_number($PlanetsWhile['ionic_canyon'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['buster_canyon'])."\">".shortly_number($PlanetsWhile['buster_canyon'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['small_protection_shield'])."\">".shortly_number($PlanetsWhile['small_protection_shield'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['big_protection_shield'])."\">".shortly_number($PlanetsWhile['big_protection_shield'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['interceptor_misil'])."\">".shortly_number($PlanetsWhile['interceptor_misil'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['interplanetary_misil'])."\">".shortly_number($PlanetsWhile['interplanetary_misil'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['misil_launcher'])."\">".Format::shortly_number($PlanetsWhile['misil_launcher'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['small_laser'])."\">".Format::shortly_number($PlanetsWhile['small_laser'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['big_laser'])."\">".Format::shortly_number($PlanetsWhile['big_laser'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['gauss_canyon'])."\">".Format::shortly_number($PlanetsWhile['gauss_canyon'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['ionic_canyon'])."\">".Format::shortly_number($PlanetsWhile['ionic_canyon'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['buster_canyon'])."\">".Format::shortly_number($PlanetsWhile['buster_canyon'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['small_protection_shield'])."\">".Format::shortly_number($PlanetsWhile['small_protection_shield'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['big_protection_shield'])."\">".Format::shortly_number($PlanetsWhile['big_protection_shield'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['interceptor_misil'])."\">".Format::shortly_number($PlanetsWhile['interceptor_misil'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['interplanetary_misil'])."\">".Format::shortly_number($PlanetsWhile['interplanetary_misil'])."</a></th>
 				</tr>";
 
 				$parse['buildings']	.=	"
 				<tr>
 				<th width=\"10%\">".$Planettt."</th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['metal_mine'])."\">".shortly_number($PlanetsWhile['metal_mine'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['crystal_mine'])."\">".shortly_number($PlanetsWhile['crystal_mine'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['deuterium_sintetizer'])."\">".shortly_number($PlanetsWhile['deuterium_sintetizer'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['solar_plant'])."\">".shortly_number($PlanetsWhile['solar_plant'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['fusion_plant'])."\">".shortly_number($PlanetsWhile['fusion_plant'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['robot_factory'])."\">".shortly_number($PlanetsWhile['robot_factory'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['nano_factory'])."\">".shortly_number($PlanetsWhile['nano_factory'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['hangar'])."\">".shortly_number($PlanetsWhile['hangar'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['metal_store'])."\">".shortly_number($PlanetsWhile['metal_store'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['crystal_store'])."\">".shortly_number($PlanetsWhile['crystal_store'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['deuterium_store'])."\">".shortly_number($PlanetsWhile['deuterium_store'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['laboratory'])."\">".shortly_number($PlanetsWhile['laboratory'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['terraformer'])."\">".shortly_number($PlanetsWhile['terraformer'])."</a></th>
-				<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['ally_deposit'])."\">".shortly_number($PlanetsWhile['ally_deposit'])."</a></th>
-				<th width=\"30%\"><a title=\"".pretty_number($PlanetsWhile['silo'])."\">".shortly_number($PlanetsWhile['silo'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['metal_mine'])."\">".Format::shortly_number($PlanetsWhile['metal_mine'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['crystal_mine'])."\">".Format::shortly_number($PlanetsWhile['crystal_mine'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['deuterium_sintetizer'])."\">".Format::shortly_number($PlanetsWhile['deuterium_sintetizer'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['solar_plant'])."\">".Format::shortly_number($PlanetsWhile['solar_plant'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['fusion_plant'])."\">".Format::shortly_number($PlanetsWhile['fusion_plant'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['robot_factory'])."\">".Format::shortly_number($PlanetsWhile['robot_factory'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['nano_factory'])."\">".Format::shortly_number($PlanetsWhile['nano_factory'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['hangar'])."\">".Format::shortly_number($PlanetsWhile['hangar'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['metal_store'])."\">".Format::shortly_number($PlanetsWhile['metal_store'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['crystal_store'])."\">".Format::shortly_number($PlanetsWhile['crystal_store'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['deuterium_store'])."\">".Format::shortly_number($PlanetsWhile['deuterium_store'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['laboratory'])."\">".Format::shortly_number($PlanetsWhile['laboratory'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['terraformer'])."\">".Format::shortly_number($PlanetsWhile['terraformer'])."</a></th>
+				<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['ally_deposit'])."\">".Format::shortly_number($PlanetsWhile['ally_deposit'])."</a></th>
+				<th width=\"30%\"><a title=\"".Format::pretty_number($PlanetsWhile['silo'])."\">".Format::shortly_number($PlanetsWhile['silo'])."</a></th>
 				</tr>";
 
 				if ( $PlanetsWhile['planet_type'] == 3 )
@@ -406,9 +406,9 @@ if ($_GET)
 					$parse['moon_buildings'] .=	"
 					<tr>
 					<th width=\"10%\">".$Moons."</th>
-					<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['mondbasis'])."\">".shortly_number($PlanetsWhile['mondbasis'])."</a></th>
-					<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['phalanx'])."\">".shortly_number($PlanetsWhile['phalanx'])."</a></th>
-					<th width=\"10%\"><a title=\"".pretty_number($PlanetsWhile['sprungtor'])."\">".shortly_number($PlanetsWhile['sprungtor'])."</a></th>
+					<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['mondbasis'])."\">".Format::shortly_number($PlanetsWhile['mondbasis'])."</a></th>
+					<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['phalanx'])."\">".Format::shortly_number($PlanetsWhile['phalanx'])."</a></th>
+					<th width=\"10%\"><a title=\"".Format::pretty_number($PlanetsWhile['sprungtor'])."\">".Format::shortly_number($PlanetsWhile['sprungtor'])."</a></th>
 					</tr>";
 				}
 

@@ -4,6 +4,32 @@ $lang['Version']     = 'Versi&oacute;n';
 $lang['Description'] = 'Descripci&oacute;n';
 $lang['changelog']   = array(
 
+'2.10.2' => ' 06/05/2012
+-[Mejoras]
+- Mejorado el paquete de idioma en ingl&eacute;s, se tradujeron varios textos faltantes (By cyberghoser1).-
+- Mejorado el sistema para determinar si un jugador es fuerte o d&eacute;bil.-
+- Mejorado el sistema de producci&oacute;n.-
+- El a&ntilde;o final del copyright se muestra din&aacute;micamente en el index.-
+- Mejoras internas globales.-
+- Mejoras en la validaci&oacute;n del modo vacaciones. Antes realizaba una query + una query por cada planeta, ahora realiza s&oacute;lo una.-
+- Mejorada la velocidad de procesamiento al determinar si un usuario puede o no entrar en modo vacaciones.- 
+- De 2 a 1 query para determinar si un jugador puede o no entrar en modo vacaciones.-
+
+-[Bugs]
+#9854: Corregido un bug que no permit&iacute;a enviar sondas desde galaxia.-
+#0000: Corregido un bug en el que el sistema de jugadores d&eacute;biles no funcionaba correctamente al enviar flotas desde galaxia.-
+#0000: Corregido un bug que mostraba mal el texto de error de enviar una sonda desde galaxia.-
+#0000: Corregido un bug que al cliquear en el nombre de un oficial de redirig&iacute;a a una p&aacute;gina vac&iacute;a.-
+
+- [Cambios]
+- Eliminada plantilla "/infos/info_officiers_general.php".-
+- Opci&oacute;n de overflow de los almacenes removida.-
+- Modificado el link en el admin cp que redirig&iacute;a al tracker.-
+
+-[Seguridad]
+- Bloqueada la lectura de los archivos .xml (By Neko).-
+',
+
 '2.10.1' => ' 06/04/2012
 -[Mejoras]
 - Mejora menor en el informe de actualizaci&oacute;n que te informa de que versi&oacute;n a cual otra pasaste.-

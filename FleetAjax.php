@@ -54,10 +54,6 @@ if ($PartialFleet == TRUE)
 	}
 }
 
-$PrNoob      = read_config ( 'noobprotection' );
-$PrNoobTime  = read_config ( 'noobprotectiontime' );
-$PrNoobMulti = read_config ( 'noobprotectionmulti' );
-
 $galaxy          = intval($_POST['galaxy']);
 if ($galaxy > MAX_GALAXY_IN_WORLD || $galaxy < 1)
 {
@@ -119,10 +115,9 @@ $User2Points   = doquery("SELECT * FROM {{table}} WHERE `stat_type` = '1' AND `s
 
 $CurrentPoints = $UserPoints['total_points'];
 $TargetPoints  = $User2Points['total_points'];
-
 $TargetVacat   = $TargetUser['urlaubs_modus'];
 
-if ((get_max_fleets ( $CurrentUser[$resource[108]] , $CurrentUser['rpg_amiral'] )) <= $CurrentFlyingFleets)
+if ((Fleets::get_max_fleets ( $user[$resource[108]] , $user['rpg_amiral'] )) <= $CurrentFlyingFleets)
 {
 	$ResultMessage = "612; ".$lang['fa_no_more_slots']." |".$CurrentFlyingFleets." ".$UserSpyProbes." ".$UserRecycles." ".$UserMissiles;
 	die ($ResultMessage);
@@ -149,9 +144,6 @@ foreach ($FleetArray as $Ships => $Count)
 	}
 }
 
-if ($PrNoobTime < 1)
-	$PrNoobTime = 9999999999999999;
-
 if ($TargetVacat && $_POST['mission'] != 8)
 {
 	$ResultMessage = "605; ".$lang['fa_vacation_mode']." |".$CurrentFlyingFleets." ".$UserSpyProbes." ".$UserRecycles." ".$UserMissiles;
@@ -166,13 +158,13 @@ if($user['urlaubs_modus'])
 
 if($TargetUser['onlinetime'] >= (time()-60 * 60 * 24 * 7))
 {
-	if ($CurrentPoints > ($TargetPoints * $PrNoobMulti) && $TargetRow['id_owner'] != '' && $_POST['mission'] == 6  && $PrNoob == 1  && $TargetPoints < ($PrNoobTime * 1000))
+	if ( is_weak ( $CurrentPoints , $TargetPoints ) && $TargetRow['id_owner'] != '' && $_POST['mission'] == 6 )
 	{
 		$ResultMessage = "603; ".$lang['fa_week_player']." |".$CurrentFlyingFleets." ".$UserSpyProbes." ".$UserRecycles." ".$UserMissiles;
 		die ( $ResultMessage );
 	}
 
-	if ($TargetPoints > ($CurrentPoints * $PrNoobMulti) && $TargetRow['id_owner'] != '' && $_POST['mission'] == 6  && $PrNoob == 1  && $CurrentPoints < ($PrNoobTime * 1000))
+	if ( is_strong ( $CurrentPoints , $TargetPoints ) && $TargetRow['id_owner'] != '' && $_POST['mission'] == 6 )
 	{
 		$ResultMessage = "604; ".$lang['fa_strong_player']." |".$CurrentFlyingFleets." ".$UserSpyProbes." ".$UserRecycles." ".$UserMissiles;
 		die ( $ResultMessage );
@@ -200,10 +192,10 @@ if ($_POST['thisgalaxy'] != $planetrow['galaxy'] |
 	die ($ResultMessage);
 }
 
-$Distance    = GetTargetDistance ($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
-$speedall    = GetFleetMaxSpeed ($FleetArray, 0, $user);
+$Distance    = Fleets::target_distance ($_POST['thisgalaxy'], $_POST['galaxy'], $_POST['thissystem'], $_POST['system'], $_POST['thisplanet'], $_POST['planet']);
+$speedall    = Fleets::fleet_max_speed ($FleetArray, 0, $user);
 $SpeedAllMin = min($speedall);
-$Duration    = GetMissionDuration ( 10, $SpeedAllMin, $Distance, GetGameSpeedFactor ());
+$Duration    = Fleets::mission_duration ( 10, $SpeedAllMin, $Distance, GetGameSpeedFactor ());
 
 $fleet['fly_time']   = $Duration;
 $fleet['start_time'] = $Duration + time();

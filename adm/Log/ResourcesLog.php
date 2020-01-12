@@ -1,9 +1,10 @@
 
 El usuario lucky agrego:
-Metal: 1000000
-Cristal: 1000000
-Deuterio: 1000000
+Metal: 0
+Cristal: 0
+Deuterio: 1000
 al planeta con el ID: 1
 y Materia oscura: 0
 al usuario con el ID: 0
-Operación realizada el: 21-12-2011 12:05:03
+Operaci&oacute;n realizada el: 26-04-2012 22:05:40
+2:05:03

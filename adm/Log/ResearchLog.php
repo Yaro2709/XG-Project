@@ -1,22 +1,21 @@
 
 El usuario lucky agrego:
-Tecnología de espionaje: 0
-Tecnología de computación: 0
-Tecnología militar: 0
-Tecnología de defensa: 0
-Tecnología de blindaje: 0
-Tecnología de energía: 0
-Tecnología de hiperespacio: 0
-Motor de combustión: 0
-Motor de impulso: 0
-Propulsor hiperespacial: 0
-Tecnología láser: 0
-Tecnología iónica: 0
-Tecnología de plasma: 0
-Red de investigación intergaláctica: 0
-Tecnología de expedicion: 0
-Tecnología de gravitón: 1
+Tecnolog&iacute;a de espionaje: 0
+Tecnolog&iacute;a de computaci&oacute;n: 0
+Tecnolog&iacute;a militar: 0
+Tecnolog&iacute;a de defensa: 0
+Tecnolog&iacute;a de blindaje: 0
+Tecnolog&iacute;a de energ&iacute;a: 0
+Tecnolog&iacute;a de hiperespacio: 0
+Motor de combusti&oacute;n: 6
+Motor de impulso: 6
+Propulsor hiperespacial: 6
+Tecnolog&iacute;a l&aacute;ser: 0
+Tecnolog&iacute;a i&oacute;nica: 0
+Tecnolog&iacute;a de plasma: 0
+Red de investigaci&oacute;n intergal&aacute;ctica: 0
+Tecnolog&iacute;a de expedicion: 0
+Tecnolog&iacute;a de gravit&oacute;n: 0
 al usuario con el ID: 1
-Operación realizada el: 20-12-2011 19:51:16
-6
-:12
+Operaci&oacute;n realizada el: 11-04-2012 20:45:47
+

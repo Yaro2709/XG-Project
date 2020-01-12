@@ -266,6 +266,7 @@ switch ($Mode)
 						migrate_to_xml();
 					break;
 					case '2.10.0':
+					case '2.10.1':
 						update_config ( 'version' , SYSTEM_VERSION );
 					break;
 					default:

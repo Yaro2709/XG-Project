@@ -64,12 +64,12 @@ class ShowFleet1Page
 					$fleet['fleetlist']        .= $i . "," . $_POST["ship$i"] . ";";
 					$fleet['amount']           += $_POST["ship$i"];
 					$fleet['i']				   	= $i;
-					$fleet['consumption']		= GetShipConsumption ( $i, $CurrentUser );
-					$fleet['speed']				= GetFleetMaxSpeed ( "", $i, $CurrentUser );
+					$fleet['consumption']		= Fleets::ship_consumption ( $i, $CurrentUser );
+					$fleet['speed']				= Fleets::fleet_max_speed ( "", $i, $CurrentUser );
 					$fleet['capacity']			= $pricelist[$i]['capacity'];
 					$fleet['ship']				= $_POST["ship$i"];
 
-					$speedalls[$i]             = GetFleetMaxSpeed( "", $i, $CurrentUser);
+					$speedalls[$i]             = Fleets::fleet_max_speed ( "", $i, $CurrentUser);
 					$FleetHiddenBlock		  .= parsetemplate ( $inputs_template , $fleet );
 				}
 			}
@@ -250,7 +250,7 @@ class ShowFleet1Page
 		$parse['curepedition'] 		= $_POST['curepedition'];
 		$parse['target_mission'] 	= $_POST['target_mission'];
 
-		display(parsetemplate(gettemplate('fleet/fleet1_table'), $parse));
+		display ( parsetemplate ( gettemplate ( 'fleet/fleet1_table' ) , $parse ) );
 	}
 }
 ?>

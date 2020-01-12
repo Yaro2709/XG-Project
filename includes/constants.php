@@ -9,7 +9,7 @@
 if ( !defined('INSIDE') ) die(header("location:../"));
 
 	// VERSION
-	define('SYSTEM_VERSION' , '2.10.1');
+	define('SYSTEM_VERSION' 			, '2.10.2');
 
 	// TEMPLATES DEFAULT SETTINGS
 	define('SKIN_PATH'					, 'styles/skins/');
@@ -42,10 +42,6 @@ if ( !defined('INSIDE') ) die(header("location:../"));
 
 	// NUMBER OF SHIPS THAT CAN BUILD FOR ONCE
 	define('MAX_FLEET_OR_DEFS_PER_ROW'	, 1000000);
-
-	// PERCENTAGE OF RESOURCES THAT CAN BE OVER STORED
-	// 1.0 TO 100% - 1.1% FOR 110 AND SO ON
-	define('MAX_OVERFLOW'             	,       1);
 
 	//PLANET SIZE MULTIPLER
 	define('PLANETSIZE_MULTIPLER'		,       1);

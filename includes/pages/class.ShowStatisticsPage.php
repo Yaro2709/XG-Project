@@ -144,8 +144,8 @@ class ShowStatisticsPage
 				$parse['ally_name']       	  = $StatRow['ally_name'];
 				$parse['ally_mes']        	  = '';
 				$parse['ally_members']    	  = $StatRow['ally_members'];
-				$parse['ally_points']     	  = pretty_number( $StatRow[ $Order ] );
-				$parse['ally_members_points'] =  pretty_number( floor($StatRow[ $Order ] / $StatRow['ally_members']) );
+				$parse['ally_points']     	  = Format::pretty_number( $StatRow[ $Order ] );
+				$parse['ally_members_points'] =  Format::pretty_number( floor($StatRow[ $Order ] / $StatRow['ally_members']) );
 				$parse['stat_values']    	 .= parsetemplate($StatAllianceTableTPL, $parse);
 				$start++;
 			}
@@ -234,7 +234,7 @@ class ShowStatisticsPage
 					{
 						$parse['player_alliance'] = "<a href=\"game.php?page=alliance&mode=ainfo&a=".$StatRow['ally_id']."\">".$StatRow['ally_name']."</a>";
 					}
-					$parse['player_points']   = pretty_number( $StatRow[ $Order ] );
+					$parse['player_points']   = Format::pretty_number( $StatRow[ $Order ] );
 					$parse['stat_values']    .= parsetemplate($StatPlayerTableTPL, $parse);
 
 

@@ -23,7 +23,7 @@ th.lic{border:0px;}</style>
     <tr>
         <th>
         	<br />
-            <a href="http://tracker.xgproyect.net/" target="_blank">Reporte de bugs (Bug Report)</a>
+            <a href="http://xgproyect.net/2-10-x-bug-report/" target="_blank">Reporte de bugs (Bug Report)</a>
         	<br />
         	<a href="http://www.xgproyect.net/" target="_blank">XG Proyect {ow_forum}</a>
         	<br />

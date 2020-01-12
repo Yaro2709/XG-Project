@@ -1,6 +1,6 @@
 
 El usuario lucky agrego:
-Nave pequeña de carga: 10
+Nave peque&ntilde;a de carga: 10
 Nave grande de carga: 10
 Cazador ligero: 10
 Cazador pesado: 10
@@ -10,9 +10,9 @@ Colonizador: 0
 Reciclador: 0
 Sonda de espionaje: 0
 Bombardero: 0
-Satélite solar: 0
+Sat&eacute;lite solar: 0
 Destructor: 0
 Estrella de la muerte: 0
 Acorazado: 0
 al planeta con el ID: 1
-Operación realizada el: 06-12-2011 20:52:44
+Operaci&oacute;n realizada el: 26-04-2012 21:25:47
