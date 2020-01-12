@@ -6,5 +6,5 @@ $dbsettings = Array(
 "pass"       => "root", // MySQL password.
 "name"       => "ogame", // MySQL database name.
 "prefix"     => "xgp_", // Tables prefix.
-"secretword" => "XGProyect875208701"); // Cookies.
+"secretword" => "XGProyect543856441"); // Cookies.
 ?>

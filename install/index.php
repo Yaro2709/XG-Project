@@ -216,7 +216,7 @@ switch ($Mode)
 				include("../config.php");
 
 				$system_version	=	str_replace ( 'v' , '' , VERSION );
-
+								
 				// ALL QUERYS NEEDED
 				$Qry1 = "DELETE FROM `$dbsettings[prefix]config` WHERE `config_name` = 'VERSION'";
 				$Qry2 = "INSERT INTO `$dbsettings[prefix]config` (`config_name`, `config_value`) VALUES ('VERSION', '".SYSTEM_VERSION."');";
@@ -234,7 +234,9 @@ switch ($Mode)
 				$Qry9 = "ALTER TABLE $dbsettings[prefix]galaxy ADD `invisible_start_time` int(11) NOT NULL default '0'; ";
 				$Qry10 = "ALTER TABLE `$dbsettings[prefix]users` DROP `rpg_espion`,DROP `rpg_constructeur`,DROP `rpg_scientifique`,DROP `rpg_commandant`,DROP `rpg_stockeur`,DROP `rpg_defenseur`,DROP `rpg_destructeur`,DROP `rpg_general`,DROP `rpg_empereur`;";
 				$Qry11 = "DROP TABLE `$dbsettings[prefix]config`";
-
+				
+				$QrysArray	= NULL;
+				
 				switch($system_version)
 				{
 					case '2.9.0':
@@ -260,22 +262,26 @@ switch ($Mode)
 						migrate_to_xml();
 					break;
 					case '2.9.10':
-					case '2.9.11':
-					case '2.10.0':
 						$QrysArray	= array($Qry1, $Qry2 , $Qry10, $Qry11);
 						migrate_to_xml();
+					break;
+					case '2.10.0':
+						update_config ( 'version' , SYSTEM_VERSION );
 					break;
 					default:
 						message("&iexcl;La versi&oacute;n de tu proyecto no es compatible con XG Proyect, o estas intentando actualizar desde una versi&oacute;n m&aacute;s nueva!", "", "", FALSE, FALSE);
 					break;
 				}
-
-				foreach ( $QrysArray as $DoQuery )
+				
+				if ( $QrysArray != NULL )
 				{
-					mysql_query($DoQuery);
+					foreach ( $QrysArray as $DoQuery )
+					{
+						mysql_query($DoQuery);
+					}
 				}
 
-				message("XG Proyect finaliz&oacute; la actualizaci&oacute;n con &eacute;xito, para finalizar borra el directorio install y luego haz <a href=\"./../\">click aqui</a>", "", "", FALSE, FALSE);
+				message("XG Proyect finaliz&oacute; la actualizaci&oacute;n de la version " . $system_version . " a la versi&oacute;n " . SYSTEM_VERSION . " con &eacute;xito, para finalizar borra el directorio install y luego haz <a href=\"./../\">click aqui</a>", "", "", FALSE, FALSE);
 			}
 		}
 		else

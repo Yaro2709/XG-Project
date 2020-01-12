@@ -83,10 +83,10 @@ class ShowFleetShortcuts
 		display(parsetemplate(gettemplate("shortcuts/shortcuts_editPanel"),$parse));
 	}
 
-	private function saveFleetShortcuts($id,$name,$galaxy,$system,$planet,$position,$moon)
+	private function saveFleetShortcuts($id,$name,$galaxy,$system,$planet,$moon)
 	{
 		$scarray 		= explode(";", $this->CurrentUser['fleet_shortcut']);
-		$scarray[$id]	="{$name},{$galaxy},{$system},{$planet},{$position},{$moon};";
+		$scarray[$id]	="{$name},{$galaxy},{$system},{$planet},{$moon};";
 
 		$this->CurrentUser['fleet_shortcut'] = implode(";", $scarray);
 
@@ -95,9 +95,9 @@ class ShowFleetShortcuts
 		header("location:game.php?page=shortcuts");
 	}
 
-    private function addFleetShortcuts($name,$galaxy,$system,$planet,$position,$moon)
+    private function addFleetShortcuts($name,$galaxy,$system,$planet,$moon)
 	{
-		$this->CurrentUser['fleet_shortcut'] .= "{$name},{$galaxy},{$system},{$planet},{$position},{$moon};";
+		$this->CurrentUser['fleet_shortcut'] .= "{$name},{$galaxy},{$system},{$planet},{$moon};";
 
 		doquery("UPDATE {{table}} SET fleet_shortcut='".($this->CurrentUser['fleet_shortcut'])."' WHERE id=".($this->CurrentUser['id']), "users");
 

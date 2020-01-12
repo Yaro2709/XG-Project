@@ -1,22 +1,22 @@
 
-El usuario  cambio la siguiente configuración:
-¿Servidor cerrado? : 
-¿Modo DEBUG activado? : 
+El usuario  cambio la siguiente configuraci&oacute;n:
+&iquest;Servidor cerrado? : 
+&iquest;Modo DEBUG activado? : 
 Nombre del juego : XG Proyect
 URL del foro : http://www.xgproyect.net/
 Velocidad del juego : x1
 Velocidad de flota : x1
-Velocidad de producción : x1
+Velocidad de producci&oacute;n : x1
 Campos iniciales : 163
-Básico de metal por hora : 20
-Básico de cristal por hora : 10
-Básico de deuterio por hora : 0
-¿Protección contra administradores activado? : 
+B&aacute;sico de metal por hora : 20
+B&aacute;sico de cristal por hora : 10
+B&aacute;sico de deuterio por hora : 0
+&iquest;Protecci&oacute;n contra administradores activado? : 
 Lenguaje : spanish
 Nombre de la cookie : XGProyect
 Defensas a escombros : 30%
 Naves a escombros : 30%
-¿Protección contra novatos activado? : 
-Tiempo de protección contra novato : 5000
-Limite de puntos para la protección de novato : 5
-Operación realizada el: 20-12-2011 22:17:36
+&iquest;Protecci&oacute;n contra novatos activado? : 
+Tiempo de protecci&oacute;n contra novato : 5000
+Limite de puntos para la protecci&oacute;n de novato : 5
+Operaci&oacute;n realizada el: 02-04-2012 19:04:23

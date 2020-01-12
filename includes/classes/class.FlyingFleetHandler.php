@@ -59,17 +59,24 @@ class FlyingFleetHandler
 
 		$AllCapacity    = array_sum($SortFleets);
 		$QryUpdateFleet    = "";
-
-		foreach($SortFleets as $FleetID => $Capacity)
+		
+		if ( $AllCapacity != 0 )
 		{
-			$QryUpdateFleet = 'UPDATE {{table}} SET ';
-			$QryUpdateFleet .= '`fleet_resource_metal` = `fleet_resource_metal` + '.floattostring($steal['metal'] * ($Capacity / $AllCapacity)).', ';
-			$QryUpdateFleet .= '`fleet_resource_crystal` = `fleet_resource_crystal` +'.floattostring($steal['crystal'] * ($Capacity / $AllCapacity)).', ';
-			$QryUpdateFleet .= '`fleet_resource_deuterium` = `fleet_resource_deuterium` +'.floattostring($steal['deuterium'] * ($Capacity / $AllCapacity)).' ';
-			$QryUpdateFleet .= 'WHERE fleet_id = '.$FleetID.' ';
-			$QryUpdateFleet .= 'LIMIT 1;';
-			doquery($QryUpdateFleet, 'fleets');
-
+			foreach($SortFleets as $FleetID => $Capacity)
+			{
+				$QryUpdateFleet = 'UPDATE {{table}} SET ';
+				$QryUpdateFleet .= '`fleet_resource_metal` = `fleet_resource_metal` + '.floattostring($steal['metal'] * ($Capacity / $AllCapacity)).', ';
+				$QryUpdateFleet .= '`fleet_resource_crystal` = `fleet_resource_crystal` +'.floattostring($steal['crystal'] * ($Capacity / $AllCapacity)).', ';
+				$QryUpdateFleet .= '`fleet_resource_deuterium` = `fleet_resource_deuterium` +'.floattostring($steal['deuterium'] * ($Capacity / $AllCapacity)).' ';
+				$QryUpdateFleet .= 'WHERE fleet_id = '.$FleetID.' ';
+				$QryUpdateFleet .= 'LIMIT 1;';
+				doquery($QryUpdateFleet, 'fleets');
+	
+			}
+		}
+		else
+		{
+			$steal	= 0;
 		}
 
 		return $steal;

@@ -14,20 +14,20 @@
 
 <tr>
 <th>{mods}</th>
-<th><input type="checkbox"{config_m} name="config_m"/></th>
-<th><input type="checkbox"{edit_m} name="edit_m"/></th>
-<th><input type="checkbox"{view_m} name="view_m"/></th>
-<th><input type="checkbox"{tools_m} name="tools_m"/></th>
-<th><input type="checkbox"{log_m} name="log_m"/></th>
+<th><input type="checkbox" {config_m} name="config_m" value="on"/></th>
+<th><input type="checkbox" {edit_m} name="edit_m" value="on"/></th>
+<th><input type="checkbox" {view_m} name="view_m" value="on" /></th>
+<th><input type="checkbox" {tools_m} name="tools_m" value="on"/></th>
+<th><input type="checkbox" {log_m} name="log_m" value="on"/></th>
 </tr>
 
 <tr>
 <th>{oper}</th>
-<th><input type="checkbox"{config_o} name="config_o"/></th>
-<th><input type="checkbox"{edit_o} name="edit_o"/></th>
-<th><input type="checkbox"{view_o} name="view_o"/></th>
-<th><input type="checkbox"{tools_o} name="tools_o"/></th>
-<th><input type="checkbox"{log_o} name="log_o"/></th>
+<th><input type="checkbox" {config_o} name="config_o" value="on"/></th>
+<th><input type="checkbox" {edit_o} name="edit_o" value="on"/></th>
+<th><input type="checkbox" {view_o} name="view_o" value="on"/></th>
+<th><input type="checkbox" {tools_o} name="tools_o" value="on"/></th>
+<th><input type="checkbox" {log_o} name="log_o" value="on"/></th>
 </tr>
 
 <tr>
@@ -36,7 +36,7 @@
 <th><input type="checkbox" checked="checked" disabled="disabled"/></th>
 <th><input type="checkbox" checked="checked" disabled="disabled"/></th>
 <th><input type="checkbox" checked="checked" disabled="disabled"/></th>
-<th><input type="checkbox"{log_a} name="log_a"/></th>
+<th><input type="checkbox" {log_a} name="log_a" value="on"/></th>
 </tr>
 <tr><th colspan="6"><input type="submit" value="{button_submit}" name="mode" /></th></tr>
 </table>

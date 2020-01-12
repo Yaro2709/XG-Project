@@ -25,7 +25,7 @@ function unset_vars ( $prefix )
 
 function read_config ( $config_name = '' , $all = FALSE )
 {
-	$configs		= new xml ( 'config.xml' );
+	$configs		= xml::getInstance ( 'config.xml' );
 
 	if ( $all )
 	{
@@ -40,7 +40,7 @@ function read_config ( $config_name = '' , $all = FALSE )
 
 function update_config ( $config_name, $config_value )
 {
-	$configs		= new xml ( 'config.xml' );
+	$configs		= xml::getInstance ( 'config.xml' );
 
 	$configs->write_config ( $config_name , $config_value );
 }

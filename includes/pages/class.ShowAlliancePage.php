@@ -33,7 +33,7 @@ class ShowAlliancePage extends bbCode
 
 	private function return_rank ( $ally_ranks , $rank_type , $ally_owner , $user )
 	{
-		if ( $ally_ranks[$user['ally_rank_id']-1][$rank_type] == 1 or $ally_owner == $user )
+		if ($ally_ranks[$user['ally_rank_id']-1][$rank_type] == 1 or $ally['ally_owner'] == $user['id'])
 		{
 			return TRUE;
 		}
@@ -385,16 +385,16 @@ class ShowAlliancePage extends bbCode
 			$ally 		= doquery ( "SELECT * FROM {{table}} WHERE id='" . intval ( $CurrentUser['ally_id'] ) . "'" , "alliance" , TRUE );
 			$ally_ranks = unserialize ( $ally['ally_ranks'] );
 
-			$user_can_watch_memberlist_status	= $this->return_rank ( $ally_ranks , 'onlinestatus' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_can_watch_memberlist			= $this->return_rank ( $ally_ranks , 'memberlist' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_can_send_mails				= $this->return_rank ( $ally_ranks , 'mails' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_can_kick						= $this->return_rank ( $ally_ranks , 'kick' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_can_edit_rights				= $this->return_rank ( $ally_ranks , 'rechtehand' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_can_exit_alliance				= $this->return_rank ( $ally_ranks , 'delete' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_bewerbungen_einsehen			= $this->return_rank ( $ally_ranks , 'bewerbungen' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_bewerbungen_bearbeiten		= $this->return_rank ( $ally_ranks , 'bewerbungenbearbeiten' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_admin							= $this->return_rank ( $ally_ranks , 'administrieren' , $ally['ally_owner'] , $CurrentUser['id'] );
-			$user_onlinestatus					= $this->return_rank ( $ally_ranks , 'onlinestatus' , $ally['ally_owner'] , $CurrentUser['id'] );
+			$user_can_watch_memberlist_status	= $this->return_rank ( $ally_ranks , 'onlinestatus' , $ally['ally_owner'] , $CurrentUser );
+			$user_can_watch_memberlist			= $this->return_rank ( $ally_ranks , 'memberlist' , $ally['ally_owner'] , $CurrentUser );
+			$user_can_send_mails				= $this->return_rank ( $ally_ranks , 'mails' , $ally['ally_owner'] , $CurrentUser );
+			$user_can_kick						= $this->return_rank ( $ally_ranks , 'kick' , $ally['ally_owner'] , $CurrentUser );
+			$user_can_edit_rights				= $this->return_rank ( $ally_ranks , 'rechtehand' , $ally['ally_owner'] , $CurrentUser );
+			$user_can_exit_alliance				= $this->return_rank ( $ally_ranks , 'delete' , $ally['ally_owner'] , $CurrentUser );
+			$user_bewerbungen_einsehen			= $this->return_rank ( $ally_ranks , 'bewerbungen' , $ally['ally_owner'] , $CurrentUser );
+			$user_bewerbungen_bearbeiten		= $this->return_rank ( $ally_ranks , 'bewerbungenbearbeiten' , $ally['ally_owner'] , $CurrentUser );
+			$user_admin							= $this->return_rank ( $ally_ranks , 'administrieren' , $ally['ally_owner'] , $CurrentUser );
+			$user_onlinestatus					= $this->return_rank ( $ally_ranks , 'onlinestatus' , $ally['ally_owner'] , $CurrentUser );
 
 			if ( !$ally )
 			{
@@ -739,7 +739,7 @@ class ShowAlliancePage extends bbCode
 						if ( $ally['ally_owner'] == $CurrentUser['id'] )
 						{
 							$lang['id'] 	= $a;
-							$lang['delete']	= "<a href=\"game.php?page=alliance&mode=admin&edit=rights&d={$a}\"><img src=\"{DPATH}pic/abort.gif\" title=\"Borrar rango\" border=\"0\"></a>";
+							$lang['delete']	= "<a href=\"game.php?page=alliance&mode=admin&edit=rights&d={$a}\"><img src=\"" . DPATH . "pic/abort.gif\" title=\"Borrar rango\" border=\"0\"></a>";
 							$lang['r0'] 	= $b['name'];
 							$lang['a'] 		= $a;
 							$lang['r1'] 	= "<input type=checkbox name=\"u{$a}r0\"" . (($b['delete'] == 1)?' checked="checked"':'') . ">"; //{$b[1]}
@@ -954,8 +954,9 @@ class ShowAlliancePage extends bbCode
 
 					$i++;
 					$u['i'] 			= $i;
-					$u['points'] 		= pretty_number ( $UserPoints['total_points'] );
-					$days 				= floor ( round ( time() - $u["onlinetime"] ) / 3600 * 24 );
+					$u['points'] 		= pretty_number ( $UserPoints['total_points'] );					
+					$days 				= floor ( ( time() - $u["onlinetime"] ) / ( 3600 * 24 ) );
+					
 					$u["onlinetime"]	= str_replace ( "%s" , $days , "%s d" );
 
 					if ( $ally['ally_owner'] == $u['id'] )

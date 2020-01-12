@@ -284,12 +284,12 @@ class ShowFleet3Page
 			{
 				message ("<font color=\"red\"><b>".$lang['fl_planet_populed']."</b></font>", "game.php?page=fleet", 2);
 			}
-
+						
 			if ($HeDBRec['ally_id'] != $MyDBRec['ally_id'] && $_POST['mission'] == 4)
 			{
 				message ("<font color=\"red\"><b>".$lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=fleet", 2);
 			}
-
+			
 			if (($TargetPlanet["id_owner"] == $CurrentPlanet["id_owner"]) && (($_POST["mission"] == 1) or ($_POST["mission"] == 6)))
 			{
 				exit ( header ( "location:game.php?page=fleet" ) );
@@ -299,11 +299,24 @@ class ShowFleet3Page
 			{
 				message ("<font color=\"red\"><b>".$lang['fl_deploy_only_your_planets']."</b></font>","game.php?page=fleet", 2);
 			}
-
+			
 			if($_POST['mission'] == 5)
-			{
-				$buddy = doquery("SELECT count(*) FROM {{table}} WHERE `owner` = '". intval($TargetPlanet['id_owner']) ."' OR `sender`='".intval($TargetPlanet['id_owner'])."' AND `active` = '1';", 'buddy');
+			{	
+				$buddy = doquery ( "SELECT COUNT( * ) AS buddys
+										FROM  `{{table}}` 
+											WHERE (
+												(
+													sender ='" . intval($CurrentPlanet['id_owner']) . "'
+													AND owner ='" . intval($TargetPlanet['id_owner']) . "'
+												)
+												OR (
+													sender ='" . intval($TargetPlanet['id_owner']) . "'
+													AND owner ='" . intval($CurrentPlanet['id_owner']) . "'
+												)
+											)
+											AND active =1" , 'buddy' , TRUE );
 
+/*
 				if ($_POST['planettype']==3)
 				{
 					$x = doquery("SELECT `ally_deposit` FROM {{table}} WHERE `galaxy` = '". intval($_POST['galaxy']) ."' AND `system` = '". intval($_POST['system']) ."' AND `planet` = '". intval($_POST['planet']) ."' AND `planet_type` = 1;", 'planets', TRUE);
@@ -312,8 +325,11 @@ class ShowFleet3Page
 				{
 					$x = $TargetPlanet;
 				}
-
-				if (($HeDBRec['ally_id'] != $MyDBRec['ally_id'] && $buddy<1) ||  $x['ally_deposit'] < 1)
+*/
+			//	if (($HeDBRec['ally_id'] != $MyDBRec['ally_id'] && $buddy<1) ||  $x['ally_deposit'] < 1)
+			
+			
+				if ( $HeDBRec['ally_id'] != $MyDBRec['ally_id'] && $buddy['buddys'] < 1 )
 				{
 					message ("<font color=\"red\"><b>".$lang['fl_stay_not_on_enemy']."</b></font>", "game.php?page=fleet", 2);
 				}

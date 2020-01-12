@@ -46,54 +46,6 @@ class ShowInfosPage
     {
         global $resource, $lang;
 
-        $inp_ok    = TRUE;
-        for ($Ship = 300; $Ship > 200; $Ship-- )
-        {
-            if ($resource[$Ship] != "")
-            {
-                if ($CurrentPlanet[$resource[$Ship]] > 0)
-                {
-                    $bla['c' .strval($Ship)]= $CurrentPlanet[$resource[$Ship]];
-                }
-            }
-        }
-
-        $keyPOST    = array_keys($_POST);
-        $keyBLA        = array_keys($bla);
-        $pos    = 0;
-        $pos2    = 0;
-
-        foreach ($_POST as &$fldp)
-        {
-            if (is_numeric($fldp))
-            {
-                foreach ($bla as &$fmax)
-                {
-                    if ($keyPOST[$pos]==$keyBLA[$pos2])
-                    {
-                        if (!($fldp >= 0 && $fldp <= $fmax))
-                        {
-                            $inp_ok=FALSE;
-                        }
-                    }
-                    $pos2++;
-                }
-                $pos2=0;
-
-            }
-            else
-            {
-                $inp_ok=FALSE;
-            }
-            $pos++;
-        }
-
-    	//fix redirect by quaua
-		if ($inp_ok == FALSE)
-        {
-            header("location:game.php?page=infos&gid=43");
-        }
-
         if ($_POST)
         {
             $RestString   = $this->GetNextJumpWaitTime ($CurrentPlanet);
@@ -103,7 +55,7 @@ class ShowInfosPage
             if ( $NextJumpTime == 0 )
             {
                 $TargetPlanet = $_POST['jmpto'];
-                $TargetGate   = doquery ( "SELECT `id`, `sprungtor`, `last_jump_time` FROM {{table}} WHERE `id` = '". intval($TargetPlanet) ."';", 'planets', TRUE);
+                $TargetGate   = doquery ( "SELECT `id`, `sprungtor`, `last_jump_time` FROM {{table}} WHERE `id` = '". $TargetPlanet ."';", 'planets', true);
 
                 if ($TargetGate['sprungtor'] > 0)
                 {
@@ -119,25 +71,27 @@ class ShowInfosPage
                         for ( $Ship = 200; $Ship < 300; $Ship++ )
                         {
                             $ShipLabel = "c". $Ship;
-
-                            $gemi_kontrol    =    abs(intval($_POST[ $ShipLabel ]));
-
-                            if ( $gemi_kontrol > $CurrentPlanet[ $resource[ $Ship ] ] && ctype_digit($_POST[ $ShipLabel ]))
+                            $gemi_kontrol    =    $_POST[ $ShipLabel ];
+                            
+                            if (is_numeric($gemi_kontrol))
                             {
-                                $ShipArray[ $Ship ] = $CurrentPlanet[ $resource[ $Ship ] ];
-                            }
-                            else
-                            {
-                                $ShipArray[ $Ship ] = $gemi_kontrol;
-                            }
-
-                            if ($ShipArray[ $Ship ] <> 0)
-                            {
-                                $SubQueryOri .= "`". $resource[ $Ship ] ."` = `". $resource[ $Ship ] ."` - '". $ShipArray[ $Ship ] ."', ";
-                                $SubQueryDes .= "`". $resource[ $Ship ] ."` = `". $resource[ $Ship ] ."` + '". $ShipArray[ $Ship ] ."', ";
+                                if ( $gemi_kontrol > $CurrentPlanet[ $resource[ $Ship ] ])
+                                {
+                                    $ShipArray[ $Ship ] = $CurrentPlanet[ $resource[ $Ship ] ];
+                                }
+                                else
+                                {
+                                    $ShipArray[ $Ship ] = $gemi_kontrol;
+                                }
+                            
+                                
+                                if ($ShipArray[ $Ship ] > 0)
+                                {
+                                    $SubQueryOri .= "`". $resource[ $Ship ] ."` = `". $resource[ $Ship ] ."` - '". $ShipArray[ $Ship ] ."', ";
+                                    $SubQueryDes .= "`". $resource[ $Ship ] ."` = `". $resource[ $Ship ] ."` + '". $ShipArray[ $Ship ] ."', ";
+                                }
                             }
                         }
-
                         if ($SubQueryOri != "")
                         {
                             $QryUpdateOri  = "UPDATE {{table}} SET ";
@@ -190,7 +144,7 @@ class ShowInfosPage
         }
 
         return $RetMessage;
-    }
+    }  
 
     private function BuildFleetListRows ($CurrentPlanet)
     {

@@ -4,6 +4,29 @@ $lang['Version']     = 'Versi&oacute;n';
 $lang['Description'] = 'Descripci&oacute;n';
 $lang['changelog']   = array(
 
+'2.10.1' => ' 06/04/2012
+-[Mejoras]
+- Mejora menor en el informe de actualizaci&oacute;n que te informa de que versi&oacute;n a cual otra pasaste.-
+
+-[Bugs]
+
+#9943: Corregido el bug de los permisos de la alianza.-
+#9934: Ahora es posible enviar naves con la misi&oacute;n de mantener posici&oacute;n a una Luna.-
+#9903: Bug al cambiar los permisos de administradores/moderadores/operadores en el panel administrativo (By PowerMaster).-
+#9913: Varios problemas con el phalanx (By jstar).-
+#9864: Problemas con los atajos.-
+#9857: Error que produc&iacute;a problemas en las estad&iacute;sticas y en varias otras p&aacute;ginas del juego (By Jstar).-
+#9852: Calculo erroneo en los d&iacute;as de inactividad de un usuario en el panel administrativo.-
+#9850: No se pueden enviar sondas a atacar, producen un error.-
+#9837: L&iacute;mite en la cantidad de naves que se pueden enviar durante el salto cu&aacute;ntico (By Gmir17).-
+#0000: Corregido un bug menor en el actualizador.-
+#0000: Corregido un bug que no mostraba la imagen de eliminar rango en el panel administrativo.-
+#0000: Correcciones a caracteres err&oacute;neos en algunos textos.-
+#0000: Corregido un bug que imped&iacute;a enviar una flota a mantener posici&oacute;n si no ten&iacute;a deposito de la alianza.-
+#0000: Corregido un bug que no informaba correctamente si hab&iacute;a una nueva versi&oacute;n disponible.-
+#0000: Corregido un bug que mostraba &uacute;nicamente la primer flota en el phalanx (By jstar).-
+',
+
 '2.10.0' => ' 06/01/12
 
 -[Mejoras]

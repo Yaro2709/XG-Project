@@ -18,7 +18,7 @@ if ( $user['authlevel'] < 1 )
 }
 
 $QueryModeration	=	read_config ( 'moderation' );
-$QueryModerationEx	=	explode ( ";" , $QueryModeration[1] );
+$QueryModerationEx  =   explode ( ";" , $QueryModeration ); 
 $Moderator			=	explode ( "," , $QueryModerationEx[0] );
 $Operator			=	explode ( "," , $QueryModerationEx[1] );
 $Administrator		=	explode ( "," , $QueryModerationEx[2] );

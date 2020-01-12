@@ -1,7 +1,8 @@
 
 <font color=lime>||| LISTA DE ERRORES |||</font>
-El usuario lucky ha borrado todos los mensajes de error
-Operaci&oacute;n realizada el: 05-01-2012 04:16:21
+El usuario lucky ha borrado un error
+Operaci&oacute;n realizada el: 02-04-2012 18:53:27
+5-01-2012 04:16:21
 : 23-11-2011 01:45:07
 5
 21:15:04
