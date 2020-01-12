@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 if(!defined('INSIDE')) {die(header("location:../../"));}
@@ -278,7 +278,6 @@ class ShowOverviewPage
 				{
 					if($CurrentUserPlanet["id"] != $CurrentUser["current_planet"] && $CurrentUserPlanet['planet_type'] != 3)
 					{
-						$Coloneshow++;
 						$AllPlanets .= "<th>" . $CurrentUserPlanet['name'] . "<br>";
 						$AllPlanets .= "<a href=\"game.php?page=overview&cp=" . $CurrentUserPlanet['id'] . "&re=0\" title=\"" . $CurrentUserPlanet['name'] . "\"><img src=\"" . DPATH . "planeten/small/s_" . $CurrentUserPlanet['image'] . ".jpg\" height=\"50\" width=\"50\"></a><br>";
 						$AllPlanets .= "<center>";
@@ -311,7 +310,9 @@ class ShowOverviewPage
 						$AllPlanets .= "</center></th>";
 
 						if($Colone <= 1)
+						{
 							$Colone++;
+						}	
 						else
 						{
 							$AllPlanets .= "</tr><tr>";

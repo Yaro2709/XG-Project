@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
@@ -383,7 +383,7 @@ class ShowFleet3Page
 		{
 			$StayDuration	= floor($_POST['expeditiontime']);
 
-			if ( $StayDuration <= floor ( sqrt ( $CurrentUser['expedition_tech'] ) ) && $StayDuration > 0 )
+			if ( $StayDuration > 0 )
 			{
 				$StayDuration    = $StayDuration  * 3600;
 				$StayTime        = $fleet['start_time'] + $StayDuration;

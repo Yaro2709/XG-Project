@@ -7,6 +7,7 @@
  */
 
 define('INSIDE'  		,   	 TRUE);
+define('INSTALL'        ,        TRUE);
 define('XGP_ROOT'		, 	  './../');
 
 include_once(XGP_ROOT . 'global.php');
@@ -211,7 +212,7 @@ switch ($Mode)
 			$administrator	=	doquery("SELECT id
 											FROM {{table}}
 											WHERE password = '" . md5 ( $_POST['adm_pass'] ) . "' AND
-													email = '" . mysql_real_escape_string ( $_POST['adm_email'] ) . "' AND
+													email = '" . mysql_escape_string ( $_POST['adm_email'] ) . "' AND
 													authlevel = 3" , 'users' , TRUE );
 
 			if ( !$administrator )
@@ -278,6 +279,7 @@ switch ($Mode)
 					case '2.10.0':
 					case '2.10.1':
 					case '2.10.2':
+					case '2.10.3':
 						update_config ( 'version' , SYSTEM_VERSION );
 					break;
 					default:

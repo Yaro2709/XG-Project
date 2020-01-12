@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
@@ -80,6 +80,14 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 						SendSimpleMessage ( $CurrentUser['id'], '', '', 99, $lang['sys_buildlist'], $lang['sys_buildlist_fail'], $Message);
 
 						array_shift( $QueueArray );
+						
+						foreach ( $QueueArray as $num => $info )
+                        {
+                            $fixEle             = explode ( "," , $info );
+                            $fixEle[3]          = $fixEle[3] - $BuildTime;
+                            $QueueArray[$num]	= implode ( "," , $fixEle );
+                        } 
+						
 						$ActualCount         = count ($QueueArray);
 						if ( $ActualCount == 0 )
 						{

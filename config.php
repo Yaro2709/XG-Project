@@ -4,7 +4,7 @@ $dbsettings = Array(
 "server"     => "localhost", // MySQL server name.
 "user"       => "root", // MySQL username.
 "pass"       => "root", // MySQL password.
-"name"       => "ogame", // MySQL database name.
+"name"       => "ogame2", // MySQL database name.
 "prefix"     => "xgp_", // Tables prefix.
-"secretword" => "XGProyect543856441"); // Cookies.
+"secretword" => "XGProyect835172841"); // Cookies.
 ?>

@@ -3,7 +3,7 @@
 /**
  * @project XG Proyect
  * @version 2.10.x build 0000
- * @copyright Copyright (C) 2008 - 2016
+ * @copyright Copyright (C) 2008 - 2012
  */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
@@ -252,7 +252,7 @@ class ShowFleet2Page
 				$stay_row['options']  .= parsetemplate ( $options_template , $stay );
 			}
 
-			$StayBlock = parsetemplate ( $stay_template , $stay_row );
+			$StayBlock = parsetemplate ( $stay_template , array_merge ( $stay_row , $lang ) );
 		}
 		elseif ( $missiontype[5] != '' )
 		{
@@ -268,7 +268,7 @@ class ShowFleet2Page
 				$stay_row['options']  .= parsetemplate ( $options_template , $stay );
 			}
 
-			$StayBlock = parsetemplate ( $stay_template , $stay_row );
+			$StayBlock = parsetemplate ( $stay_template , array_merge ( $stay_row , $lang ) );
 		}
 
 		$parse['input_extra'] 			= $input_extra;

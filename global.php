@@ -26,7 +26,7 @@ include_once ( XGP_ROOT . 'includes/classes/class.Fleets.php' );
 
 $debug 		= new debug();
 
-if ( filesize ( XGP_ROOT . 'config.php' ) == 0 && INSTALL != TRUE )
+if ( filesize ( XGP_ROOT . 'config.php' ) === 0 && ( ( !defined ( 'INSTALL' ) ) OR ( !INSTALL ) ) )
 {
 	exit ( header ( 'location:' . XGP_ROOT .  'install/' ) );
 }
@@ -56,14 +56,17 @@ if ( INSTALL != TRUE )
 
 	includeLang ( 'INGAME' );
 
-	if ( $InLogin != TRUE )
-	{
+	if ( !isset ( $InLogin ) or $InLogin != TRUE )
+	{		
 		include ( XGP_ROOT . 'includes/classes/class.CheckSession.php' );
 
 		$Result        	= new CheckSession();
 		$Result			= $Result->CheckUser ( $IsUserChecked );
 		$IsUserChecked 	= $Result['state'];
 		$user          	= $Result['record'];
+		
+		require ( XGP_ROOT . 'includes/classes/class.SecurePage.php' );
+		SecurePage::run(); 
 
 		if ( read_config ( 'game_disable' ) == 0 && $user['authlevel'] == 0 )
 		{
@@ -137,9 +140,5 @@ else
 {
 	define('DPATH' , "../". DEFAULT_SKINPATH );
 }
-
-include ( 'includes/classes/class.SecurePage.php' ); // include the class
-$SecureSqlInjection	= new SecureSqlInjection(); // load the class
-$SecureSqlInjection->secureGlobals(); // run the main class function
 
 ?>
