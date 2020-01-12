@@ -1,29 +1,16 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
     function calculateAttack (&$attackers, &$defenders)
     {
-        global $pricelist, $CombatCaps, $game_config, $resource;
+        global $pricelist, $CombatCaps, $resource;
 
         $totalResourcePoints = array('attacker' => 0, 'defender' => 0);
         $resourcePointsAttacker = array('metal' => 0, 'crystal' => 0);
@@ -75,9 +62,9 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
                 $attackAmount[$fleetID] = 0;
 
                 foreach ($attacker['detail'] as $element => $amount) {
-                    $attTech    = (1 + (0.1 * ($attacker['user']['military_tech']) + (0.05 * $attacker['user']['rpg_amiral']))); //attaque
-                    $defTech    = (1 + (0.1 * ($attacker['user']['defence_tech']) + (0.05 * $attacker['user']['rpg_amiral']))); //bouclier
-                    $shieldTech = (1 + (0.1 * ($attacker['user']['shield_tech']) + (0.05 * $attacker['user']['rpg_amiral']))); //coque
+                    $attTech    = (1 + (0.1 * ($attacker['user']['military_tech']))); //attaque
+                    $defTech    = (1 + (0.1 * ($attacker['user']['defence_tech']))); //bouclier
+                    $shieldTech = (1 + (0.1 * ($attacker['user']['shield_tech']))); //coque
 
                     $attackers[$fleetID]['techs'] = array($shieldTech, $defTech, $attTech);
 
@@ -102,9 +89,9 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
                 $defenseAmount[$fleetID] = 0;
 
                 foreach ($defender['def'] as $element => $amount) {
-                    $attTech    = (1 + (0.1 * ($defender['user']['military_tech']) + (0.05 * $defender['user']['rpg_amiral']))); //attaquue
-                    $defTech    = (1 + (0.1 * ($defender['user']['defence_tech']) + (0.05 * $defender['user']['rpg_amiral']))); //bouclier
-                    $shieldTech = (1 + (0.1 * ($defender['user']['shield_tech']) + (0.05 * $defender['user']['rpg_amiral']))); //coque
+                    $attTech    = (1 + (0.1 * ($defender['user']['military_tech']))); //attaquue
+                    $defTech    = (1 + (0.1 * ($defender['user']['defence_tech']))); //bouclier
+                    $shieldTech = (1 + (0.1 * ($defender['user']['shield_tech']))); //coque
 
                     $defenders[$fleetID]['techs'] = array($shieldTech, $defTech, $attTech);
 
@@ -112,7 +99,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
                     $thisDef    = $amount * ($CombatCaps[$element]['shield']) * $defTech ; //bouclier
                     $thisShield    = $amount * ($pricelist[$element]['metal'] + $pricelist[$element]['crystal']) / 10 * $shieldTech; //coque
 
-                    if ($element == 407 || $element == 408 || $element == 409) $thisAtt = 0;
+                    if ($element == 407 || $element == 408 ) $thisAtt = 0;
 
                     $defArray[$fleetID][$element] = array('def' => $thisDef, 'shield' => $thisShield, 'att' => $thisAtt);
 
@@ -306,8 +293,16 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
                     $totalResourcePoints['defender'] -= $pricelist[$element]['metal'] * $amount ;
                     $totalResourcePoints['defender'] -= $pricelist[$element]['crystal'] * $amount ;
 
-                    $lost = $originalDef[$element] - $amount;
-                    $giveback = round($lost * (rand(70*0.8, 70*1.2) / 100));
+                	if ( $user['rpg_technocrate'] == 1 )
+                	{
+						$lost = floor ( ( $originalDef[$element] - $amount ) / ENGINEER_DEFENSE );
+                	}
+                	else
+                	{
+                		$lost = $originalDef[$element] - $amount;
+                	}
+
+                	$giveback = round ( $lost * ( rand ( 70 * 0.8 , 70 * 1.2 ) / 100 ) );
                     $defenders[$fleetID]['def'][$element] += $giveback;
                     $resourcePointsDefenderDefs['metal'] += $pricelist[$element]['metal'] * ($lost - $giveback) ;
                     $resourcePointsDefenderDefs['crystal'] += $pricelist[$element]['crystal'] * ($lost - $giveback) ;
@@ -316,12 +311,13 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
             }
         }
 
-
-        $totalLost = array('att' => $totalResourcePoints['attacker'], 'def' => $totalResourcePoints['defender']);
-        $debAttMet = ($resourcePointsAttacker['metal'] * ($game_config['Fleet_Cdr'] / 100));
-        $debAttCry = ($resourcePointsAttacker['crystal'] * ($game_config['Fleet_Cdr'] / 100));
-        $debDefMet = ($resourcePointsDefender['metal'] * ($game_config['Fleet_Cdr'] / 100)) + ($resourcePointsDefenderDefs['metal'] * ($game_config['Defs_Cdr'] / 100));
-        $debDefCry = ($resourcePointsDefender['crystal'] * ($game_config['Fleet_Cdr'] / 100)) + ($resourcePointsDefenderDefs['crystal'] * ($game_config['Defs_Cdr'] / 100));
+		$game_fleet_cdr	=	read_config ( 'fleet_cdr' );
+		$game_defs_cdr	=	read_config ( 'defs_cdr' );
+        $totalLost 		= array('att' => $totalResourcePoints['attacker'], 'def' => $totalResourcePoints['defender']);
+        $debAttMet 		= ($resourcePointsAttacker['metal'] * ($game_fleet_cdr / 100));
+        $debAttCry 		= ($resourcePointsAttacker['crystal'] * ($game_fleet_cdr / 100));
+        $debDefMet 		= ($resourcePointsDefender['metal'] * ($game_fleet_cdr / 100)) + ($resourcePointsDefenderDefs['metal'] * ($game_defs_cdr / 100));
+        $debDefCry 		= ($resourcePointsDefender['crystal'] * ($game_fleet_cdr / 100)) + ($resourcePointsDefenderDefs['crystal'] * ($game_defs_cdr / 100));
 
         return array('won' => $won, 'debree' => array('att' => array($debAttMet, $debAttCry), 'def' => array($debDefMet, $debDefCry)), 'rw' => $rounds, 'lost' => $totalLost);
     }

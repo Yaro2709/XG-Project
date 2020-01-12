@@ -1,39 +1,26 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
-	function IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, $Incremental = true, $ForDestroy = false)
+	function IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, $Incremental = TRUE, $ForDestroy = FALSE)
 	{
-		global $pricelist, $resource, $xgp_root, $phpEx;
+		global $pricelist, $resource;
 
-		include_once($xgp_root . 'includes/functions/IsVacationMode.' . $phpEx);
+		include_once(XGP_ROOT . 'includes/functions/IsVacationMode.php');
 
 	    if (IsVacationMode($CurrentUser))
-	       return false;
+	       return FALSE;
 
 		if ($Incremental)
 			$level  = ($CurrentPlanet[$resource[$Element]]) ? $CurrentPlanet[$resource[$Element]] : $CurrentUser[$resource[$Element]];
 
-		$RetValue = true;
+		$RetValue = TRUE;
 		$array    = array('metal', 'crystal', 'deuterium', 'energy_max');
 
 		foreach ($array as $ResType)
@@ -46,10 +33,10 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 					$cost[$ResType]  = floor($pricelist[$Element][$ResType]);
 
 				if ($ForDestroy)
-					$cost[$ResType]  = floor($cost[$ResType] / 2);
+					$cost[$ResType]  = floor($cost[$ResType] / 4);
 
 				if ($cost[$ResType] > $CurrentPlanet[$ResType])
-					$RetValue = false;
+					$RetValue = FALSE;
 			}
 		}
 		return $RetValue;

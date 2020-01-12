@@ -1,130 +1,129 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
+
+if(!defined('INSIDE')){ die(header ( 'location:../../' ));}
 
 class CheckSession
 {
-	private function CheckCookies ($IsUserChecked)
-	{
-		global $game_config, $xgp_root, $phpEx, $lang;
+    private function CheckCookies ($IsUserChecked)
+    {
+        global $lang;
 
-		$UserRow = array();
+        $UserRow = array();
 
-		include($xgp_root . 'config.' . $phpEx);
+        include(XGP_ROOT . 'config.php');
 
-		if (isset($_COOKIE[$game_config['COOKIE_NAME']]))
-		{
-			$TheCookie  = explode("/%/", $_COOKIE[$game_config['COOKIE_NAME']]);
-			$TheCookie 	= array_map('mysql_escape_string',$TheCookie);
-			$UserResult = doquery("SELECT * FROM {{table}} WHERE `username` = '". mysql_escape_string($TheCookie[1]). "';", 'users');
+    	$game_cookie	=	read_config ( 'cookie_name' );
 
-			if (mysql_num_rows($UserResult) != 1)
-			{
-				message($lang['ccs_multiple_users'], $xgp_root, 5, false, false);
-			}
+        if (isset($_COOKIE[$game_cookie]))
+        {
+            $TheCookie	= explode("/%/", $_COOKIE[$game_cookie]);
 
-			$UserRow    = mysql_fetch_array($UserResult);
+            // START FIX BY JSTAR
+            $TheCookie	= array_map ( 'mysql_escape_string' , $TheCookie );
+            // END FIX BY JSTAR
 
-			if ($UserRow["id"] != $TheCookie[0])
-			{
-				message($lang['ccs_other_user'], $xgp_root, 5,  false, false);
-			}
+            // BETTER QUERY BY LUCKY! REDUCE GENERAL QUERY FROM 11 TO 10.
+            $UserResult = doquery("SELECT {{table}}users.*, {{table}}statpoints.total_rank, {{table}}statpoints.total_points, {{table}}users.id
+                                    FROM {{table}}statpoints
+                                    RIGHT JOIN {{table}}users ON {{table}}statpoints.id_owner = {{table}}users.id
+                                    WHERE ({{table}}users.username = '{$TheCookie[1]}') LIMIT 1;", '');
 
-			if (md5($UserRow["password"] . "--" . $dbsettings["secretword"]) !== $TheCookie[2])
-			{
-				message($lang['css_different_password'], $xgp_root, 5,  false, false);
-			}
 
-			$NextCookie = implode("/%/", $TheCookie);
+            if (mysql_num_rows($UserResult) != 1)
+            {
+                message($lang['ccs_multiple_users'], XGP_ROOT, 5, FALSE, FALSE);
+            }
 
-			if ($TheCookie[3] == 1)
-			{
-				$ExpireTime = time() + 31536000;
-			}
-			else
-			{
-				$ExpireTime = 0;
-			}
+            $UserRow    = mysql_fetch_array($UserResult);
 
-			if ($IsUserChecked == false)
-			{
-				setcookie ($game_config['COOKIE_NAME'], $NextCookie, $ExpireTime, "/", "", 0);
-				$QryUpdateUser  = "UPDATE {{table}} SET ";
-				$QryUpdateUser .= "`onlinetime` = '". time() ."', ";
-				$QryUpdateUser .= "`current_page` = '". mysql_escape_string($_SERVER['REQUEST_URI']) ."', ";
-				$QryUpdateUser .= "`user_lastip` = '". mysql_escape_string($_SERVER['REMOTE_ADDR']) ."', ";
-				$QryUpdateUser .= "`user_agent` = '". mysql_escape_string($_SERVER['HTTP_USER_AGENT']) ."' ";
-				$QryUpdateUser .= "WHERE ";
-				$QryUpdateUser .= "`id` = '". intval($TheCookie[0]) ."' LIMIT 1;";
-				doquery( $QryUpdateUser, 'users');
-				$IsUserChecked = true;
-			}
-			else
-			{
-				$QryUpdateUser  = "UPDATE {{table}} SET ";
-				$QryUpdateUser .= "`onlinetime` = '". time() ."', ";
-				$QryUpdateUser .= "`current_page` = '". mysql_escape_string($_SERVER['REQUEST_URI']) ."', ";
-				$QryUpdateUser .= "`user_lastip` = '". mysql_escape_string($_SERVER['REMOTE_ADDR']) ."', ";
-				$QryUpdateUser .= "`user_agent` = '". mysql_escape_string($_SERVER['HTTP_USER_AGENT']) ."' ";
-				$QryUpdateUser .= "WHERE ";
-				$QryUpdateUser .= "`id` = '". intval($TheCookie[0]) ."' LIMIT 1;";
-				doquery( $QryUpdateUser, 'users');
-				$IsUserChecked = true;
-			}
-		}
+            if ($UserRow["id"] != $TheCookie[0])
+            {
+                message($lang['ccs_other_user'], XGP_ROOT, 5,  FALSE, FALSE);
+            }
 
-		unset($dbsettings);
+            if (md5($UserRow["password"] . "--" . $dbsettings["secretword"]) !== $TheCookie[2])
+            {
+                message($lang['css_different_password'], XGP_ROOT, 5,  FALSE, FALSE);
+            }
 
-		$Return['state']  = $IsUserChecked;
-		$Return['record'] = $UserRow;
+            $NextCookie = implode("/%/", $TheCookie);
 
-		return $Return;
-	}
+            if ($TheCookie[3] == 1)
+            {
+                $ExpireTime = time() + 31536000;
+            }
+            else
+            {
+                $ExpireTime = 0;
+            }
 
-	public function CheckUser($IsUserChecked)
-	{
-		global $user, $xgp_root, $lang;
+            if ($IsUserChecked == FALSE)
+            {
+                setcookie ($game_cookie, $NextCookie, $ExpireTime, "/", "", 0);
+                $QryUpdateUser  = "UPDATE {{table}} SET ";
+                $QryUpdateUser .= "`onlinetime` = '". time() ."', ";
+                $QryUpdateUser .= "`current_page` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['REQUEST_URI'])) ."', ";
+                $QryUpdateUser .= "`user_lastip` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['REMOTE_ADDR'])) ."', ";
+                $QryUpdateUser .= "`user_agent` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['HTTP_USER_AGENT'])) ."' ";
+                $QryUpdateUser .= "WHERE ";
+                $QryUpdateUser .= "`id` = '". intval($TheCookie[0]) ."' LIMIT 1;";
+                doquery( $QryUpdateUser, 'users');
+                $IsUserChecked = TRUE;
+            }
+            else
+            {
+                $QryUpdateUser  = "UPDATE {{table}} SET ";
+                $QryUpdateUser .= "`onlinetime` = '". time() ."', ";
+                $QryUpdateUser .= "`current_page` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['REQUEST_URI'])) ."', ";
+                $QryUpdateUser .= "`user_lastip` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['REMOTE_ADDR'])) ."', ";
+                $QryUpdateUser .= "`user_agent` = '". mysql_real_escape_string(htmlspecialchars($_SERVER['HTTP_USER_AGENT'])) ."' ";
+                $QryUpdateUser .= "WHERE ";
+                $QryUpdateUser .= "`id` = '". intval($TheCookie[0]) ."' LIMIT 1;";
+                doquery( $QryUpdateUser, 'users');
+                $IsUserChecked = TRUE;
+            }
+        }
 
-		$Result        = $this->CheckCookies($IsUserChecked);
-		$IsUserChecked = $Result['state'];
+        unset($dbsettings);
 
-		if ($Result['record'] != false)
-		{
-			$user = $Result['record'];
+        $Return['state']  = $IsUserChecked;
+        $Return['record'] = $UserRow;
 
-			if ($user['bana'] == 1)
-			{
-				die("<div align=\"center\"><h1>".$lang['css_account_banned_message']."</h1><br /> <strong>".$lang['css_account_banned_expire'].date("d-m-y H:i", $user['banaday'])."</strong></div>");
-			}
+        return $Return;
+    }
 
-			$RetValue['record'] = $user;
-			$RetValue['state']  = $IsUserChecked;
-		}
-		else
-		{
-			$RetValue['record'] = array();
-			$RetValue['state']  = false;
-			header("location:".$xgp_root);
-		}
+    public function CheckUser($IsUserChecked)
+    {
+        global $user, $lang;
 
-		return $RetValue;
-	}
+        $Result        = $this->CheckCookies($IsUserChecked);
+        $IsUserChecked = $Result['state'];
+
+        if ($Result['record'] != FALSE)
+        {
+            $user = $Result['record'];
+
+            if ($user['bana'] == 1)
+            {
+                die("<div align=\"center\"><h1>".$lang['css_account_banned_message']."</h1><br /> <strong>".$lang['css_account_banned_expire'].date("d-m-y H:i", $user['banaday'])."</strong></div>");
+            }
+
+            $RetValue['record'] = $user;
+            $RetValue['state']  = $IsUserChecked;
+        }
+        else
+        {
+            $RetValue['record'] = array();
+            $RetValue['state']  = FALSE;
+        	header ( 'location:' . XGP_ROOT );
+        }
+
+        return $RetValue;
+    }
 }
-?>

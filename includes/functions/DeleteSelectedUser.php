@@ -1,33 +1,20 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2010 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
 	function DeleteSelectedUser($UserID)
 	{
-		$TheUser = doquery ( "SELECT * FROM {{table}} WHERE `id` = '" . $UserID . "';", 'users', true );
+		$TheUser = doquery ( "SELECT * FROM {{table}} WHERE `id` = '" . $UserID . "';", 'users', TRUE );
 
 		if ( $TheUser['ally_id'] != 0 )
 		{
-			$TheAlly = doquery ( "SELECT * FROM {{table}} WHERE `id` = '" . $TheUser['ally_id'] . "';", 'alliance', true );
+			$TheAlly = doquery ( "SELECT * FROM {{table}} WHERE `id` = '" . $TheUser['ally_id'] . "';", 'alliance', TRUE );
 			$TheAlly['ally_members'] -= 1;
 
 			if ($TheAlly['ally_members'] > 0)
@@ -61,14 +48,15 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		doquery ( "DELETE FROM {{table}} WHERE `sender` = '" . $UserID . "';", 'buddy' );
 		doquery ( "DELETE FROM {{table}} WHERE `owner` = '" . $UserID . "';", 'buddy' );
 		doquery ( "DELETE FROM {{table}} WHERE `id` = '" . $UserID . "';", 'users' );
-		doquery ( "UPDATE `{{table}}` SET `config_value` = `config_value` - '1' WHERE `config_name` = 'users_amount' LIMIT 1 ;", "config" );
+
+		update_config ( 'users_amount' , read_config ( 'users_amount' ) - 1 );
 	}
 
 	function DeleteSelectedPlanet ($ID)
 	{
 		global $lang;
 
-		$QueryPlanet = doquery ("SELECT galaxy,planet,system,planet_type FROM {{table}} WHERE id = '".$ID."'", 'planets', true );
+		$QueryPlanet = doquery ("SELECT galaxy,planet,system,planet_type FROM {{table}} WHERE id = '".$ID."'", 'planets', TRUE );
 
 		if ($QueryPlanet['planet_type'] == '3')
 		{

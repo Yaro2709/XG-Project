@@ -1,43 +1,30 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($ConfigGame != 1) die(message ($lang['404_page']));
 $AreLog	=	$LogCanWork;
 
 function DisplayGameSettingsPage ( $CurrentUser )
 {
-	global $game_config, $lang, $AreLog;
+	global $lang, $AreLog;
 
-	if ($_POST['opt_save'] == "1")
+	$game_config	= 	read_config ( '' , TRUE );
+
+	if ( $_POST['opt_save'] == "1" )
 	{
 		$Log	.=	"\n".$lang['log_the_user'].$user['username'].$lang['log_sett_no1'].":\n";
-
 
 		if (isset($_POST['closed']) && $_POST['closed'] == 'on') {
 		$game_config['game_disable']         = 1;
@@ -119,16 +106,16 @@ function DisplayGameSettingsPage ( $CurrentUser )
 		}
 
 		if (isset($_POST['cookie_name']) && $_POST['game_name'] != '') {
-			$game_config['COOKIE_NAME'] = $_POST['cookie_name'];
+			$game_config['cookie_name'] = $_POST['cookie_name'];
 			$Log	.=	$lang['log_sett_name_cookie'].": ".$_POST['cookie_name']."\n";
 		}
 
 		if (isset($_POST['Defs_Cdr']) && is_numeric($_POST['Defs_Cdr'])) {
 			if ($_POST['Defs_Cdr'] < 0){
-				$game_config['Defs_Cdr'] = 0;
+				$game_config['defs_cdr'] = 0;
 				$Number	=	0;}
 			else{
-				$game_config['Defs_Cdr'] = $_POST['Defs_Cdr'];
+				$game_config['defs_cdr'] = $_POST['Defs_Cdr'];
 				$Number	=	$_POST['Defs_Cdr'];}
 
 			$Log	.=	$lang['log_sett_debris_def'].": ".$Number."%\n";
@@ -136,10 +123,10 @@ function DisplayGameSettingsPage ( $CurrentUser )
 
 		if (isset($_POST['Fleet_Cdr']) && is_numeric($_POST['Fleet_Cdr'])) {
 			if ($_POST['Fleet_Cdr'] < 0){
-				$game_config['Fleet_Cdr'] = 0;
+				$game_config['fleet_cdr'] = 0;
 				$Number2	=	0;}
 			else{
-				$game_config['Fleet_Cdr'] = $_POST['Fleet_Cdr'];
+				$game_config['fleet_cdr'] = $_POST['Fleet_Cdr'];
 				$Number2	=	$_POST['Fleet_Cdr'];}
 
 			$Log	.=	$lang['log_sett_debris_flot'].": ".$Number2."%\n";
@@ -166,28 +153,28 @@ function DisplayGameSettingsPage ( $CurrentUser )
 
 		LogFunction($Log, "ConfigLog", $AreLog);
 
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['game_disable']           ."' WHERE `config_name` = 'game_disable';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['close_reason']           ."' WHERE `config_name` = 'close_reason';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['game_name']              ."' WHERE `config_name` = 'game_name';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['forum_url']              ."' WHERE `config_name` = 'forum_url';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['game_speed']             ."' WHERE `config_name` = 'game_speed';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['fleet_speed']            ."' WHERE `config_name` = 'fleet_speed';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['resource_multiplier']    ."' WHERE `config_name` = 'resource_multiplier';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['initial_fields']         ."' WHERE `config_name` = 'initial_fields';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['metal_basic_income']     ."' WHERE `config_name` = 'metal_basic_income';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['crystal_basic_income']   ."' WHERE `config_name` = 'crystal_basic_income';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '". $game_config['deuterium_basic_income'] ."' WHERE `config_name` = 'deuterium_basic_income';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['debug']                  ."' WHERE `config_name` = 'debug'", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['adm_attack']             ."' WHERE `config_name` = 'adm_attack'", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['lang']             	  ."' WHERE `config_name` = 'lang'", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['COOKIE_NAME'] 			  ."' WHERE `config_name` = 'COOKIE_NAME';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['noobprotection']         ."' WHERE `config_name` = 'noobprotection'", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['Defs_Cdr'] 	  		  ."' WHERE `config_name` = 'Defs_Cdr';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['Fleet_Cdr'] 	  		  ."' WHERE `config_name` = 'Fleet_Cdr';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['noobprotectiontime'] 	  ."' WHERE `config_name` = 'noobprotectiontime';", 'config');
-		doquery("UPDATE {{table}} SET `config_value` = '" .$game_config['noobprotectionmulti'] 	  ."' WHERE `config_name` = 'noobprotectionmulti';", 'config');
+		update_config ( 'game_disable'				, $game_config['game_disable'] 			);
+		update_config ( 'close_reason' 				, $game_config['close_reason'] 			);
+		update_config ( 'game_name' 				, $game_config['game_name'] 				);
+		update_config ( 'forum_url' 				, $game_config['forum_url'] 				);
+		update_config ( 'game_speed' 				, $game_config['game_speed'] 				);
+		update_config ( 'fleet_speed' 				, $game_config['fleet_speed']            	);
+		update_config ( 'resource_multiplier' 		, $game_config['resource_multiplier']    	);
+		update_config ( 'initial_fields' 			, $game_config['initial_fields']         	);
+		update_config ( 'metal_basic_income' 		, $game_config['metal_basic_income']     	);
+		update_config ( 'crystal_basic_income' 		, $game_config['crystal_basic_income']   	);
+		update_config ( 'deuterium_basic_income'	, $game_config['deuterium_basic_income']	);
+		update_config ( 'debug' 					, $game_config['debug'] 					);
+		update_config ( 'adm_attack' 				, $game_config['adm_attack'] 				);
+		update_config ( 'lang' 						, $game_config['lang'] 					);
+		update_config ( 'cookie_name' 				, $game_config['cookie_name'] 			);
+		update_config ( 'noobprotection' 			, $game_config['noobprotection'] 			);
+		update_config ( 'defs_cdr' 					, $game_config['defs_cdr'] 				);
+		update_config ( 'fleet_cdr' 				, $game_config['fleet_cdr'] 				);
+		update_config ( 'noobprotectiontime' 		, $game_config['noobprotectiontime'] 		);
+		update_config ( 'noobprotectionmulti' 		, $game_config['noobprotectionmulti'] 	);
 
-		header("location:SettingsPage.php");
+		header ( 'location:SettingsPage.php' );
 	}
 	else
 	{
@@ -205,18 +192,18 @@ function DisplayGameSettingsPage ( $CurrentUser )
 		$parse['close_reason']           	= stripslashes($game_config['close_reason']);
 		$parse['debug']                  	= ($game_config['debug'] == 1)        ? " checked = 'checked' ":"";
 		$parse['adm_attack']             	= ($game_config['adm_attack'] == 1)   ? " checked = 'checked' ":"";
-		$parse['cookie'] 					= $game_config['COOKIE_NAME'];
-		$parse['defenses'] 					= $game_config['Defs_Cdr'];
-		$parse['shiips'] 					= $game_config['Fleet_Cdr'];
+		$parse['cookie'] 					= $game_config['cookie_name'];
+		$parse['defenses'] 					= $game_config['defs_cdr'];
+		$parse['shiips'] 					= $game_config['fleet_cdr'];
 		$parse['noobprot']            	 	= ($game_config['noobprotection'] == 1)   ? " checked = 'checked' ":"";
 		$parse['noobprot2'] 				= $game_config['noobprotectiontime'];
 		$parse['noobprot3'] 				= $game_config['noobprotectionmulti'];
 
 		$LangFolder = opendir("./../" . 'language');
 
-		while (($LangSubFolder = readdir($LangFolder)) !== false)
+		while (($LangSubFolder = readdir($LangFolder)) !== FALSE)
 		{
-			if($LangSubFolder != '.' && $LangSubFolder != '..' && $LangSubFolder != '.htaccess' && $LangSubFolder != '.svn')
+			if($LangSubFolder != '.' && $LangSubFolder != '..' && $LangSubFolder != '.htaccess' && $LangSubFolder != '.svn' && $LangSubFolder != 'index.html')
 			{
 				$parse['language_settings'] .= "<option ";
 
@@ -227,7 +214,7 @@ function DisplayGameSettingsPage ( $CurrentUser )
 			}
 		}
 
-		return display (parsetemplate(gettemplate('adm/SettingsBody'),  $parse), false, '', true, false);
+		return display (parsetemplate(gettemplate('adm/SettingsBody'),  $parse), FALSE, '', TRUE, FALSE);
 	}
 }
 

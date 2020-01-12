@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 function GetTechnoPoints ( $CurrentUser ) {
 	global $resource, $pricelist, $reslist;
@@ -124,10 +111,10 @@ return $RetValue;
 //FIN FIX ACTUALIZACION PUNTOS CON FLOTA VOLANDO
 function MakeStats()
 {
-	global $resource, $pricelist, $reslist, $game_config, $xgp_root, $phpEx;
+	global $resource, $pricelist, $reslist;
 
-	$CheckUserQuery = false;
-	$CheckAllyQuery	= false;
+	$CheckUserQuery = FALSE;
+	$CheckAllyQuery	= FALSE;
 
 	// Initial Time
 	$mtime        = microtime();
@@ -139,15 +126,15 @@ function MakeStats()
 	//Change the last stats time
 	$stats_time   = time();
 	//Delete old messages
-	$del_before 	= time() - (60 * 60 * 24); // 1 День - это время хранения мессаг и отчетов
-	$del_inactive 	= time() - (60 * 60 * 24 * 30); // 1 Месяц - это вот хранение аккауннтов со дня последнего посещения
-	$del_deleted 	= time() - (60 * 60 * 24 * 7); // 1 Неделя это удаление аккаунта в опциях
+	$del_before 	= time() - (60 * 60 * 24); // 1 DAY
+	$del_inactive 	= time() - (60 * 60 * 24 * 30); // 1 MONTH
+	$del_deleted 	= time() - (60 * 60 * 24 * 7); // 1 WEEK
 
 	$ChooseToDelete = doquery("SELECT `id` FROM `{{table}}` WHERE (`db_deaktjava` < '".$del_deleted."' AND `db_deaktjava` <> 0) OR (`onlinetime` < '".$del_inactive."' AND `authlevel` <> 3)", 'users');
 
 	if($ChooseToDelete)
 	{
-		include_once($xgp_root . 'includes/functions/DeleteSelectedUser.' . $phpEx);
+		include_once(XGP_ROOT . 'includes/functions/DeleteSelectedUser.php');
 
 		while($delete = mysql_fetch_array($ChooseToDelete))
 		{
@@ -164,23 +151,23 @@ function MakeStats()
 	{
 		if ($resource[ $Defense ] != 'small_protection_shield' && $resource[ $Defense ] != 'big_protection_shield')
 		{
-			$select_defenses	.= " SUM(p.".$resource[ $Defense ].") AS ".$resource[ $Defense ].",";
+			$select_defenses	.= " SUM(p.`".$resource[ $Defense ]."`) AS `".$resource[ $Defense ]."`,";
 		}
 	}
 	$select_buildings	=	'';
 	foreach($reslist['build'] as $n => $Building)
 	{
-		$select_buildings	.= " p.".$resource[ $Building ].",";
+		$select_buildings	.= " p.`".$resource[ $Building ]."`,";
 	}
 	$selected_tech	=	'';
 	foreach($reslist['tech'] as $n => $Techno)
 	{
-			$selected_tech	.= " u.".$resource[ $Techno ].",";
+			$selected_tech	.= " u.`".$resource[ $Techno ]."`,";
 	}
 	$select_fleets	=	'';
 	foreach($reslist['fleet'] as $n => $Fleet)
 	{
-			$select_fleets	.= " SUM(p.".$resource[ $Fleet ].") AS ".$resource[ $Fleet ].",";
+			$select_fleets	.= " SUM(p.`".$resource[ $Fleet ]."`) AS `".$resource[ $Fleet ]."`,";
 	}
 	//If you have some data type enmu is better if you put it here, because that data give a error in the SUM function.
 	$selected_enum	=	"p.small_protection_shield, p.big_protection_shield";//For now...
@@ -190,11 +177,19 @@ function MakeStats()
 	//For users table
 	$select_user		= " u.id, u.ally_id, u.authlevel ";
 	//We check how many users are for not overload the server...
-	$total_users = doquery("SELECT COUNT(*) AS `count` FROM {{table}} WHERE 1;", 'users', true);
-	//We will make query every $game_config['stat_amount'] users
+	$total_users = doquery("SELECT COUNT(*) AS `count` FROM {{table}} WHERE 1;", 'users', TRUE);
+	//We will make query every 'stat_amount' users
 	//Min amount = 10, if it is less than 10, it is not a good system
-	$game_config['stat_amount']	= (($game_config['stat_amount']>=10)?$game_config['stat_amount']:10);
-	$amount_per_block	= (($game_config['stat_amount']<$game_config['users_amount'])?$game_config['users_amount']:$game_config['stat_amount']);
+
+	$game_stat_amount	=	read_config ( 'stat_amount' );
+	$game_users_amount	=	read_config ( 'users_amount' );
+	$game_stat_flying	=	read_config ( 'stat_flying' );
+	$game_stat_settings	=	read_config ( 'stat_settings' );
+	$game_stat_level	=	read_config ( 'stat_level' );
+	$game_stat			=	read_config ( 'stat' );
+
+	$game_stat_amount	= (($game_stat_amount>=10)?$game_stat_amount:10);
+	$amount_per_block	= (($game_stat_amount<$game_users_amount)?$game_users_amount:$game_stat_amount);
 	if ($total_users['count'] > $amount_per_block)
 	{
 		$LastQuery = roundUp($total_users['count'] / $amount_per_block);
@@ -217,7 +212,7 @@ function MakeStats()
 		$minmax_sql	=	'SELECT Max(id) AS `max`, Min(id) AS `min` FROM
 						(SELECT id FROM {{table}}users ORDER BY id ASC LIMIT
 						'. $start.','. ($amount_per_block) .') AS A';
-		$minmax	= doquery($minmax_sql, '',true);
+		$minmax	= doquery($minmax_sql, '',TRUE);
 		$sql_parcial = 	'SELECT '.$select_buildings .$select_planet . $selected_enum.', p.id FROM {{table}}planets as p WHERE p.id_owner <='.  $minmax['max'].' AND p.id_owner >= ' .$minmax['min'].';';
 		//We delete now the old stats of the users
 		$sql_old_stats	=	'SELECT '.$select_old_ranks.' FROM {{table}} WHERE stat_type = 1 AND stat_code = 1 AND id_owner <= '.$minmax['max'].' AND id_owner >=  '.$minmax['min'].';';
@@ -239,7 +234,7 @@ function MakeStats()
 		unset($CurStats, $old_stats);
 		//We take the data of flying fleets if stat_flying is =1 in game config
 		//If you have trouble with the RAM and CPU usage, please set stat_flying = 0 and a low value of stat_amount (25, 15...)
-		if($game_config['stat_flying'] == 1)
+		if($game_stat_flying == 1)
 		{
 			$sql_flying_fleets	=	'SELECT fleet_array, fleet_owner, fleet_id FROM {{table}} WHERE fleet_owner <= '. $minmax['max'].' AND fleet_owner >= '. $minmax['min'].';';
 			$flying_fleets		=	doquery($sql_flying_fleets, 'fleets');
@@ -275,22 +270,22 @@ function MakeStats()
 			$u_OldFleetRank = (($old_stats_array[$CurUser['id']]['old_fleet_rank'])? $old_stats_array[$CurUser['id']]['old_fleet_rank']:0);
 			//We dont need this anymore...
 			unset($old_stats_array[$CurUser['id']]);
-			//1 point=  $game_config['stat_settings'] ressources
+			//1 point=  'stat_settings' ressources
 			//Make the tech points XD
 			$u_points			= GetTechnoPoints ( $CurUser );
 			$u_TTechCount		= $u_points['TechCount'];
-			$u_TTechPoints	= ($u_points['TechPoint'] / $game_config['stat_settings']);
+			$u_TTechPoints	= ($u_points['TechPoint'] / $game_stat_settings);
 			//Make the defense points
 			$u_points			= GetDefensePoints ( $CurUser );
 			$u_TDefsCount		= $u_points['DefenseCount'];
-			$u_TDefsPoints	= ($u_points['DefensePoint'] / $game_config['stat_settings']);
+			$u_TDefsPoints	= ($u_points['DefensePoint'] / $game_stat_settings);
 			//Make the fleets points (without the flying fleets...
 			$u_points			= GetFleetPoints ( $CurUser );
 			$u_TFleetCount	= $u_points['FleetCount'];
-			$u_TFleetPoints	= ($u_points['FleetPoint'] / $game_config['stat_settings']);
+			$u_TFleetPoints	= ($u_points['FleetPoint'] / $game_stat_settings);
 			//Now we add the flying fleets points
-			//This is used if($game_config['stat_flying'] == 1)
-			if($game_config['stat_flying'] == 1)
+			//This is used if($game_stat_flying == 1)
+			if($game_stat_flying == 1)
 			{
 				if($flying_fleets_array[$CurUser['id']])
 				{
@@ -298,7 +293,7 @@ function MakeStats()
 					{
 						$u_points			= GetFlyingFleetPoints ( $fleet_array );
 						$u_TFleetCount  	+= $u_points['FleetCount'];
-						$u_TFleetPoints 	+= ($u_points['FleetPoint'] / $game_config['stat_settings']);
+						$u_TFleetPoints 	+= ($u_points['FleetPoint'] / $game_stat_settings);
 					}
 				}
 				//We dont need this anymore...
@@ -311,7 +306,7 @@ function MakeStats()
 				{
 						$u_points			= GetFlyingFleetPoints ( $FleetRow['fleet_array'] );
 						$u_TFleetCount  	+= $u_points['FleetCount'];
-						$u_TFleetPoints 	+= ($u_points['FleetPoint'] / $game_config['stat_settings']);
+						$u_TFleetPoints 	+= ($u_points['FleetPoint'] / $game_stat_settings);
 				}
 				//We dont need this anymore...
 				unset($OwnFleets, $FleetRow);
@@ -324,11 +319,11 @@ function MakeStats()
 				{
 					$u_points				= GetBuildPoints ( $building );
 					$u_TBuildCount		+= $u_points['BuildCount'];
-					$u_TBuildPoints		+= ($u_points['BuildPoint'] / $game_config['stat_settings']);
+					$u_TBuildPoints		+= ($u_points['BuildPoint'] / $game_stat_settings);
 					//We add the shields points (this way is a temporary way...)
 					$u_points				= GetDefensePoints ( $building );
 					$u_TDefsCount			+= $u_points['DefenseCount'];
-					$u_TDefsPoints		+= ($u_points['DefensePoint'] / $game_config['stat_settings']);
+					$u_TDefsPoints		+= ($u_points['DefensePoint'] / $game_stat_settings);
 				}
 				//We dont need this anymore...
 				unset($Buildings_array[$CurUser['id']],$planet_id,$building);
@@ -339,7 +334,7 @@ function MakeStats()
 			}
 			$u_GCount			= $u_TDefsCount  + $u_TTechCount  + $u_TFleetCount  + $u_TBuildCount;
 			$u_GPoints		= $u_TTechPoints + $u_TDefsPoints + $u_TFleetPoints + $u_TBuildPoints;
-			if (($CurUser['authlevel'] >= $game_config['stat_level']&& $game_config['stat']==1 ) || $CurUser['bana']==1)
+			if (($CurUser['authlevel'] >= $game_stat_level&& $game_stat==1 ) || $CurUser['bana']==1)
 			{
 				$insert_user_query  .= '('.$CurUser['id'].','.$CurUser['ally_id'].',1,1,'.$u_OldTechRank.',
 										0,0,'.$u_OldBuildRank.',0,0,'.$u_OldDefsRank.',0,0,'.$u_OldFleetRank.',
@@ -355,12 +350,12 @@ function MakeStats()
 			}
 			unset_vars( 'u_' );
 
-			$CheckUserQuery = true;
+			$CheckUserQuery = TRUE;
 		}
 		//TODO, make a end string check in case that insert_user_query end in VALUE...
 		//Here we change the end of the query for ;
 
-		if($CheckUserQuery == true)
+		if($CheckUserQuery == TRUE)
 		{
 			$insert_user_query	=	substr_replace($insert_user_query, ';', -1);
 			doquery ( $insert_user_query , 'statpoints');
@@ -386,8 +381,8 @@ function MakeStats()
 	if ($total_ally > 0)//We only update allys if at least 1 ally exist...
 	{
 		//Min amount = 10, if it is less than 10, it is not a good system
-		$game_config['stat_amount']= (($game_config['stat_amount']>=10)?$game_config['stat_amount']:10);
-		$amount_per_block	= (($game_config['stat_amount']<$game_config['users_amount'])?$game_config['users_amount']:$game_config['stat_amount']);
+		$game_stat_amount= (($game_stat_amount>=10)?$game_stat_amount:10);
+		$amount_per_block	= (($game_stat_amount<$game_users_amount)?$game_users_amount:$game_stat_amount);
 		if ($total_ally > $amount_per_block)
 		{
 			$LastQuery = roundUp($total_ally / $amount_per_block);
@@ -410,7 +405,7 @@ function MakeStats()
 			$minmax_sql	=	'SELECT Max(id) AS `max`, Min(id) AS `min` FROM
 						(SELECT id FROM {{table}}alliance ORDER BY id ASC LIMIT
 						'. $start.','. $amount_per_block.') AS A';
-			$minmax	= doquery($minmax_sql, '',true);
+			$minmax	= doquery($minmax_sql, '',TRUE);
 			$select_old_a_ranks	=	"s.id_owner , s.stat_type,	s.tech_rank AS old_tech_rank,
 								s.build_rank AS old_build_rank, s.defs_rank AS old_defs_rank, s.fleet_rank AS old_fleet_rank,
 								s.total_rank AS old_total_rank";
@@ -480,11 +475,11 @@ function MakeStats()
 					doquery ( "UPDATE {{table}}	SET `ally_id`=0, `ally_name` = '', 	`ally_register_time`= 0, `ally_rank_id`= 0 	WHERE `ally_id`='{$CurAlly['id_ally']}'", "users");
 				}
 
-				$CheckAllyQuery	= true;
+				$CheckAllyQuery	= TRUE;
 			}
 			//Here we change the end of the query for ;
 
-			if($CheckAllyQuery == true)
+			if($CheckAllyQuery == TRUE)
 			{
 				$insert_ally_query	=	substr_replace($insert_ally_query, ';', -1);
 				doquery ( $insert_ally_query , 'statpoints');

@@ -1,21 +1,22 @@
 
-Игрок admin дабавить:
-Шпионская Технология: 0
-Компьютерная технология: 0
-Оружейная технология: 0
-Щитовая технология: 0
-Технология защиты космических аппаратов: 0
-Энергетическая технология: 0
-Гиперпространственная технология: 0
-Ракетный двигатель: 0
-Импульсный двигатель: 0
-Гиперпространственный двигатель: 0
-Лазерная технология: 0
-Ионная технология: 0
-Плазменная технология: 0
-Межгалактическая научно-исследовательская сеть: 0
-Экспедиционная технология: 0
-Атомная технология: 3
-Гравитационная технология: 0
-к игроку с ID: 1
-Operation on: 25-08-2010 23:10:11
+El usuario lucky agrego:
+Tecnologнa de espionaje: 0
+Tecnologнa de computaciуn: 0
+Tecnologнa militar: 0
+Tecnologнa de defensa: 0
+Tecnologнa de blindaje: 0
+Tecnologнa de energнa: 0
+Tecnologнa de hiperespacio: 0
+Motor de combustiуn: 0
+Motor de impulso: 0
+Propulsor hiperespacial: 0
+Tecnologнa lбser: 0
+Tecnologнa iуnica: 0
+Tecnologнa de plasma: 0
+Red de investigaciуn intergalбctica: 0
+Tecnologнa de expedicion: 0
+Tecnologнa de gravitуn: 1
+al usuario con el ID: 1
+Operaciуn realizada el: 20-12-2011 19:51:16
+6
+:12

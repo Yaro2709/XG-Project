@@ -1,51 +1,33 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
-function ShowLeftMenu ($Level)
+function ShowLeftMenu ()
 {
-	global $game_config, $dpath, $user, $lang;;
+	global $lang, $user;
 
 	$parse					= $lang;
-	$parse['dpath']			= $dpath;
+	$parse['dpath']			= DPATH;
 	$parse['version']   	= VERSION;
-	$parse['servername']	= $game_config['game_name'];
-	$parse['lm_tx_serv']	= $game_config['resource_multiplier'];
-	$parse['lm_tx_game']    = $game_config['game_speed'] / 2500;
-	$parse['lm_tx_fleet']   = $game_config['fleet_speed'] / 2500;
-	$parse['lm_tx_queue']   = MAX_FLEET_OR_DEFS_PER_ROW;
-	$parse['forum_url']     = $game_config['forum_url'];
-	$parse['servername']   	= $game_config['game_name'];
-	$rank                   = doquery("SELECT `total_rank` FROM {{table}} WHERE `stat_code` = '1' AND `stat_type` = '1' AND `id_owner` = '". intval($user['id']) ."';",'statpoints',true);
-	$parse['user_rank']     = $rank['total_rank'];
+	$parse['servername']	= read_config ( 'game_name' );
+	$parse['forum_url']     = read_config ( 'forum_url' );
+	$parse['user_rank']     = $user['total_rank'];
 
-	if ($Level > 0)
-		$parse['admin_link']	="<tr><td><div align=\"center\"><a href=\"javascript:top.location.href='adm/index.php'\"> <font color=\"lime\">" . $lang['lm_administration'] . "</font></a></div></td></tr>";
+	if ($user['authlevel'] > 0)
+	{
+		$parse['admin_link']	="<tr><td><div align=\"center\"><a href=\"adm/index.php\" target=\"_top\"> <font color=\"lime\">" . $lang['lm_administration'] . "</font></a></div></td></tr>";
+	}
 	else
+	{
 		$parse['admin_link']  	= "";
+	}
 
-
-
-
-	return parsetemplate(gettemplate('left_menu'), $parse);
+	return parsetemplate(gettemplate('general/left_menu'), $parse);
 }
 ?>

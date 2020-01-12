@@ -1,10 +1,10 @@
 
-<font color=lime>||| LIST OF ERRORS |||</font>
-Èãðîê admin has removed an error
-Operation on: 25-08-2010 23:02:54
-guientes especificaciones:
-Razón: Estoy haciendo una prueba.
-el: 15-08-2010 19:43:52
-hasta el: 15-08-2010 19:44:52
+<font color=lime>||| LISTA DE ERRORES |||</font>
+El usuario lucky ha borrado todos los mensajes de error
+Operaci&oacute;n realizada el: 05-01-2012 04:16:21
+: 23-11-2011 01:45:07
+5
+21:15:04
+hasta el: 04-10-2011 21:15:04
 ¿En modo vacaciones? 
-Operación realizada el: 15-08-2010 19:43:52
+Operación realizada el: 03-10-2011 21:15:04

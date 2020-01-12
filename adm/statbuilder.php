@@ -1,32 +1,18 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
-include($xgp_root . 'adm/statfunctions.' . $phpEx);
+include(XGP_ROOT . 'global.php');
+include(XGP_ROOT . 'adm/statfunctions.php');
 
 if ($user['authlevel'] < 2) die(message ($lang['not_enough_permissions']));
 
@@ -39,7 +25,7 @@ if ($user['authlevel'] < 2) die(message ($lang['not_enough_permissions']));
 
 	update_config( 'stat_last_update', $result['stats_time']);
 
-	$using_flying 	= (($game_config['stat_flying']==1) ? $lang['sb_using_fleet_array'] : $lang['sb_using_fleet_query']);
+	$using_flying 	= ( ( read_config ( 'stat_flying' ) == 1 ) ? $lang['sb_using_fleet_array'] : $lang['sb_using_fleet_query']);
 
 	message($lang['sb_stats_updated'].$stats_end_time.$memory_i.$memory_e.$memory_p.$stats_block.$using_flying);
 

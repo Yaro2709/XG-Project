@@ -1,34 +1,23 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
-	function GetElementPrice ($user, $planet, $Element, $userfactor = true)
+	function GetElementPrice ($user, $planet, $Element, $userfactor = TRUE, $level = FALSE)
+	//function GetElementPrice ($user, $planet, $Element, $userfactor = TRUE)
 	{
 		global $pricelist, $resource, $lang;
 
-		if ($userfactor)
+		//if ($userfactor) // OLD CODE
+		if ($userfactor && ($level === FALSE)) // FIX BY JSTAR
 			$level = ($planet[$resource[$Element]]) ? $planet[$resource[$Element]] : $user[$resource[$Element]];
 
-		$is_buyeable = true;
+		$is_buyeable = TRUE;
 
 		$array = array(
 			'metal'      => $lang['Metal'],
@@ -52,7 +41,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 				{
 					$text .= "<b style=\"color:red;\"> <t title=\"-" . pretty_number ($cost - $planet[$ResType]) . "\">";
 					$text .= "<span class=\"noresources\">" . pretty_number($cost) . "</span></t></b> ";
-					$is_buyeable = false;
+					$is_buyeable = FALSE;
 				}
 				else
 					$text .= "<b style=\"color:lime;\">" . pretty_number($cost) . "</b> ";

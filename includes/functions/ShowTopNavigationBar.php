@@ -1,29 +1,16 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
 	function ShowTopNavigationBar ($CurrentUser, $CurrentPlanet)
 	{
-		global $lang, $game_config, $dpath;
+		global $lang;
 
 		if($CurrentUser['urlaubs_modus'] == 0)
 			PlanetResourceUpdate($CurrentUser, $CurrentPlanet, time());
@@ -31,7 +18,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			doquery("UPDATE {{table}} SET `deuterium_sintetizer_porcent` = 0, `metal_mine_porcent` = 0, `crystal_mine_porcent` = 0 WHERE id_owner = ".intval($CurrentUser['id']),"planets");
 
 		$parse				 			= $lang;
-		$parse['dpath']      			= $dpath;
+		$parse['dpath']      			= DPATH;
 		$parse['image']      			= $CurrentPlanet['image'];
 
 
@@ -69,16 +56,13 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			}
 		}
 
-		// Max Energie
-		$energy_max= pretty_number($CurrentPlanet["energy_max"]);
-		if (($CurrentPlanet["energy_max"] > $CurrentPlanet["energy_max"])) {
-			$parse['energy_max'] = colorRed($energy_max);
+		$energy = pretty_number($CurrentPlanet["energy_max"] + $CurrentPlanet["energy_used"]) . "/" . pretty_number($CurrentPlanet["energy_max"]);
+		// Energie
+		if (($CurrentPlanet["energy_max"] + $CurrentPlanet["energy_used"]) < 0) {
+			$parse['energy'] = colorRed($energy);
 		} else {
-			$parse['energy_max'] = colorGreen($energy_max);
+			$parse['energy'] = $energy;
 		}
- 
-        $parse['energy'] = colorNumber(pretty_number(floor(($CurrentPlanet['energy_max'] + $CurrentPlanet["energy_used"]))) - $parse['energy_basic_income']);
-
 		// Metal
 		$metal = pretty_number($CurrentPlanet["metal"]);
 		if (($CurrentPlanet["metal"] >= $CurrentPlanet["metal_max"])) {
@@ -100,66 +84,9 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		} else {
 			$parse['deuterium'] = $deuterium;
 		}
-
-
-
-        // JAVASCRIPT REALTIME RESS
-        $parse['energy_total'] = colorNumber(pretty_number(floor(($CurrentPlanet['energy_max'] + $CurrentPlanet["energy_used"]))) - $parse['energy_basic_income']);
-		
-        // Metal maximo
-        if (($CurrentPlanet["metal_max"] * MAX_OVERFLOW) < $CurrentPlanet["metal"]) {
-	        $parse['metal_max'] = '<font color="#ff0000">';
-        } else {
-         	$parse['metal_max'] = '<font color="#00ff00">';
-        }
-        $parse['metal_max'] .= pretty_number($CurrentPlanet["metal_max"] / 1) . " {$lang['']}";
-
-		// Cristal maximo
-        if (($CurrentPlanet["crystal_max"] * MAX_OVERFLOW) < $CurrentPlanet["crystal"]) {
-	        $parse['crystal_max'] = '<font color="#ff0000">';
-        } else {
-	        $parse['crystal_max'] = '<font color="#00ff00">';
-        }
-        $parse['crystal_max'] .= pretty_number($CurrentPlanet["crystal_max"] / 1) . " {$lang['']}";
-
-		// Deuterio maximo
-        if (($CurrentPlanet["deuterium_max"] * MAX_OVERFLOW) < $CurrentPlanet["deuterium"]) {
-	    $parse['deuterium_max'] = '<font color="#ff0000">';
-        } else {
-    	$parse['deuterium_max'] = '<font color="#00ff00">';
-        }
-        $parse['deuterium_max'] .= pretty_number($CurrentPlanet["deuterium_max"] / 1) . " {$lang['']}";
-
-        $parse['metal_perhour'] .= $CurrentPlanet["metal_perhour"] + ($game_config['metal_basic_income'] * $game_config['resource_multiplier']);
-        $parse['crystal_perhour'] .= $CurrentPlanet["crystal_perhour"] + ($game_config['crystal_basic_income'] * $game_config['resource_multiplier']);
-        $parse['deuterium_perhour'] .= $CurrentPlanet["deuterium_perhour"] + ($game_config['deuterium_basic_income'] * $game_config['resource_multiplier']);
-
-        $parse['metalh'] .= round($CurrentPlanet["metal"]);
-        $parse['crystalh'] .= round($CurrentPlanet["crystal"]);
-        $parse['deuteriumh'] .= round($CurrentPlanet["deuterium"]);
-
-        $parse['metal_mmax'] .= $CurrentPlanet["metal_max"] * MAX_OVERFLOW;
-        $parse['crystal_mmax'] .= $CurrentPlanet["crystal_max"] * MAX_OVERFLOW;
-        $parse['deuterium_mmax'] .= $CurrentPlanet["deuterium_max"] * MAX_OVERFLOW;		
-        // JAVASCRIPT REALTIME RESS ENDE
-		
-		// Max Energie
-		$energy_max= pretty_number($CurrentPlanet["energy_max"]);
-		if (($CurrentPlanet["energy_max"] > $CurrentPlanet["energy_max"])) {
-			$parse['energy_max'] = colorRed($energy_max);
-		} else {
-			$parse['energy_max'] = $energy_max;
-		}
 		$parse['darkmatter'] 		= pretty_number($CurrentUser["darkmatter"]);
+		$TopBar 			 		= parsetemplate(gettemplate('general/topnav'), $parse);
 
-        // Message
-        if ($CurrentUser['new_message'] > 0) {
-            $parse['message'] = "<a href=\"game.php?page=messages\"><b><font color='lime'><blink>[ ". $CurrentUser['new_message'] ." ]<blink></font><b></a>";
-        } else {
-            $parse['message'] = "0";
-        }
-	
-		$TopBar 			 		= parsetemplate(gettemplate('topnav'), $parse);
 		return $TopBar;
 	}
 ?>

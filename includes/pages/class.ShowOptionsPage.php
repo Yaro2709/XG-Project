@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2012
+ */
 
 class ShowOptionsPage
 {
@@ -30,29 +17,29 @@ class ShowOptionsPage
 			if($id['b_building'] != 0)
 			{
 				if($id['b_building'] != "")
-					return true;
+					return TRUE;
 			}
 			elseif($id['b_tech'] != 0)
 			{
 				if($id['b_tech'] != "")
-					return true;
+					return TRUE;
 			}
 			elseif($id['b_hangar'] != 0)
 			{
 				if($id['b_hangar'] != "")
-					return true;
+					return TRUE;
 			}
 		}
-		$fleets = doquery("SELECT * FROM {{table}} WHERE `fleet_owner` = '".intval($CurrentUser['id'])."'", 'fleets',true);
+		$fleets = doquery("SELECT * FROM {{table}} WHERE `fleet_owner` = '".intval($CurrentUser['id'])."'", 'fleets',TRUE);
 		if($fleets != 0)
-			return true;
+			return TRUE;
 
-		return false;
+		return FALSE;
 	}
 
 	public function __construct($CurrentUser)
 	{
-		global $game_config, $dpath, $lang;
+		global $lang;
 
 		$mode = $_GET['mode'];
 
@@ -176,6 +163,7 @@ class ShowOptionsPage
 			{
 				$settings_bud = "0";
 			}
+
 			// < ------------------------------------------------------------ ATAQUE CON MISILES ------------------------------------------------------------ >
 			if (isset($_POST["settings_mis"]) && $_POST["settings_mis"] == 'on')
 			{
@@ -214,9 +202,9 @@ class ShowOptionsPage
 				while($id = mysql_fetch_array($query))
 				{
 					doquery("UPDATE {{table}} SET
-					metal_perhour = '".$game_config['metal_basic_income']."',
-					crystal_perhour = '".$game_config['crystal_basic_income']."',
-					deuterium_perhour = '".$game_config['deuterium_basic_income']."',
+					metal_perhour = '".read_config ( 'metal_basic_income' )."',
+					crystal_perhour = '".read_config ( 'crystal_basic_income' )."',
+					deuterium_perhour = '".read_config ( 'deuterium_basic_income' )."',
 					energy_used = '0',
 					energy_max = '0',
 					metal_mine_porcent = '0',
@@ -280,7 +268,7 @@ class ShowOptionsPage
 			// < ------------------------------------------------------- CAMBIO DE NOMBRE DE USUARIO ------------------------------------------------------ >
 			if ($CurrentUser['username'] != $_POST["db_character"])
 			{
-				$query = doquery("SELECT id FROM {{table}} WHERE username='".mysql_escape_string ($_POST["db_character"])."'", 'users', true);
+				$query = doquery("SELECT id FROM {{table}} WHERE username='".mysql_escape_string ($_POST["db_character"])."'", 'users', TRUE);
 
 				if (!$query)
 				{
@@ -294,7 +282,7 @@ class ShowOptionsPage
 		else
 		{
 			$parse			= $lang;
-			$parse['dpath'] = $dpath;
+			$parse['dpath'] = DPATH;
 
 			if($CurrentUser['urlaubs_modus'])
 			{
@@ -302,21 +290,36 @@ class ShowOptionsPage
 				$parse['opt_modev_exit'] 	= ($CurrentUser['urlaubs_modus'] == 0)?" checked='1'/":'';
 				$parse['vacation_until'] 	= date("d.m.Y G:i:s",$CurrentUser['urlaubs_until']);
 
-				display(parsetemplate(gettemplate('options/options_body_vmode'), $parse), false);
+				display(parsetemplate(gettemplate('options/options_body_vmode'), $parse), FALSE);
 			}
 			else
 			{
-				$parse['opt_lst_ord_data']   = "<option value =\"0\"". (($CurrentUser['planet_sort'] == 0) ? " selected": "") .">Fecha de colonización</option>";
-				$parse['opt_lst_ord_data']  .= "<option value =\"1\"". (($CurrentUser['planet_sort'] == 1) ? " selected": "") .">Coordenadas</option>";
-				$parse['opt_lst_ord_data']  .= "<option value =\"2\"". (($CurrentUser['planet_sort'] == 2) ? " selected": "") .">Orden alfabético</option>";
-				$parse['opt_lst_cla_data']   = "<option value =\"0\"". (($CurrentUser['planet_sort_order'] == 0) ? " selected": "") .">creciente</option>";
-				$parse['opt_lst_cla_data']  .= "<option value =\"1\"". (($CurrentUser['planet_sort_order'] == 1) ? " selected": "") .">Decreciente</option>";
+				$parse['opt_lst_ord_data']   = "<option value =\"0\"". (($CurrentUser['planet_sort'] == 0) ? " selected": "") .">" . $lang['op_sort_colonization'] . "</option>";
+				$parse['opt_lst_ord_data']  .= "<option value =\"1\"". (($CurrentUser['planet_sort'] == 1) ? " selected": "") .">" . $lang['op_sort_coords'] . "</option>";
+				$parse['opt_lst_ord_data']  .= "<option value =\"2\"". (($CurrentUser['planet_sort'] == 2) ? " selected": "") .">" . $lang['op_sort_alpha'] . "</option>";
+				$parse['opt_lst_cla_data']   = "<option value =\"0\"". (($CurrentUser['planet_sort_order'] == 0) ? " selected": "") .">" . $lang['op_sort_asc'] . "</option>";
+				$parse['opt_lst_cla_data']  .= "<option value =\"1\"". (($CurrentUser['planet_sort_order'] == 1) ? " selected": "") .">" . $lang['op_sort_desc'] . "</option>";
+
+				$SkinsFolder = opendir(XGP_ROOT . 'styles/skins');
+
+				while (($SkinsSubFolder = readdir($SkinsFolder)) !== FALSE)
+				{
+					if($SkinsSubFolder != '.' && $SkinsSubFolder != '..' && $SkinsSubFolder != '.htaccess' && $SkinsSubFolder != '.svn' && $SkinsSubFolder != 'index.html')
+					{
+						$parse['opt_skin_data'] .= "<option ";
+
+						if($CurrentUser['dpath'] == $SkinsSubFolder)
+							$parse['opt_skin_data'] .= "selected = selected";
+
+						$parse['opt_skin_data'] .= " value=\"".$SkinsSubFolder."\">".$SkinsSubFolder."</option>";
+					}
+				}
 
 				if ($CurrentUser['authlevel'] > 0)
 				{
-					$IsProtOn = doquery ("SELECT `id_level` FROM {{table}} WHERE `id_owner` = '".intval($CurrentUser['id'])."' LIMIT 1;", 'planets', true);
-					$parse['adm_pl_prot_data']    = ($IsProtOn['id_level'] > 0) ? " checked='checked'/":'';
-					$parse['opt_adm_frame']      = parsetemplate(gettemplate('options/options_admadd'), $parse);
+					$IsProtOn 					= doquery ("SELECT `id_level` FROM {{table}} WHERE `id_owner` = '".intval($CurrentUser['id'])."' LIMIT 1;", 'planets', TRUE);
+					$parse['adm_pl_prot_data']	= ($IsProtOn['id_level'] > 0) ? " checked='checked'/":'';
+					$parse['opt_adm_frame']  	= parsetemplate(gettemplate('options/options_admadd'), $parse);
 				}
 				$parse['opt_usern_data'] 	= $CurrentUser['username'];
 				$parse['opt_mail1_data'] 	= $CurrentUser['email'];

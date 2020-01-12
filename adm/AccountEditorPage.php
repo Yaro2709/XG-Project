@@ -1,32 +1,17 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2010 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
-
+include(XGP_ROOT . 'global.php');
 
 if ($EditUsers != 1) die(message ($lang['404_page']));
 
@@ -111,7 +96,7 @@ switch($_GET[page])
 
 	}
 
-			display (parsetemplate(gettemplate("adm/EditorTPL/ResourcesBody"), $parse), false, '', true, false);
+			display (parsetemplate(gettemplate("adm/EditorTPL/ResourcesBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case'ships':
@@ -132,13 +117,12 @@ switch($_GET[page])
 			$destructor       	= $_POST['destructor'];
 			$dearth_star       	= $_POST['dearth_star'];
 			$battleship      	= $_POST['battleship'];
-			$supernova      	= $_POST['supernova'];
 
 
 			if(is_numeric($id) && is_numeric($light_hunter) && is_numeric($heavy_hunter) && is_numeric($small_ship_cargo) && is_numeric($big_ship_cargo) &&
 				is_numeric($crusher) && is_numeric($battle_ship) && is_numeric($colonizer) && is_numeric($recycler) && is_numeric($spy_sonde) &&
 				is_numeric($bomber_ship) && is_numeric($solar_satelit) && is_numeric($destructor) && is_numeric($dearth_star) &&
-				is_numeric($battleship) && is_numeric($supernova))
+				is_numeric($battleship))
 			{
 				if ($_POST['add'])
 				{
@@ -156,7 +140,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`crusher` = `crusher` + '". $crusher ."', ";
 					$QryUpdatePlanet .= "`heavy_hunter` = `heavy_hunter` + '". $heavy_hunter ."', ";
 					$QryUpdatePlanet .= "`big_ship_cargo` = `big_ship_cargo` + '". $big_ship_cargo ."', ";
-					$QryUpdatePlanet .= "`supernova` = `supernova` + '". $supernova ."', ";
 					$QryUpdatePlanet .= "`light_hunter` = `light_hunter` + '". $light_hunter ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
@@ -181,7 +164,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`crusher` = `crusher` - '". $crusher ."', ";
 					$QryUpdatePlanet .= "`heavy_hunter` = `heavy_hunter` - '". $heavy_hunter ."', ";
 					$QryUpdatePlanet .= "`big_ship_cargo` = `big_ship_cargo` - '". $big_ship_cargo ."', ";
-					$QryUpdatePlanet .= "`supernova` = `supernova` - '". $supernova ."', ";
 					$QryUpdatePlanet .= "`light_hunter` = `light_hunter` - '". $light_hunter ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
@@ -208,7 +190,6 @@ switch($_GET[page])
 					$Log	.=	$lang['destructor'].": ".$destructor."\n";
 					$Log	.=	$lang['dearth_star'].": ".$dearth_star."\n";
 					$Log	.=	$lang['battleship'].": ".$battleship."\n";
-					$Log	.=	$lang['supernova'].": ".$supernova."\n";
 					$Log	.=	$lang['log_to_planet'].$id."\n";
 
 					LogFunction($Log, "ShipsLog", $LogCanWork);
@@ -220,7 +201,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/ShipsBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/ShipsBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case'defenses':
@@ -235,14 +216,12 @@ switch($_GET[page])
 			$buster_canyon        		= $_POST['buster_canyon'];
 			$small_protection_shield	= $_POST['small_protection_shield'];
 			$big_protection_shield      = $_POST['big_protection_shield'];
-			$planet_protector      		= $_POST['planet_protector'];
-			$atom_protector             = $_POST['atom_protector'];
 			$interceptor_misil       	= $_POST['interceptor_misil'];
 			$interplanetary_misil      	= $_POST['interplanetary_misil'];
 
 			if(is_numeric($id) && is_numeric($misil_launcher) && is_numeric($small_laser) && is_numeric($big_laser) && is_numeric($gauss_canyon) &&
 				is_numeric($ionic_canyon) && is_numeric($buster_canyon) && is_numeric($small_protection_shield) && is_numeric($big_protection_shield) &&
-				is_numeric($interceptor_misil) && is_numeric($interplanetary_misil) && is_numeric($planet_protector))
+				is_numeric($interceptor_misil) && is_numeric($interplanetary_misil))
 			{
 				if ($_POST['add'])
 				{
@@ -255,8 +234,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`buster_canyon` = `buster_canyon` + '". $buster_canyon ."', ";
 					$QryUpdatePlanet .= "`small_protection_shield` = `small_protection_shield` + '". $small_protection_shield ."', ";
 					$QryUpdatePlanet .= "`big_protection_shield` = `big_protection_shield` + '". $big_protection_shield ."', ";
-					$QryUpdatePlanet .= "`planet_protector` = `planet_protector` + '". $planet_protector ."', ";
-					$QryUpdatePlanet .= "`atom_protector` = `atom_protector` + '". $atom_protector ."', ";
 					$QryUpdatePlanet .= "`interceptor_misil` = `interceptor_misil` + '". $interceptor_misil ."', ";
 					$QryUpdatePlanet .= "`interplanetary_misil` = `interplanetary_misil` + '". $interplanetary_misil ."' ";
 					$QryUpdatePlanet .= "WHERE ";
@@ -277,8 +254,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`buster_canyon` = `buster_canyon` - '". $buster_canyon ."', ";
 					$QryUpdatePlanet .= "`small_protection_shield` = `small_protection_shield` - '". $small_protection_shield ."', ";
 					$QryUpdatePlanet .= "`big_protection_shield` = `big_protection_shield` - '". $big_protection_shield ."', ";
-					$QryUpdatePlanet .= "`planet_protector` = `planet_protector` - '". $planet_protector ."', ";
-					$QryUpdatePlanet .= "`atom_protector` = `atom_protector` - '". $atom_protector ."', ";
 					$QryUpdatePlanet .= "`interceptor_misil` = `interceptor_misil` - '". $interceptor_misil ."', ";
 					$QryUpdatePlanet .= "`interplanetary_misil` = `interplanetary_misil` - '". $interplanetary_misil ."' ";
 					$QryUpdatePlanet .= "WHERE ";
@@ -300,7 +275,6 @@ switch($_GET[page])
 					$Log	.=	$lang['buster_canyon'].": ".$buster_canyon."\n";
 					$Log	.=	$lang['small_protection_shield'].": ".$small_protection_shield."\n";
 					$Log	.=	$lang['big_protection_shield'].": ".$big_protection_shield."\n";
-					$Log	.=	$lang['planet_protector'].": ".$planet_protector."\n";
 					$Log	.=	$lang['interceptor_misil'].": ".$interceptor_misil."\n";
 					$Log	.=	$lang['interplanetary_misil'].": ".$interplanetary_misil."\n";
 					$Log	.=	$lang['log_to_planet'].$id."\n";
@@ -314,7 +288,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/DefensesBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/DefensesBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case'buildings':
@@ -346,7 +320,7 @@ switch($_GET[page])
 				is_numeric($terraformer)&& is_numeric($ally_deposit) && is_numeric($silo) && is_numeric($mondbasis) &&
 				is_numeric($phalanx) && is_numeric($sprungtor))
 			{
-				$QueryFind	=	doquery("SELECT `planet_type` FROM {{table}} WHERE `id` = '".$id."'", "planets", true);
+				$QueryFind	=	doquery("SELECT `planet_type` FROM {{table}} WHERE `id` = '".$id."'", "planets", TRUE);
 
 				if ($_POST['add'])
 				{
@@ -385,7 +359,12 @@ switch($_GET[page])
 							if ($mondbasis > 0)
 							{
 								$Sum	=	$mondbasis * FIELDS_BY_MOONBASIS_LEVEL;
-								doquery("UPDATE {{table}} SET `field_max` = field_max + '".$Sum."', `field_current` = field_current + '".$mondbasis."'", "planets");
+								//doquery("UPDATE {{table}} SET `field_max` = field_max + '".$Sum."', `field_current` = field_current + '".$mondbasis."'", "planets");
+								// FIX START BY alivan
+								//doquery("UPDATE {{table}} SET `field_max` = field_max '".$Sum."', `field_current` = field_current '".$mondbasis."' WHERE `id` = '". $id ."'", "planets");
+								// FIX END BY alivan
+								//fix by jstar lol
+								doquery("UPDATE {{table}} SET `field_max` = field_max + '".$Sum."', `field_current` = field_current + '".$mondbasis."' WHERE `id` = '". $id ."'", "planets");
 							}
 						}
 						else
@@ -425,6 +404,8 @@ switch($_GET[page])
 						if ($QueryFind['planet_type']	==	'3')
 						{
 							$QryUpdatePlanet  = "UPDATE {{table}} SET ";
+
+
 							$QryUpdatePlanet .= "`mondbasis` = `mondbasis` - '". $mondbasis ."', ";
 							$QryUpdatePlanet .= "`phalanx` = `phalanx` - '". $phalanx ."', ";
 							$QryUpdatePlanet .= "`sprungtor` = `sprungtor` - '". $sprungtor ."' ";
@@ -435,7 +416,12 @@ switch($_GET[page])
 							if ($mondbasis > 0)
 							{
 								$Sum	=	$mondbasis * FIELDS_BY_MOONBASIS_LEVEL;
-								doquery("UPDATE {{table}} SET `field_max` = field_max - '".$Sum."', `field_current` = field_current - '".$mondbasis."'", "planets");
+								//doquery("UPDATE {{table}} SET `field_max` = field_max - '".$Sum."', `field_current` = field_current - '".$mondbasis."'", "planets");
+								// FIX START BY alivan
+								//doquery("UPDATE {{table}} SET `field_max` = field_max - '".$Sum."', `field_current` = field_current - '".$mondbasis."' WHERE `id` = '". $id ."'", "planets");
+								// FIX END BY alivan
+								//fix by jstar
+								doquery("UPDATE {{table}} SET `field_max` = field_max - '".$Sum."', `field_current` = field_current - '".$mondbasis."' WHERE `id` = '". $id ."'", "planets");
 							}
 						}
 						else
@@ -481,7 +467,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/BuildingsBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/BuildingsBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case'researchs':
@@ -503,14 +489,12 @@ switch($_GET[page])
 			$buster_tech       		= $_POST['buster_tech'];
 			$intergalactic_tech     = $_POST['intergalactic_tech'];
 			$expedition_tech     	= $_POST['expedition_tech'];
-			$atom_tech           	= $_POST['atom_tech'];
-			$colonisation_tech      = $_POST['colonisation_tech'];
 			$graviton_tech     		= $_POST['graviton_tech'];
 
 			if(is_numeric($id) && is_numeric($spy_tech) && is_numeric($computer_tech) && is_numeric($military_tech) && is_numeric($defence_tech) &&
 				is_numeric($shield_tech) && is_numeric($energy_tech) && is_numeric($hyperspace_tech) && is_numeric($combustion_tech) &&
 				is_numeric($impulse_motor_tech) && is_numeric($hyperspace_motor_tech) && is_numeric($laser_tech) && is_numeric($ionic_tech) &&
-				is_numeric($buster_tech)&& is_numeric($intergalactic_tech) && is_numeric($expedition_tech) && is_numeric($atom_tech) && is_numeric($colonisation_tech) && is_numeric($graviton_tech))
+				is_numeric($buster_tech)&& is_numeric($intergalactic_tech) && is_numeric($expedition_tech) && is_numeric($graviton_tech))
 			{
 
 				if ($_POST['add'])
@@ -531,8 +515,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`buster_tech` = `buster_tech` + '". $buster_tech ."', ";
 					$QryUpdatePlanet .= "`intergalactic_tech` = `intergalactic_tech` + '". $intergalactic_tech ."', ";
 					$QryUpdatePlanet .= "`expedition_tech` = `expedition_tech` + '". $expedition_tech ."', ";
-					$QryUpdatePlanet .= "`atom_tech` = `atom_tech` + '". $atom_tech ."', ";
-					$QryUpdatePlanet .= "`colonisation_tech` = `colonisation_tech` + '". $colonisation_tech ."', ";
 					$QryUpdatePlanet .= "`graviton_tech` = `graviton_tech` + '". $graviton_tech ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
@@ -559,8 +541,6 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`buster_tech` = `buster_tech` - '". $buster_tech ."', ";
 					$QryUpdatePlanet .= "`intergalactic_tech` = `intergalactic_tech` - '". $intergalactic_tech ."', ";
 					$QryUpdatePlanet .= "`expedition_tech` = `expedition_tech` - '". $expedition_tech ."', ";
-					$QryUpdatePlanet .= "`atom_tech` = `atom_tech` - '". $atom_tech ."', ";
-					$QryUpdatePlanet .= "`colonisation_tech` = `colonisation_tech` - '". $colonisation_tech ."', ";
 					$QryUpdatePlanet .= "`graviton_tech` = `graviton_tech` - '". $graviton_tech ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
@@ -588,7 +568,6 @@ switch($_GET[page])
 					$Log	.=	$lang['buster_tech'].": ".$buster_tech."\n";
 					$Log	.=	$lang['intergalactic_tech'].": ".$intergalactic_tech."\n";
 					$Log	.=	$lang['expedition_tech'].": ".$expedition_tech."\n";
-					$Log	.=	$lang['atom_tech'].": ".$atom_tech."\n";
 					$Log	.=	$lang['graviton_tech'].": ".$graviton_tech."\n";
 					$Log	.=	$lang['log_to_user'].$id."\n";
 
@@ -601,7 +580,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/ResearchBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/ResearchBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case 'personal':
@@ -622,6 +601,9 @@ switch($_GET[page])
 				$Log    .=    "\n".$lang['log_the_user'].$user['username']." ".$lang['log_modify_personal'].":\n";
 
 				$PersonalQuery    =    "UPDATE {{table}} SET ";
+
+
+
 				if($_POST['username'] != NULL){
 					$PersonalQuery    .=    "`username` = '".$_POST['username']."', ";
 					$Log    .=    $lang['ad_personal_name'].": ".$_POST['username']."\n";}
@@ -671,7 +653,7 @@ switch($_GET[page])
 				$parse['display']    =    '<tr><th colspan="3"><font color=lime>'.$lang['ad_personal_succes'].'</font></th></tr>';
 			}
 		}
-		display (parsetemplate(gettemplate("adm/EditorTPL/PersonalBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/PersonalBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case'officiers':
@@ -682,22 +664,8 @@ switch($_GET[page])
 			$rpg_amiral    		= $_POST['rpg_amiral'];
 			$rpg_ingenieur      = $_POST['rpg_ingenieur'];
 			$rpg_technocrate    = $_POST['rpg_technocrate'];
-			$rpg_espion    		= $_POST['rpg_espion'];
-			$rpg_constructeur   = $_POST['rpg_constructeur'];
-			$rpg_scientifique   = $_POST['rpg_scientifique'];
-			$rpg_commandant     = $_POST['rpg_commandant'];
-			$rpg_stockeur     	= $_POST['rpg_stockeur'];
-			$rpg_defenseur  	= $_POST['rpg_defenseur'];
-			$rpg_destructeur    = $_POST['rpg_destructeur'];
-			$rpg_general       	= $_POST['rpg_general'];
-			$rpg_bunker       	= $_POST['rpg_bunker'];
-			$rpg_raideur     	= $_POST['rpg_raideur'];
-			$rpg_empereur     	= $_POST['rpg_empereur'];
 
-			if(is_numeric($id) && is_numeric($rpg_geologue) && is_numeric($rpg_amiral) && is_numeric($rpg_ingenieur) && is_numeric($rpg_technocrate) &&
-				is_numeric($rpg_espion) && is_numeric($rpg_constructeur) && is_numeric($rpg_scientifique) && is_numeric($rpg_commandant) &&
-				is_numeric($rpg_stockeur) && is_numeric($rpg_defenseur) && is_numeric($rpg_destructeur) && is_numeric($rpg_general) &&
-				is_numeric($rpg_bunker)&& is_numeric($rpg_raideur) && is_numeric($rpg_empereur))
+			if(is_numeric($id) && is_numeric($rpg_geologue) && is_numeric($rpg_amiral) && is_numeric($rpg_ingenieur) && is_numeric($rpg_technocrate))
 			{
 
 				if ($_POST['add'])
@@ -706,18 +674,7 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`rpg_geologue` = `rpg_geologue` + '". $rpg_geologue ."', ";
 					$QryUpdatePlanet .= "`rpg_amiral` = `rpg_amiral` + '". $rpg_amiral ."', ";
 					$QryUpdatePlanet .= "`rpg_ingenieur` = `rpg_ingenieur` + '". $rpg_ingenieur ."', ";
-					$QryUpdatePlanet .= "`rpg_technocrate` = `rpg_technocrate` + '". $rpg_technocrate ."', ";
-					$QryUpdatePlanet .= "`rpg_espion` = `rpg_espion` + '". $rpg_espion ."', ";
-					$QryUpdatePlanet .= "`rpg_constructeur` = `rpg_constructeur` + '". $rpg_constructeur ."', ";
-					$QryUpdatePlanet .= "`rpg_scientifique` = `rpg_scientifique` + '". $rpg_scientifique ."', ";
-					$QryUpdatePlanet .= "`rpg_commandant` = `rpg_commandant` + '". $rpg_commandant ."', ";
-					$QryUpdatePlanet .= "`rpg_stockeur` = `rpg_stockeur` + '". $rpg_stockeur ."', ";
-					$QryUpdatePlanet .= "`rpg_defenseur` = `rpg_defenseur` + '". $rpg_defenseur ."', ";
-					$QryUpdatePlanet .= "`rpg_destructeur` = `rpg_destructeur` + '". $rpg_destructeur ."', ";
-					$QryUpdatePlanet .= "`rpg_general` = `rpg_general` + '". $rpg_general ."', ";
-					$QryUpdatePlanet .= "`rpg_bunker` = `rpg_bunker` + '". $rpg_bunker ."', ";
-					$QryUpdatePlanet .= "`rpg_raideur` = `rpg_raideur` + '". $rpg_raideur ."', ";
-					$QryUpdatePlanet .= "`rpg_empereur` = `rpg_empereur` + '". $rpg_empereur ."' ";
+					$QryUpdatePlanet .= "`rpg_technocrate` = `rpg_technocrate` + '". $rpg_technocrate ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
 					doquery( $QryUpdatePlanet, "users");
@@ -731,18 +688,7 @@ switch($_GET[page])
 					$QryUpdatePlanet .= "`rpg_geologue` = `rpg_geologue` - '". $rpg_geologue ."', ";
 					$QryUpdatePlanet .= "`rpg_amiral` = `rpg_amiral` - '". $rpg_amiral ."', ";
 					$QryUpdatePlanet .= "`rpg_ingenieur` = `rpg_ingenieur` - '". $rpg_ingenieur ."', ";
-					$QryUpdatePlanet .= "`rpg_technocrate` = `rpg_technocrate` - '". $rpg_technocrate ."', ";
-					$QryUpdatePlanet .= "`rpg_espion` = `rpg_espion` - '". $rpg_espion ."', ";
-					$QryUpdatePlanet .= "`rpg_constructeur` = `rpg_constructeur` - '". $rpg_constructeur ."', ";
-					$QryUpdatePlanet .= "`rpg_scientifique` = `rpg_scientifique` - '". $rpg_scientifique ."', ";
-					$QryUpdatePlanet .= "`rpg_commandant` = `rpg_commandant` - '". $rpg_commandant ."', ";
-					$QryUpdatePlanet .= "`rpg_stockeur` = `rpg_stockeur` - '". $rpg_stockeur ."', ";
-					$QryUpdatePlanet .= "`rpg_defenseur` = `rpg_defenseur` - '". $rpg_defenseur ."', ";
-					$QryUpdatePlanet .= "`rpg_destructeur` = `rpg_destructeur` - '". $rpg_destructeur ."', ";
-					$QryUpdatePlanet .= "`rpg_general` = `rpg_general` - '". $rpg_general ."', ";
-					$QryUpdatePlanet .= "`rpg_bunker` = `rpg_bunker` - '". $rpg_bunker ."', ";
-					$QryUpdatePlanet .= "`rpg_raideur` = `rpg_raideur` - '". $rpg_raideur ."', ";
-					$QryUpdatePlanet .= "`rpg_empereur` = `rpg_empereur` - '". $rpg_empereur ."' ";
+					$QryUpdatePlanet .= "`rpg_technocrate` = `rpg_technocrate` - '". $rpg_technocrate ."' ";
 					$QryUpdatePlanet .= "WHERE ";
 					$QryUpdatePlanet .= "`id` = '". $id ."' ";
 					doquery( $QryUpdatePlanet, "users");
@@ -758,17 +704,6 @@ switch($_GET[page])
 					$Log	.=	$lang['admiral'].": ".$rpg_amiral."\n";
 					$Log	.=	$lang['engineer'].": ".$rpg_ingenieur."\n";
 					$Log	.=	$lang['technocrat'].": ".$rpg_technocrate."\n";
-					$Log	.=	$lang['spy'].": ".$rpg_espion."\n";
-					$Log	.=	$lang['constructor'].": ".$rpg_constructeur."\n";
-					$Log	.=	$lang['scientific'].": ".$rpg_scientifique."\n";
-					$Log	.=	$lang['commander'].": ".$rpg_commandant."\n";
-					$Log	.=	$lang['storer'].": ".$rpg_stockeur."\n";
-					$Log	.=	$lang['defender'].": ".$rpg_defenseur."\n";
-					$Log	.=	$lang['destroyer'].": ".$rpg_destructeur."\n";
-					$Log	.=	$lang['general'].": ".$rpg_general."\n";
-					$Log	.=	$lang['protector'].": ".$rpg_bunker."\n";
-					$Log	.=	$lang['conqueror'].": ".$rpg_raideur."\n";
-					$Log	.=	$lang['emperor'].": ".$rpg_empereur."\n";
 					$Log	.=	$lang['log_to_user'].$id."\n";
 
 					LogFunction($Log, "OfficierLog", $LogCanWork);
@@ -780,7 +715,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/OfficiersBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/OfficiersBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case 'planets':
@@ -789,6 +724,7 @@ switch($_GET[page])
 			$id				=	$_POST['id'];
 			$name			=	$_POST['name'];
 			$change_id		=	$_POST['change_id'];
+
 			$diameter		=	$_POST['diameter'];
 			$fields			=	$_POST['fields'];
 			$buildings		=	$_POST['0_buildings'];
@@ -828,13 +764,13 @@ switch($_GET[page])
 									`heavy_hunter` = '0', `crusher` = '0', `battle_ship` = '0',
 									`colonizer` = '0', `recycler` = '0', `spy_sonde` = '0',
 									`bomber_ship` = '0', `solar_satelit` = '0', `destructor` = '0',
-									`dearth_star` = '0', `battleship` = '0', `supernova` = '0' WHERE `id` = '".$id."'", "planets");
+									`dearth_star` = '0', `battleship` = '0' WHERE `id` = '".$id."'", "planets");
 						$Log	.=	$lang['log_delete_all_ships']."\n";}
 
 					if ($defenses == 'on'){
 						doquery("UPDATE {{table}} SET `misil_launcher` = '0', `small_laser` = '0', `big_laser` = '0',
 									`gauss_canyon` = '0', `ionic_canyon` = '0', `buster_canyon` = '0',
-									`small_protection_shield` = '0', `planet_protector` = '0', `big_protection_shield` = '0',
+									`small_protection_shield` = '0', `big_protection_shield` = '0',
 									`interceptor_misil` = '0', `interplanetary_misil` = '0' WHERE `id` = '".$id."'", "planets");
 						$Log	.=	$lang['log_delete_all_def']."\n";}
 
@@ -848,7 +784,7 @@ switch($_GET[page])
 						$Log	.=	$lang['log_delete_all_c_edi']."\n";}
 
 
-					$P	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$id."'", "planets", true);
+					$P	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$id."'", "planets", TRUE);
 
 					if ($diameter != NULL && is_numeric($diameter) && $diameter > 0){
 						doquery("UPDATE {{table}} SET `diameter` = '".$diameter."' WHERE `id` = '".$id."'", "planets");
@@ -864,7 +800,7 @@ switch($_GET[page])
 							$galaxy <= MAX_GALAXY_IN_WORLD && $system <= MAX_SYSTEM_IN_GALAXY && $planet <= MAX_PLANET_IN_SYSTEM)
 						{
 							$Queryyy	=	doquery("SELECT * FROM {{table}} WHERE `galaxy` = '".$galaxy."' AND `system` = '".$system."' AND
-											`planet` = '".$planet."'", "galaxy", true);
+											`planet` = '".$planet."'", "galaxy", TRUE);
 
 							if ($P['planet_type'] == '1')
 							{
@@ -902,7 +838,7 @@ switch($_GET[page])
 										`id_luna` = '".$id."' WHERE `id_planet` = '".$Queryyy['id_planet']."'", "galaxy");
 
 										$QMOON2	=	doquery("SELECT * FROM {{table}} WHERE `galaxy` = '".$galaxy."' AND `system` = '".$system."' AND
-										`planet` = '".$planet."'", "planets", true);
+										`planet` = '".$planet."'", "planets", TRUE);
 
 										doquery ("UPDATE {{table}} SET `galaxy` = '".$galaxy."', `system` = '".$system."', `planet` = '".$planet."',
 										`id_owner` = '".$QMOON2['id_owner']."', `id_level` = '".$QMOON2['id_level']."' WHERE `id` = '".$id."' AND `planet_type` = '3'", "planets");
@@ -919,6 +855,7 @@ switch($_GET[page])
 								}
 							}
 
+
 							$Log	.=	$lang['log_change_pla_pos'].$Name.": [".$galaxy.":".$system.":".$planet."]\n";
 						}
 						else
@@ -932,7 +869,7 @@ switch($_GET[page])
 				}
 				else
 				{
-					$QueryPlanetsS	=	doquery("SELECT planet_type FROM {{table}} WHERE id = '".$id."'", "planets", true);
+					$QueryPlanetsS	=	doquery("SELECT planet_type FROM {{table}} WHERE id = '".$id."'", "planets", TRUE);
 					if ($QueryPlanetsS['planet_type'] == '1')
 					{
 						doquery("DELETE FROM {{table}} WHERE id = '".$id."'", "planets");
@@ -962,7 +899,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/PlanetsMoonsBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/PlanetsMoonsBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case 'alliances':
@@ -980,7 +917,7 @@ switch($_GET[page])
 
 			if ($id != NULL)
 			{
-				$QueryF	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$id."'", "alliance", true);
+				$QueryF	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$id."'", "alliance", TRUE);
 
 			 	if ($QueryF)
 			 	{
@@ -997,7 +934,7 @@ switch($_GET[page])
 
 
 					$i	=	0;
-					$QueryF2	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$changeleader."'", "users", true);
+					$QueryF2	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$changeleader."'", "users", TRUE);
 					if ($QueryF2 && $changeleader != NULL && $QueryF2['ally_id'] == $id){
 						doquery("UPDATE {{table}} SET `ally_owner` = '".$changeleader."' WHERE `id` = '".$id."'", "alliance");
 						doquery("UPDATE {{table}} SET `ally_rank_id` = '0' WHERE `id` = '".$changeleader."'", "users");
@@ -1026,7 +963,7 @@ switch($_GET[page])
 
 
 
-					$QueryF3	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$delete_u."'", "users", true);
+					$QueryF3	=	doquery("SELECT * FROM {{table}} WHERE `id` = '".$delete_u."'", "users", TRUE);
 					if ($QueryF3 && $delete_u != NULL){
 						doquery("UPDATE {{table}} SET `ally_members` = ally_members - 1 WHERE `id` = '".$id."'", "alliance");
 						doquery("UPDATE {{table}} SET `ally_id` = '0', `ally_name` = '', `ally_request` = '0', `ally_rank_id` = '0', `ally_register_time` = '0',
@@ -1057,7 +994,7 @@ switch($_GET[page])
 			}
 		}
 
-		display (parsetemplate(gettemplate("adm/EditorTPL/AllianceBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/EditorTPL/AllianceBody"), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	default:
@@ -1068,6 +1005,6 @@ switch($_GET[page])
 	</tr>';
 
 
-	display(parsetemplate(gettemplate('adm/EditorTPL/EditorBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/EditorTPL/EditorBody'), $parse), FALSE, '', TRUE, FALSE);
 }
 ?>

@@ -1,25 +1,12 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-if(!defined('INSIDE')){ die(header("location:../../"));}
+if(!defined('INSIDE')){ die(header ( 'location:../../' ));}
 
 class debug
 {
@@ -39,23 +26,21 @@ class debug
 
 	function echo_log()
 	{
-		global $xgp_root;
-		return  "<br><table><tr><td class=k colspan=4><a href=".$xgp_root."adm/settings.php>Debug Log</a>:</td></tr>".$this->log."</table>";
+		return  "<br><table><tr><td class=k colspan=4><a href=".XGP_ROOT."adm/settings.php>Debug Log</a>:</td></tr>".$this->log."</table>";
 		die();
 	}
 
 	function error($message,$title)
 	{
-		global $link, $game_config, $lang;
+		global $link, $lang, $user;
 
-		if($game_config['debug']==1)
+		if ( read_config ( 'debug' ) == 1 )
 		{
 			echo "<h2>$title</h2><br><font color=red>$message</font><br><hr>";
 			echo  "<table>".$this->log."</table>";
 		}
 
-		global $user,$xgp_root,$phpEx;
-		include($xgp_root . 'config.'.$phpEx);
+		include(XGP_ROOT . 'config.php');
 
 		if(!$link)
 			die($lang['cdg_mysql_not_available']);
@@ -75,7 +60,7 @@ class debug
 		if (!function_exists('message'))
 			echo $lang['cdg_error_message']." <b>".$q['rows']."</b>";
 		else
-			message($lang['cdg_error_message']." <b>".$q['rows']."</b>", '', '', false, false);
+			message($lang['cdg_error_message']." <b>".$q['rows']."</b>", '', '', FALSE, FALSE);
 
 		die();
 	}

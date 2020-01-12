@@ -1,32 +1,18 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
-include('AdminFunctions/Autorization.' . $phpEx);
+include(XGP_ROOT . 'global.php');
+include('AdminFunctions/Autorization.php');
 
 if ($EditUsers != 1) die();
 
@@ -41,10 +27,10 @@ if ($_POST && $_POST['add_moon'])
 	$TempMin	= $_POST['temp_min'];
 	$TempMax	= $_POST['temp_max'];
 	$FieldMax	= $_POST['field_max'];
-	
+
 	$search			=	doquery("SELECT * FROM {{table}} WHERE `id` LIKE '%{$PlanetID}%'", "planets");
-	$MoonPlanet		= 	doquery("SELECT * FROM {{table}} WHERE `id` = '".$PlanetID."'", 'planets', true);
-	$MoonGalaxy		= 	doquery("SELECT * FROM {{table}} WHERE `id_planet` = '".$PlanetID."'", 'galaxy', true);
+	$MoonPlanet		= 	doquery("SELECT * FROM {{table}} WHERE `id` = '".$PlanetID."'", 'planets', TRUE);
+	$MoonGalaxy		= 	doquery("SELECT * FROM {{table}} WHERE `id_planet` = '".$PlanetID."'", 'galaxy', TRUE);
 
 
 if (mysql_num_rows($search) != 0)
@@ -72,8 +58,8 @@ if (mysql_num_rows($search) != 0)
 		{
 			message ($lang['mo_only_numbers'], "MoonOptionsPage.php", 2);
 		}
-				
-				
+
+
 		if ($_POST['temp_check']	==	'on')
 		{
 			$maxtemp	= $MoonPlanet['temp_max'] - rand(10, 45);
@@ -88,8 +74,8 @@ if (mysql_num_rows($search) != 0)
 		{
 			message ($lang['mo_only_numbers'], "MoonOptionsPage.php", 2);
 		}
-			$QueryFind	=	doquery("SELECT `id_level` FROM {{table}} WHERE `id` = '".$PlanetID."'", "planets", true);
-			
+			$QueryFind	=	doquery("SELECT `id_level` FROM {{table}} WHERE `id` = '".$PlanetID."'", "planets", TRUE);
+
 			$QryInsertMoonInPlanet  = "INSERT INTO {{table}} SET ";
 			$QryInsertMoonInPlanet .= "`name` = '".$MoonName."', ";
 			$QryInsertMoonInPlanet .= "`id_owner` = '". $Owner ."', ";
@@ -114,13 +100,13 @@ if (mysql_num_rows($search) != 0)
 			$QryInsertMoonInPlanet .= "`deuterium_perhour` = '0', ";
 			$QryInsertMoonInPlanet .= "`deuterium_max` = '".BASE_STORAGE_SIZE."';";
 			doquery( $QryInsertMoonInPlanet , 'planets');
-			
+
 			$QryGetMoonIdFromLunas  = "SELECT * FROM {{table}} WHERE ";
 			$QryGetMoonIdFromLunas .= "`galaxy` = '".  $Galaxy ."' AND ";
 			$QryGetMoonIdFromLunas .= "`system` = '".  $System ."' AND ";
 			$QryGetMoonIdFromLunas .= "`planet` = '". $Planet ."' AND ";
 			$QryGetMoonIdFromLunas .= "`planet_type` = '3';";
-			$PlanetRow = doquery( $QryGetMoonIdFromLunas , 'planets', true);
+			$PlanetRow = doquery( $QryGetMoonIdFromLunas , 'planets', TRUE);
 
 			$QryUpdateMoonInGalaxy  = "UPDATE {{table}} SET ";
 			$QryUpdateMoonInGalaxy .= "`id_luna` = '". $PlanetRow['id'] ."', ";
@@ -130,7 +116,7 @@ if (mysql_num_rows($search) != 0)
 			$QryUpdateMoonInGalaxy .= "`system` = '". $System ."' AND ";
 			$QryUpdateMoonInGalaxy .= "`planet` = '". $Planet ."';";
 			doquery( $QryUpdateMoonInGalaxy , 'galaxy');
-			
+
 			message ($lang['mo_moon_added'],"MoonOptionsPage.php",2);
 		}
 		else
@@ -150,14 +136,14 @@ elseif($_POST && $_POST['del_moon'])
 	$search	=	doquery("SELECT * FROM {{table}} WHERE `id` LIKE '%{$MoonID}%'", "planets");
 	if (mysql_num_rows($search) != 0)
 	{
-		$MoonSelected  			= doquery("SELECT * FROM {{table}} WHERE `id` = '". $MoonID ."'", 'planets', true);
-		
+		$MoonSelected  			= doquery("SELECT * FROM {{table}} WHERE `id` = '". $MoonID ."'", 'planets', TRUE);
+
 		if ($MoonSelected['planet_type'] == 3)
 		{
 			$Galaxy    = $MoonSelected['galaxy'];
 			$System    = $MoonSelected['system'];
 			$Planet    = $MoonSelected['planet'];
-		
+
 			doquery("DELETE FROM {{table}} WHERE `galaxy` ='".$Galaxy."' AND `system` ='".$System."' AND `planet` ='".$Planet."' AND `planet_type` = '3'",'planets');
 
 			$QryUpdateGalaxy  = "UPDATE {{table}} SET ";
@@ -199,6 +185,6 @@ while ($b = mysql_fetch_array($search_u))
 }
 
 
-display (parsetemplate(gettemplate("adm/MoonOptionsBody"), $parse), false, '', true, false);
+display (parsetemplate(gettemplate("adm/MoonOptionsBody"), $parse), FALSE, '', TRUE, FALSE);
 
 ?>

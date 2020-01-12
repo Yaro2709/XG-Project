@@ -1,56 +1,40 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($user['authlevel'] < 1) die(message ($lang['404_page']));
 
 function check_updates()
 {
-	global $game_config;
-
-	if (function_exists('file_get_contents'))
+	if ( function_exists ( 'file_get_contents' ) )
 	{
-		$current = @file_get_contents('http://www.xgproyect.net/xgproyect/current.php');
+		$current = @file_get_contents ( 'http://www.xgproyect.net/xgproyect/current.php' );
 
-		if ($current > $game_config['VERSION'])
+		if ( str_replace ( '.' , '' , $current ) > str_replace ( '.' , '' , read_config ( 'version' ) ) )
 		{
-			return true;
+			return TRUE;
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 }
 
 $parse	=	$lang;
 
-if(file_exists($xgp_root . 'install/') && defined('IN_ADMIN'))
+if(file_exists(XGP_ROOT . 'install/') && defined('IN_ADMIN'))
 {
 	$Message	.= "<font color=\"red\">".$lang['ow_install_file_detected']."</font><br/><br/>";
 	$error++;
@@ -64,7 +48,7 @@ if ($user['authlevel'] >= 3)
 		$error++;
 	}
 
-	$Errors = doquery("SELECT COUNT(*) AS `errors` FROM {{table}} WHERE 1;", 'errors', true);
+	$Errors = doquery("SELECT COUNT(*) AS `errors` FROM {{table}} WHERE 1;", 'errors', TRUE);
 
 	if($Errors['errors'] != 0)
 	{
@@ -90,5 +74,5 @@ else
 }
 
 
-display( parsetemplate(gettemplate('adm/OverviewBody'), $parse), false, '', true, false);
+display( parsetemplate(gettemplate('adm/OverviewBody'), $parse), FALSE, '', TRUE, FALSE);
 ?>

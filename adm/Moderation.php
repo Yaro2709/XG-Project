@@ -1,32 +1,18 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 Neko from xgproyect.net	         #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($user['authlevel'] < 3) die(message ($lang['404_page']));
 
@@ -35,7 +21,7 @@ $parse	=	$lang;
 
 if ($_GET['moderation'] == '1')
 {
-	$QueryModeration	=	doquery("SELECT * FROM {{table}} WHERE `config_name` = 'moderation'", "config", true);
+	$QueryModeration	=	read_config ( 'moderation' );
 	$QueryModerationEx	=	explode(";", $QueryModeration[1]);
 	$Moderator			=	explode(",", $QueryModerationEx[0]);
 	$Operator			=	explode(",", $QueryModerationEx[1]);
@@ -76,6 +62,7 @@ if ($_GET['moderation'] == '1')
 
 		if($_POST['view_o'] == 'on') $view_o = 1; else $view_o = 0;
 		if($_POST['edit_o'] == 'on') $edit_o = 1; else $edit_o = 0;
+
 		if($_POST['config_o'] == 'on') $config_o = 1; else $config_o = 0;
 		if($_POST['tools_o'] == 'on') $tools_o = 1; else $tools_o = 0;
 		if($_POST['log_o'] == 'on') $log_o = 1; else $log_o = 0;
@@ -103,12 +90,11 @@ if ($_GET['moderation'] == '1')
 
 		LogFunction($Log, "ModerationLog", $LogCanWork);
 
-
-		doquery("UPDATE {{table}} SET `config_value` = '".$QueryEdit."' WHERE `config_name` = 'moderation'", "config");
-		header("Location: Moderation.php?moderation=1");
+		update_config ( 'moderation' , $QueryEdit );
+		header ( 'location:Moderation.php?moderation=1' );
 	}
 
-	display(parsetemplate(gettemplate('adm/ModerationBody'), $parse), false, '' , true, false);
+	display(parsetemplate(gettemplate('adm/ModerationBody'), $parse), FALSE, '' , TRUE, FALSE);
 }
 elseif ($_GET['moderation'] == '2')
 {
@@ -163,7 +149,7 @@ elseif ($_GET['moderation'] == '2')
 					$id	=	$_POST['id_2'];
 
 
-				$QueryFind	=	doquery("SELECT `authlevel` FROM {{table}} WHERE `id` = '".$id."'", "users", true);
+				$QueryFind	=	doquery("SELECT `authlevel` FROM {{table}} WHERE `id` = '".$id."'", "users", TRUE);
 
 				if($QueryFind['authlevel'] != $_POST['authlevel'])
 				{
@@ -178,7 +164,7 @@ elseif ($_GET['moderation'] == '2')
 
 					LogFunction($Log, "ModerationLog", $LogCanWork);
 
-					header ("Location: Moderation.php?moderation=2&succes=yes");
+					header ( 'location:Moderation.php?moderation=2&succes=yes' );
 				}
 				else
 				{
@@ -191,7 +177,7 @@ elseif ($_GET['moderation'] == '2')
 			$parse['display']	=	'<tr><th colspan="3"><font color=lime>'.$lang['ad_authlevel_succes'].'</font></th></tr>';
 
 
-		display (parsetemplate(gettemplate("adm/AuthlevelBody"), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate("adm/AuthlevelBody"), $parse), FALSE, '', TRUE, FALSE);
 }
 else
 {

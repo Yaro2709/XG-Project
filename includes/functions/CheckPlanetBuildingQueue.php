@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -25,7 +12,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 	{
 		global $resource;
 
-		$RetValue     = false;
+		$RetValue     = FALSE;
 		if ($CurrentPlanet['b_building_id'] != 0)
 		{
 			$CurrentQueue  = $CurrentPlanet['b_building_id'];
@@ -42,13 +29,13 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			array_shift ( $QueueArray );
 
 			if ($BuildMode == 'destroy')
-				$ForDestroy = true;
+				$ForDestroy = TRUE;
 			else
-				$ForDestroy = false;
+				$ForDestroy = FALSE;
 
 			if ($BuildEndTime <= time())
 			{
-				$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, true, $ForDestroy);
+				$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 				$Units                         = $Needed['metal'] + $Needed['crystal'] + $Needed['deuterium'];
 
 				$current = intval($CurrentPlanet['field_current']);
@@ -64,7 +51,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 					}
 					elseif ($Element != 0)
 					{
-						if ($ForDestroy == false)
+						if ($ForDestroy == FALSE)
 						{
 							$current += 1;
 							$CurrentPlanet[$resource[$Element]]++;
@@ -78,7 +65,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 				}
 				elseif ($CurrentPlanet['planet_type'] == 1)
 				{
-					if ($ForDestroy == false)
+					if ($ForDestroy == FALSE)
 					{
 						$current += 1;
 						$CurrentPlanet[$resource[$Element]]++;
@@ -96,6 +83,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 
 				$CurrentPlanet['b_building']    = 0;
 				$CurrentPlanet['b_building_id'] = $NewQueue;
+
 				$CurrentPlanet['field_current'] = $current;
 				$CurrentPlanet['field_max']     = $max;
 
@@ -109,10 +97,10 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 				$QryUpdatePlanet .= "`id` = '" . $CurrentPlanet['id'] . "';";
 				doquery( $QryUpdatePlanet, 'planets');
 
-				$RetValue = true;
+				$RetValue = TRUE;
 			}
 			else
-				$RetValue = false;
+				$RetValue = FALSE;
 		}
 		else
 		{
@@ -126,7 +114,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			$QryUpdatePlanet .= "`id` = '" . $CurrentPlanet['id'] . "';";
 			doquery( $QryUpdatePlanet, 'planets');
 
-			$RetValue = false;
+			$RetValue = FALSE;
 		}
 		return $RetValue;
 	}

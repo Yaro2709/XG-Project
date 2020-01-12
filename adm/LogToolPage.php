@@ -1,36 +1,22 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2010 By Neko from xgproyect.net	         #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($user['authlevel'] < 1) die(message ($lang['404_page']));
 
 $parse		=	$lang;
-$Archive	=	"Log/".$_GET['file'].".".$phpEx;
+$Archive	=	"Log/".$_GET['file'].".php";
 
 switch ($_GET['options'])
 {
@@ -66,11 +52,11 @@ switch ($_GET['options'])
 		$parse['setsize']		=	"&nbsp;&nbsp;(".$FinalSize." KB)";
 		$parse['setarchive']	=	$_GET['file'];
 
-		display (parsetemplate(gettemplate('adm/LogEditBody'), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate('adm/LogEditBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	case 'links':
-		$Archive	=	"Log/".$_GET['file'].".".$phpEx;
+		$Archive	=	"Log/".$_GET['file'].".php";
 		if (!file_exists($Archive))
 		{
 			fopen($Archive, "w+");
@@ -117,10 +103,10 @@ switch ($_GET['options'])
 		$FinalSize				=	$FileSize / 1000;
 		$parse['setsize']		=	"&nbsp;&nbsp;(".$FinalSize." KB)";
 		$parse['setarchive']	=	$_GET['file'];
-		display (parsetemplate(gettemplate('adm/LogBody'), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate('adm/LogBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	default:
-		display (parsetemplate(gettemplate('adm/LogBody'), $parse), false, '', true, false);
+		display (parsetemplate(gettemplate('adm/LogBody'), $parse), FALSE, '', TRUE, FALSE);
 }
 ?>

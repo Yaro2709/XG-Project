@@ -1,11 +1,9 @@
 
-Игрок admin дабавить:
-Метал: 1000000
-Кристалы: 1000000
-Дейтерий: 1000000
-к планете с ID: 1
-and Темная материя: 0
-к игроку с ID: 0
-Operation on: 24-08-2010 23:38:40
-10 19:56:58
-42
+El usuario lucky agrego:
+Metal: 1000000
+Cristal: 1000000
+Deuterio: 1000000
+al planeta con el ID: 1
+y Materia oscura: 0
+al usuario con el ID: 0
+Operaciуn realizada el: 21-12-2011 12:05:03

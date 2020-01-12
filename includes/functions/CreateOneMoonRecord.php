@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -32,20 +19,21 @@ function CreateOneMoonRecord ( $Galaxy, $System, $Planet, $Owner, $MoonID, $Moon
 	$QryGetMoonPlanetData .= "`galaxy` = '". $Galaxy ."' AND ";
 	$QryGetMoonPlanetData .= "`system` = '". $System ."' AND ";
 	$QryGetMoonPlanetData .= "`planet` = '". $Planet ."';";
-	$MoonPlanet = doquery ( $QryGetMoonPlanetData, 'planets', true);
+	$MoonPlanet = doquery ( $QryGetMoonPlanetData, 'planets', TRUE);
 
 	$QryGetMoonGalaxyData  = "SELECT * FROM {{table}} ";
 	$QryGetMoonGalaxyData .= "WHERE ";
 	$QryGetMoonGalaxyData .= "`galaxy` = '". $Galaxy ."' AND ";
 	$QryGetMoonGalaxyData .= "`system` = '". $System ."' AND ";
 	$QryGetMoonGalaxyData .= "`planet` = '". $Planet ."';";
-	$MoonGalaxy = doquery ( $QryGetMoonGalaxyData, 'galaxy', true);
+	$MoonGalaxy = doquery ( $QryGetMoonGalaxyData, 'galaxy', TRUE);
 
 	if ($MoonGalaxy['id_luna'] == 0)
 	{
 		if ($MoonPlanet['id'] != 0)
 		{
 			$SizeMin                = 2000 + ( $Chance * 100 );
+
 			$SizeMax                = 6000 + ( $Chance * 200 );
 
 			$PlanetName             = $MoonPlanet['name'];
@@ -84,7 +72,7 @@ function CreateOneMoonRecord ( $Galaxy, $System, $Planet, $Owner, $MoonID, $Moon
 			$QryGetMoonIdFromPlanet .= "`system` = '".  $System ."' AND ";
 			$QryGetMoonIdFromPlanet .= "`planet` = '".  $Planet ."' AND ";
 			$QryGetMoonIdFromPlanet .= "`planet_type` = '3';";
-			$lunarow = doquery( $QryGetMoonIdFromPlanet , 'planets', true);
+			$lunarow = doquery( $QryGetMoonIdFromPlanet , 'planets', TRUE);
 
 			$QryUpdateMoonInGalaxy  = "UPDATE {{table}} SET ";
 			$QryUpdateMoonInGalaxy .= "`id_luna` = '". $lunarow['id'] ."', ";

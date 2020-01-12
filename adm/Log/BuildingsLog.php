@@ -1,24 +1,24 @@
 
-Игрок admin удалить:
-Рудник по добыче металла: 0
-Рудник по добыче кристалла: 0
-Синтезатор дейтерия: 0
-Солнечная электростанция: 0
-Термоядерный реактор: 0
-Фабрика роботов: 20
-Фабрика нанитов: 0
-Верфь: 0
-Хранилище металов: 0
-Хранилище кресталов: 0
-Емкость для дейтерия: 0
-Исследовательская лаборатория: 0
-Тераформеры: 0
-Склад Альянса: 0
-Ракетная шахта: 0
-Луная база: 0
-Сенсорная фаланга: 0
-Прышковые врата: 0
-к планете с ID: 1
-Operation on: 25-08-2010 21:59:39
-43
-23:10
+El usuario lucky agrego:
+Mina de metal: 0
+Mina de cristal: 0
+Sintetizador de deuterio: 0
+Planta de energнa solar: 0
+Planta de fusiуn: 0
+Fбbrica de Robots: 0
+Fбbrica de Nanobots: 0
+Hangar: 0
+Almacйn de Metal: 0
+Almacйn de Cristal: 0
+Contenedor de deuterio: 0
+Laboratorio de investigaciуn: 0
+Terraformer: 0
+Depуsito de la Alianza: 0
+Silo: 0
+Base lunar: 1
+Phalanx: 1
+Salto cuбntico: 1
+al planeta con el ID: 4
+Operaciуn realizada el: 04-01-2012 18:14:07
+
+:39:55

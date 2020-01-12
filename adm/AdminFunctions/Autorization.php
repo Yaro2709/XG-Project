@@ -1,40 +1,29 @@
 <?php
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By Neko from xgproyect.net	         #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include_once('LogFunction.' . $phpEx);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
 
-if ($user['authlevel'] < 1){die();}
+include_once ( 'LogFunction.php' );
 
-$QueryModeration	=	doquery("SELECT * FROM {{table}} WHERE `config_name` = 'moderation'", "config", true);
-$QueryModerationEx	=	explode(";", $QueryModeration[1]);
-$Moderator			=	explode(",", $QueryModerationEx[0]);
-$Operator			=	explode(",", $QueryModerationEx[1]);
-$Administrator		=	explode(",", $QueryModerationEx[2]);
+if ( $user['authlevel'] < 1 )
+{
+	die();
+}
 
-if ($user['authlevel'] == 1)
+$QueryModeration	=	read_config ( 'moderation' );
+$QueryModerationEx	=	explode ( ";" , $QueryModeration[1] );
+$Moderator			=	explode ( "," , $QueryModerationEx[0] );
+$Operator			=	explode ( "," , $QueryModerationEx[1] );
+$Administrator		=	explode ( "," , $QueryModerationEx[2] );
+
+if ( $user['authlevel'] == 1 )
 {
 	$Observation	=	$Moderator[0];
 	$EditUsers		=	$Moderator[1];
@@ -43,7 +32,7 @@ if ($user['authlevel'] == 1)
 	$LogCanWork		=	$Moderator[4];
 }
 
-if ($user['authlevel'] == 2)
+if ( $user['authlevel'] == 2 )
 {
 	$Observation	=	$Operator[0];
 	$EditUsers		=	$Operator[1];
@@ -52,7 +41,7 @@ if ($user['authlevel'] == 2)
 	$LogCanWork		=	$Operator[4];
 }
 
-if ($user['authlevel'] == 3)
+if ( $user['authlevel'] == 3 )
 {
 	$Observation	=	1;
 	$EditUsers		=	1;
@@ -60,4 +49,5 @@ if ($user['authlevel'] == 3)
 	$ToolsCanUse	=	1;
 	$LogCanWork		=	$Administrator[0];
 }
+
 ?>

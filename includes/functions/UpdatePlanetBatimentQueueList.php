@@ -1,43 +1,30 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
 function UpdatePlanetBatimentQueueList ( &$CurrentPlanet, &$CurrentUser ) {
 
-	$RetValue = false;
+	$RetValue = FALSE;
 	if ( $CurrentPlanet['b_building_id'] != 0 )
 	{
 		while ( $CurrentPlanet['b_building_id'] != 0 )
 		{
 			if ( $CurrentPlanet['b_building'] <= time() )
 			{
-				PlanetResourceUpdate ( $CurrentUser, $CurrentPlanet, $CurrentPlanet['b_building'], false );
+				PlanetResourceUpdate ( $CurrentUser, $CurrentPlanet, $CurrentPlanet['b_building'], FALSE );
 				$IsDone = CheckPlanetBuildingQueue( $CurrentPlanet, $CurrentUser );
-				if ( $IsDone == true )
+				if ( $IsDone == TRUE )
 					SetNextQueueElementOnTop ( $CurrentPlanet, $CurrentUser );
 			}
 			else
 			{
-				$RetValue = true;
+				$RetValue = TRUE;
 				break;
 			}
 		}

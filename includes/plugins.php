@@ -1,34 +1,23 @@
 <?php
+
 /**
- * Plugins system
- * @author Perberos
- * @modified Adri93
- * @package XNova
- * @version 0.3
- * @copyright (c) 2008,2009 XNova Group
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
  */
 
-if (!defined('INSIDE'))
-{
-	die('Hacking attempt');
-}
-//Ahora el sistema de plugins es compatible con todas las versiones, solo hay que cambiar el root que utiliza el juego desde aqui :D
-$game_root = $xgp_root;
+if (!defined('INSIDE')){die();}
 
-// return the name of php file without extension
 function phpself()
 {
-	global $game_root;
-
 	$file = pathinfo($_SERVER['PHP_SELF']);
-	// fix for PHP PHP 4 > 5.2.0
+
 	if (version_compare(PHP_VERSION, '5.2.0', '<'))
 	{
-		$file['filename'] = substr($file['basename'], 0,
-			strlen($file['basename']) - strlen($file['extension']) - 1);
+		$file['filename'] = substr($file['basename'], 0, strlen($file['basename']) - strlen($file['extension']) - 1);
 	}
-	if (basename($game_root) != '.')
+
+	if (basename(XGP_ROOT) != '.')
 	{
 		return basename($file['dirname']).'/'.$file['filename'];
 	}
@@ -78,7 +67,7 @@ function get_hook($name)
  */
 function PluginAct($name)
 {
-    $Exists = doquery("SELECT status FROM {{table}} WHERE `plugin` = '" . $name . "' LIMIT 1;", "plugins", true);
+    $Exists = doquery("SELECT status FROM {{table}} WHERE `plugin` = '" . $name . "' LIMIT 1;", "plugins", TRUE);
 	if(!$Exists) doquery("INSERT INTO {{table}} SET `plugin` = '" . $name . "';", "plugins");
 
 	return ($Exists[0]);
@@ -92,47 +81,50 @@ function PluginAct($name)
  */
 function AdmPlugin($name, $desc)
 {
-$page   =   $_GET['modo'];
-if(is_phpself('adm/SettingsPage') && $page=='plugins'){
-    $activado          = PluginAct($name);
-    $config_line .= "<tr>";
-    if($activado == "1") { //if the plugin is on
-    $config_line .= "<td class=\"c\" style=\"color:#FFFFFF\">".$name."</td>";
-    $config_line .= "<td align=\"left\" class=\"c\" style=\"color:green\"><b>On</b></td>";
-    $config_line .= "<td align=\"center\" class=\"c\" width=\"20px\" style=\"color:#FFFFFF\"><a href=\"SettingsPage.php?modo=plugins&desactivate=".$name."\">Деактивировать</a></td>";
-    } else { //if the plugin is off
-    $config_line .= "<td class=\"c\" style=\"color:#FFFFFF\"><a href=\"#\" onMouseOver='return overlib(\"".$desc."\", CENTER, OFFSETX, 120, OFFSETY, -40, WIDTH, 250);' onMouseOut='return nd();' class=\"big\">".$name."</a></td>";
-    $config_line .= "<td align=\"left\" class=\"c\" style=\"color:red\"><b>Off</b></td>";
-    $config_line .= "<td align=\"center\" class=\"c\" width=\"20px\" style=\"color:#FFFFFF\"><a href=\"SettingsPage.php?modo=plugins&activate=".$name."\">Активировать</a></td>";
-    }
-    $config_line .= "</tr>";
-    }
-return ($config_line);
+	$page   =   $_GET['modo'];
+	if(is_phpself('adm/SettingsPage') && $page=='plugins')
+	{
+	    $activado		= PluginAct($name);
+	    $config_line	.= "<tr>";
+
+	    if($activado == "1")
+	    { //if the plugin is on
+	    	$config_line .= "<td class=\"c\" style=\"color:#FFFFFF\">".$name."</td>";
+	    	$config_line .= "<td align=\"left\" class=\"c\" style=\"color:green\"><b>On</b></td>";
+	    	$config_line .= "<td align=\"center\" class=\"c\" width=\"20px\" style=\"color:#FFFFFF\"><a href=\"SettingsPage.php?modo=plugins&desactivate=".$name."\">Desactivar</a></td>";
+	    }
+		else
+		{ //if the plugin is off
+	    	$config_line .= "<td class=\"c\" style=\"color:#FFFFFF\"><a href=\"#\" onMouseOver='return overlib(\"".$desc."\", CENTER, OFFSETX, 120, OFFSETY, -40, WIDTH, 250);' onMouseOut='return nd();' class=\"big\">".$name."</a></td>";
+	    	$config_line .= "<td align=\"left\" class=\"c\" style=\"color:red\"><b>Off</b></td>";
+	    	$config_line .= "<td align=\"center\" class=\"c\" width=\"20px\" style=\"color:#FFFFFF\"><a href=\"SettingsPage.php?modo=plugins&activate=".$name."\">Activar</a></td>";
+	    }
+	    $config_line .= "</tr>";
+	}
+	return ($config_line);
 }
 
-$config_line  = "";
-// making a little better the code using one var instead of two.
-$plugins_path = $game_root.'includes/plugins/';
-// this variable is only for compatibility reasons, using version_compare()
-$plugins_version = '0.3';
-// this array is used to store code for actions trigger in some hooks
-$plugins_hooks = array();
+$config_line  		= "";
+$plugins_path 		= XGP_ROOT . 'includes/plugins/';
+$plugins_version 	= '0.3';
+$plugins_hooks 		= array();
 
 // open all files inside plugins folder
+
 $dir = opendir($plugins_path);
 
-while (($file = readdir($dir)) !== false)
+while (($file = readdir($dir)) !== FALSE)
 {
 	// we check if the file is a include file
 	$extension = '.'.substr($file, -3);
 	// and include once the file
-	if ($extension == '.'.$phpEx)
+	if ($extension == '.php')
 	{
 		include $plugins_path . $file;
 	}
-	elseif (file_exists($plugins_path.$file.'/'.$file.'.'.$phpEx))
+	elseif (file_exists($plugins_path.$file.'/'.$file.'.php'))
 	{ // by the way, we check if the plugin is inside of a folder
-		include $plugins_path.$file.'/'.$file.'.'.$phpEx;
+		include $plugins_path.$file.'/'.$file.'.php';
 	}
 }
 
@@ -144,45 +136,49 @@ closedir($dir);
 *@author adri93
 */
 if ( defined('IN_ADMIN') )
-    {
-        $lang['mu_settings'] .= '</a></th></tr><tr><th ".$onMouseOverIE." class="ForIE"><a href="SettingsPage.php?modo=plugins" target="Hauptframe">Config. plugins';
-		$dpath     = "../". DEFAULT_SKINPATH  ;
+{
+	$lang['mu_settings'] 	.= '</a></th></tr><tr><th ".$onMouseOverIE." class="ForIE"><a href="SettingsPage.php?modo=plugins" target="Hauptframe">Config. plugins';
+	define('DPATH' , "../". DEFAULT_SKINPATH );
+	//DPATH     				= "../". DEFAULT_SKINPATH  ;
+	$page   				=   $_GET['modo'];
 
+	if(is_phpself('adm/SettingsPage') && $page=='plugins')
+	{
+		//Si existe activar, activamos el plugin, xD
+		if($_GET['activate'])
+		{
+			$plugin = $_GET['activate'];
+			$ex 	= doquery("SELECT status FROM {{table}} WHERE `plugin`='". $plugin ."' LIMIT 1", 'plugins', TRUE);
 
+			if ( $ex )
+			{
+				doquery("UPDATE {{table}} SET `status` = 1 WHERE `plugin`='".$plugin."' LIMIT 1", "plugins");
+				$info = "<big>Plugin Activado</big>";
+			}
+		}
+		//Si existe desactivar, lo desactivamos
+		if($_GET['desactivate'])
+		{
+			$plugin = $_GET['desactivate'];
+			$ex 	= doquery("SELECT status FROM {{table}} WHERE `plugin`='". $plugin ."' LIMIT 1", 'plugins', TRUE);
+			if ( $ex )
+			{
+				doquery("UPDATE {{table}} SET `status` = 0 WHERE `plugin`='". $plugin ."' LIMIT 1", "plugins");
+				$info = "<h1>Plugin Desactivado</h1>";
+			}
+		}
 
-$page   =   $_GET['modo'];
-if(is_phpself('adm/SettingsPage') && $page=='plugins'){
+		$settingsplug	='       <br><br>';
+		$settingsplug 	.=' <h2>Plugins Panel</h2>';
+		$settingsplug 	.= $info;
+		$settingsplug 	.=' <br><table width="250">';
+		$settingsplug 	.=' <tr>';
+		$settingsplug 	.='     <td class="a" colspan="3" style="color:#FFFFFF"><strong> Plugins instalados </strong></td>';
+		$settingsplug 	.=' </tr>';
+		$settingsplug 	.= $config_line;
+		$settingsplug 	.=' </table>';
 
-    //Si existe activar, activamos el plugin, xD
-     if($_GET['activate']) {
-    $plugin = $_GET['activate'];
-    //Verificamos que exista
-    $ex = doquery("SELECT status FROM {{table}} WHERE `plugin`='". $plugin ."' LIMIT 1", 'plugins', true);
-    if(!$ex){}else{
-    doquery("UPDATE {{table}} SET `status` = 1 WHERE `plugin`='".$plugin."' LIMIT 1", "plugins");
-    $info = "<big>Плагин Активирован</big>";}
-    }
-    //Si existe desactivar, lo desactivamos
-    if($_GET['desactivate']) {
-    $plugin = $_GET['desactivate'];
-    //Verificamos que exista
-    $ex = doquery("SELECT status FROM {{table}} WHERE `plugin`='". $plugin ."' LIMIT 1", 'plugins', true);
-    if(!$ex){}else{
-    doquery("UPDATE {{table}} SET `status` = 0 WHERE `plugin`='". $plugin ."' LIMIT 1", "plugins");
-    $info = "<h1>Плагин Деактивирован</h1>";}
-    }
-
-    $settingsplug ='       <br><table width="250"><br>';
-    $settingsplug .=' <td class="c" colspan="3" style="color:#FFFA00"><font size="3">Панель Плагинов</font></td>';
-    $settingsplug .= $info;
-    $settingsplug .=' <br>';
-    $settingsplug .=' <tr>';
-    $settingsplug .='     <td class="a" colspan="3" style="color:#FFFFFF"><strong> Плагины </strong></td>';
-    $settingsplug .=' </tr>';
-    $settingsplug .= $config_line;
-    $settingsplug .=' </table>';
-
-    display($settingsplug, false, '', true, false);
-        }
-    }
+		display ( $settingsplug , FALSE , '' , TRUE , FALSE );
+	}
+}
 ?>

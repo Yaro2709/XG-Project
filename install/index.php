@@ -1,63 +1,52 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2012
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , true);
+define('INSIDE'  		,   	 TRUE);
+define('XGP_ROOT'		, 	  './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.'.$phpEx);
-include_once('databaseinfos.'.$phpEx);
-include_once('UpdateMoonID.'.$phpEx);
+include_once(XGP_ROOT . 'global.php');
+include_once('databaseinfos.php');
+include_once('migration.php');
 
 $Mode     = $_GET['mode'];
 $Page     = $_GET['page'];
 $phpself  = $_SERVER['PHP_SELF'];
 $nextpage = $Page + 1;
 
-if(version_compare(PHP_VERSION, "5.1.0", "<"))
-	die("Error! Tu servidor debe tener al menos php 5.1.0");
+if(version_compare(PHP_VERSION, "5.2.0", "<"))
+	die("&iexcl;Error! Tu servidor debe tener al menos php 5.2.0");
 
 if (empty($Mode)) { $Mode = 'intro'; }
 if (empty($Page)) { $Page = 1;       }
 
-switch ($Mode) {
+switch ($Mode)
+{
 	case'license':
-		$frame  = parsetemplate(gettemplate('install/ins_license'), false);
-		break;
+		$frame  = parsetemplate(gettemplate('install/ins_license'), FALSE);
+	break;
 	case 'intro':
-		$frame  = parsetemplate(gettemplate('install/ins_intro'), false);
-		break;
+		$frame  = parsetemplate(gettemplate('install/ins_intro'), FALSE);
+	break;
 	case 'ins':
 		if ($Page == 1) {
-			if ($_GET['error'] == 1) {
-				message ("La conexi&oacute;n a la base de datos a fallado","?mode=ins&page=1", 3, false, false);
+			if ($_GET['error'] == 1)
+			{
+				message ("La conexi&oacute;n a la base de datos a fallado","?mode=ins&page=1", 3, FALSE, FALSE);
 			}
-			elseif ($_GET['error'] == 2) {
-				message ("El fichero config.php no puede ser sustituido, no tenia acceso chmod 777","?mode=ins&page=1", 3, false, false);
+			elseif ($_GET['error'] == 2)
+			{
+				message ("El fichero config.php no puede ser sustituido, no tenia acceso chmod 777","?mode=ins&page=1", 3, FALSE, FALSE);
 			}
 
-			$frame  = parsetemplate ( gettemplate ('install/ins_form'), false);
+			$frame  = parsetemplate ( gettemplate ('install/ins_form'), FALSE);
 		}
-		elseif ($Page == 2) {
+		elseif ($Page == 2)
+		{
 			$host   = $_POST['host'];
 			$user   = $_POST['user'];
 			$pass   = $_POST['passwort'];
@@ -65,14 +54,16 @@ switch ($Mode) {
 			$db     = $_POST['db'];
 
 			$connection = @mysql_connect($host, $user, $pass);
-			if (!$connection) {
-				header("Location: ?mode=ins&page=1&error=1");
+			if (!$connection)
+			{
+				header ( 'location:?mode=ins&page=1&error=1' );
 				exit();
 			}
 
 			$dbselect = @mysql_select_db($db);
-			if (!$dbselect) {
-				header("Location: ?mode=ins&page=1&error=1");
+			if (!$dbselect)
+			{
+				header ( 'location:?mode=ins&page=1&error=1' );
 				exit();
 			}
 
@@ -80,14 +71,14 @@ switch ($Mode) {
 			$dz = fopen("../config.php", "w");
 			if (!$dz)
 			{
-				header("Location: ?mode=ins&page=1&error=2");
+				header ( 'location:?mode=ins&page=1&error=2' );
 				exit();
 			}
 
-			$parse[first]	= "Ñâÿçü ñ áàçîé äàííûõ óñòàíîâëåíà óñïåøíî...";
+			$parse[first]	= "Conexi&oacute;n establecida con éxito...";
 
 			fwrite($dz, "<?php\n");
-			fwrite($dz, "if(!defined(\"INSIDE\")){ header(\"location:".$xgp_root."\"); }\n");
+			fwrite($dz, "if(!defined(\"INSIDE\")){ header(\"location:".XGP_ROOT."\"); }\n");
 			fwrite($dz, "\$dbsettings = Array(\n");
 			fwrite($dz, "\"server\"     => \"".$host."\", // MySQL server name.\n");
 			fwrite($dz, "\"user\"       => \"".$user."\", // MySQL username.\n");
@@ -98,15 +89,12 @@ switch ($Mode) {
 			fwrite($dz, "?>");
 			fclose($dz);
 
-			$parse[second]	= "Èçìåíåíèå â config.php áûëè âíåñåíû è ñîõðàíåíû...";
+			$parse[second]	= "Archivo config.php creado con éxito...";
 
 			doquery ($QryTableAks        , 'aks'    	);
 			doquery ($QryTableAlliance   , 'alliance'   );
 			doquery ($QryTableBanned     , 'banned'     );
 			doquery ($QryTableBuddy      , 'buddy'      );
-			doquery ($QryTableChat       , 'chat'       );		
-			doquery ($QryTableConfig     , 'config'     );
-			doquery ($QryInsertConfig    , 'config'     );
 			doquery ($QryTableErrors     , 'errors'     );
 			doquery ($QryTableFleets     , 'fleets'     );
 			doquery ($QryTableGalaxy     , 'galaxy'     );
@@ -118,16 +106,16 @@ switch ($Mode) {
 			doquery ($QryTableStatPoints , 'statpoints'	);
 			doquery ($QryTableUsers      , 'users'  	);
 
-			$parse[third]	= "Òàáëèöû â áàçå äûííûõ ñîçäàíû óñïåøíî...";
+			$parse[third]	= "Tablas creadas con &eaute;xito...";
 
 			$frame  = parsetemplate(gettemplate('install/ins_form_done'), $parse);
 		}
 		elseif ($Page == 3)
 		{
 			if ($_GET['error'] == 3)
-				message ("¡Debes completar todos los campos!","?mode=ins&page=3", 2, false, false);
+				message ("&iexcl;Debes completar todos los campos!","?mode=ins&page=3", 2, FALSE, FALSE);
 
-			$frame  = parsetemplate(gettemplate('install/ins_acc'), false);
+			$frame  = parsetemplate(gettemplate('install/ins_acc'), FALSE);
 		}
 		elseif ($Page == 4)
 		{
@@ -178,18 +166,18 @@ switch ($Mode) {
 			$QryAddAdmPlt .= "`planet_type`       = '1', ";
 			$QryAddAdmPlt .= "`image`             = 'normaltempplanet02', ";
 			$QryAddAdmPlt .= "`diameter`          = '12750', ";
-			$QryAddAdmPlt .= "`field_max`         = '200', ";
+			$QryAddAdmPlt .= "`field_max`         = '163', ";
 			$QryAddAdmPlt .= "`temp_min`          = '47', ";
 			$QryAddAdmPlt .= "`temp_max`          = '87', ";
-			$QryAddAdmPlt .= "`metal`             = '1000', ";
+			$QryAddAdmPlt .= "`metal`             = '500', ";
 			$QryAddAdmPlt .= "`metal_perhour`     = '0', ";
-			$QryAddAdmPlt .= "`metal_max`         = '5000000', ";
-			$QryAddAdmPlt .= "`crystal`           = '1000', ";
+			$QryAddAdmPlt .= "`metal_max`         = '1000000', ";
+			$QryAddAdmPlt .= "`crystal`           = '500', ";
 			$QryAddAdmPlt .= "`crystal_perhour`   = '0', ";
-			$QryAddAdmPlt .= "`crystal_max`       = '5000000', ";
-			$QryAddAdmPlt .= "`deuterium`         = '1000', ";
+			$QryAddAdmPlt .= "`crystal_max`       = '1000000', ";
+			$QryAddAdmPlt .= "`deuterium`         = '500', ";
 			$QryAddAdmPlt .= "`deuterium_perhour` = '0', ";
-			$QryAddAdmPlt .= "`deuterium_max`     = '5000000';";
+			$QryAddAdmPlt .= "`deuterium_max`     = '1000000';";
 			doquery($QryAddAdmPlt, 'planets');
 
 			$QryAddAdmGlx  = "INSERT INTO {{table}} SET ";
@@ -199,184 +187,107 @@ switch ($Mode) {
 			$QryAddAdmGlx .= "`id_planet`         = '1'; ";
 			doquery($QryAddAdmGlx, 'galaxy');
 
-			doquery("UPDATE {{table}} SET `config_value` = '1' WHERE `config_name` = 'LastSettedGalaxyPos';", 'config');
-			doquery("UPDATE {{table}} SET `config_value` = '1' WHERE `config_name` = 'LastSettedSystemPos';", 'config');
-			doquery("UPDATE {{table}} SET `config_value` = '1' WHERE `config_name` = 'LastSettedPlanetPos';", 'config');
-			doquery("UPDATE {{table}} SET `config_value` = `config_value` + '1' WHERE `config_name` = 'users_amount' LIMIT 1;", 'config');
+			update_config ( 'stat_last_update' , time() );
 
 			$frame  = parsetemplate(gettemplate('install/ins_acc_done'), $parse);
 		}
 		break;
 	case'upgrade':
+
 		if ($_POST)
 		{
-			$conexion = mysql_connect($_POST[servidor], $_POST[usuario], $_POST[clave])
-			or die ('<font color=red><strong>Problemas en la conexión con el servidor, es probable que el <u>nombre del servidor, usuario o clave sean incorrectas o que mysql no esta funcionando.</u></strong></font>');
-			@mysql_select_db($_POST[base],$conexion)
-			or die ('<font color=red><strong>Problemas en la conexión con la base de datos. Este error puede deberse a que <u>la base de datos no existe o escribiste mal el nombre de la misma.</u></strong></font>');
+			$administrator	=	doquery("SELECT id
+											FROM {{table}}
+											WHERE password = '" . md5 ( $_POST['adm_pass'] ) . "' AND
+													email = '" . mysql_real_escape_string ( $_POST['adm_email'] ) . "' AND
+													authlevel = 3" , 'users' , TRUE );
 
-			if ($_POST[continuar] && (empty($_POST[modo]) or empty($_POST[servidor]) or empty($_POST[usuario]) or empty($_POST[clave]) or empty($_POST[base]) or empty($_POST[prefix])))
+			if ( !$administrator )
 			{
-				message("Error!, debes rellenar todos los campos<br><a href=\"./index.php\">Volver</a>","", "", false, false);
+				die(message("&iexcl;Error! - &iexcl;El administrador ingresado no existe o el usuario no tiene permisos administrativos!","index.php?mode=upgrade", "3", FALSE, FALSE));
+			}
+
+			if(filesize('../config.php') == 0)
+			{
+				die(message("&iexcl;Error! - Tu archivo config.php se encuentra vaci&oacute; o no configurado. En caso de no ser as&iacute; verifica que su chmod sea de 777","", "", FALSE, FALSE));
 			}
 			else
 			{
-				if(filesize('../config.php') == 0)
-				{
-					die(message("Error!, tu archivo config.php se encuentra vació o no configurado. En caso de no ser así verifica que su chmod sea de 777","", "", false, false));
-				}
-				else
-				{
-					include_once("../config.php");
+				include("../config.php");
 
-					if($_POST[prefix] != $dbsettings["prefix"])
-					{
-						die(message("Error!, el prefix seleccionado (<font color=\"red\"><strong>".$_POST[prefix]."</strong></font>) no coincide con el de la base de datos.","", "", false, false));
-					}
-				}
+				$system_version	=	str_replace ( 'v' , '' , VERSION );
 
 				// ALL QUERYS NEEDED
+				$Qry1 = "DELETE FROM `$dbsettings[prefix]config` WHERE `config_name` = 'VERSION'";
+				$Qry2 = "INSERT INTO `$dbsettings[prefix]config` (`config_name`, `config_value`) VALUES ('VERSION', '".SYSTEM_VERSION."');";
+				$Qry3 = "INSERT INTO `$dbsettings[prefix]config` (`config_name`, `config_value`) VALUES ('moderation', '1,0,0,1;1,1,0,1;');";
+				$Qry4 = " ALTER TABLE `$dbsettings[prefix]banned` CHANGE `who` `who` VARCHAR( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+							CHANGE `who2` `who2` VARCHAR( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+							CHANGE `author` `author` VARCHAR( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ,
+							CHANGE `email` `email` VARCHAR( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ";
+				$Qry5 = "UPDATE `$dbsettings[prefix]config` SET `config_value` = '1,0,0,1,1;1,1,0,1,1;1;' WHERE `$dbsettings[prefix]config`.`config_name` = 'moderation';";
+				$Qry6 = "ALTER TABLE `$dbsettings[prefix]planets` CHANGE `small_protection_shield` `small_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0', CHANGE `big_protection_shield` `big_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+				$Qry7 = "UPDATE `$dbsettings[prefix]rw` SET `$dbsettings[prefix]rw`.`owners` = CONCAT(id_owner1,\",\",id_owner2)";
+				$Qry8 = "ALTER TABLE `$dbsettings[prefix]rw`
+  							DROP `id_owner1`,
+  							DROP `id_owner2`;";
+				$Qry9 = "ALTER TABLE $dbsettings[prefix]galaxy ADD `invisible_start_time` int(11) NOT NULL default '0'; ";
+				$Qry10 = "ALTER TABLE `$dbsettings[prefix]users` DROP `rpg_espion`,DROP `rpg_constructeur`,DROP `rpg_scientifique`,DROP `rpg_commandant`,DROP `rpg_stockeur`,DROP `rpg_defenseur`,DROP `rpg_destructeur`,DROP `rpg_general`,DROP `rpg_empereur`;";
+				$Qry11 = "DROP TABLE `$dbsettings[prefix]config`";
 
-				$Qry1 = "ALTER TABLE `$_POST[prefix]users`
-					  DROP `new_message`,
-					  DROP `raids`,
-					  DROP `p_infligees`,
-					  DROP `mnl_alliance`,
-					  DROP `mnl_joueur`,
-					  DROP `mnl_attaque`,
-					  DROP `mnl_spy`,
-					  DROP `mnl_exploit`,
-					  DROP `mnl_transport`,
-					  DROP `mnl_expedition`,
-					  DROP `mnl_general`,
-					  DROP `mnl_buildlist`,
-					  DROP `multi_validated`;";
-
-				$Qry2 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'urlaubs_modus_erz' AND CONVERT(`$_POST[prefix]config`.`config_value` USING cp1251) = '1' LIMIT 1;";
-				$Qry3 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'enable_bbcode' AND CONVERT(`$_POST[prefix]config`.`config_value` USING cp1251) = '1' LIMIT 1;";
-				$Qry4 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'enable_bbcode' AND CONVERT(`$_POST[prefix]config`.`config_value` USING cp1251) = '0' LIMIT 1;";
-				$Qry5 = "ALTER TABLE `$_POST[prefix]users` DROP `lvl_minier`, DROP `lvl_raid`, DROP `xpraid`, DROP `xpminier`;";
-				$Qry6 = "INSERT INTO `$_POST[prefix]config` (`config_name`, `config_value`) VALUES ('adm_attack', '0');";
-				$Qry7 = "INSERT INTO `$_POST[prefix]config` (`config_name`, `config_value`) VALUES ('stat', '1');";
-				$Qry8 = "ALTER TABLE `$_POST[prefix]users` DROP `lang`;";
-				$Qry9 = "INSERT INTO `$_POST[prefix]config` (`config_name` ,`config_value`)VALUES ('lang', 'russian');";
-				$Qry10 = "ALTER TABLE `$_POST[prefix]users` ADD `new_message` INT( 11 ) NOT NULL DEFAULT '0' AFTER `db_deaktjava` ;";
-				$Qry11 = "ALTER TABLE `$_POST[prefix]messages` DROP `leido`";
-				$Qry12 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'stat_level' LIMIT 1;";
-				$Qry13 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'stat' LIMIT 1;";
-				$Qry14 = "INSERT INTO `$_POST[prefix]config` (`config_name`, `config_value`) VALUES
-								('stat', 1),
-								('stat_level', 2),
-								('stat_last_update', 1),
-								('stat_settings', 1000),
-								('stat_amount', 25),
-								('stat_update_time', 15),
-								('stat_flying', 1);";
-				$Qry15 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'actualizar_puntos' LIMIT 1;";
-				$Qry16 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'OverviewNewsFrame' LIMIT 1;";
-				$Qry17 = "DELETE FROM `$_POST[prefix]config` WHERE CONVERT(`$_POST[prefix]config`.`config_name` USING cp1251) = 'OverviewNewsText' LIMIT 1;";
-				$Qry18 = "DELETE FROM `$_POST[prefix]config` WHERE `config_name` = 'VERSION'";
-				$Qry19 = "INSERT INTO `$_POST[prefix]config` (`config_name`, `config_value`) VALUES ('VERSION', '2.9.6');";
-				$Qry20 = "ALTER TABLE `$_POST[prefix]rw` ADD `owners` VARCHAR( 255 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL DEFAULT '0';";
-				$Qry21 = "ALTER TABLE `$_POST[prefix]fleets` CHANGE `fleet_group` `fleet_group` VARCHAR( 15 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL DEFAULT '0' ;";
-				$Qry22 = "ALTER TABLE `$_POST[prefix]aks` ADD `planet_type` TINYINT( 1 ) NOT NULL DEFAULT '1' AFTER `planet` ;";
-				$Qry23 = "ALTER TABLE `$_POST[prefix]aks` CHANGE `eingeladen` `eingeladen` TEXT CHARACTER SET cp1251 COLLATE cp1251_general_ci NULL";
-				$Qry24 = "ALTER TABLE `$_POST[prefix]rw` ADD `id_owner1` INT( 11 ) NOT NULL FIRST , ADD `id_owner2` INT( 11 ) NOT NULL AFTER `id_owner1` ";
-				$Qry25 = "ALTER TABLE `$_POST[prefix]users` CHANGE `db_deaktjava` `db_deaktjava` BIGINT( 19 ) NOT NULL DEFAULT '0'";
-				$Qry26 = "ALTER TABLE `$_POST[prefix]statpoints`
-												CHANGE `id_owner` `id_owner` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `id_ally` `id_ally` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `stat_type` `stat_type` INT(2) NOT NULL DEFAULT '0',
-												CHANGE `stat_code` `stat_code` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `tech_rank` `tech_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `tech_old_rank` `tech_old_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `tech_points` `tech_points` BIGINT(20) NOT NULL DEFAULT '0',
-												CHANGE `tech_count` `tech_count` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `build_rank` `build_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `build_old_rank` `build_old_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `build_points` `build_points` BIGINT(20) NOT NULL DEFAULT '0',
-												CHANGE `build_count` `build_count` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `defs_rank` `defs_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `defs_old_rank` `defs_old_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `defs_points` `defs_points` BIGINT(20) NOT NULL DEFAULT '0',
-												CHANGE `defs_count` `defs_count` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `fleet_rank` `fleet_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `fleet_old_rank` `fleet_old_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `fleet_points` `fleet_points` BIGINT(20) NOT NULL DEFAULT '0',
-												CHANGE `fleet_count` `fleet_count` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `total_rank` `total_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `total_old_rank` `total_old_rank` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `total_points` `total_points` BIGINT(20) NOT NULL DEFAULT '0',
-												CHANGE `total_count` `total_count` INT(11) NOT NULL DEFAULT '0',
-												CHANGE `stat_date` `stat_date` INT(11) NOT NULL DEFAULT '0'";
-				$Qry27 = "ALTER TABLE `$_POST[prefix]messages` CHANGE `message_subject` `message_subject` TEXT CHARACTER SET cp1251 COLLATE cp1251_general_ci NULL DEFAULT NULL";
-				$Qry28 = "DROP TABLE `$_POST[prefix]lunas`";
-				$Qry29 = "ALTER TABLE `$_POST[prefix]users` ADD `current_luna` INT( 11 ) NOT NULL DEFAULT '0' AFTER `ally_rank_id` ";
-				$Qry30 = "INSERT INTO `$_POST[prefix]config` (`config_name`, `config_value`) VALUES ('moderation', '1,0,0,1;1,1,0,1;');";
-				$Qry31 = " ALTER TABLE `$_POST[prefix]banned` CHANGE `who` `who` VARCHAR( 64 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
-							CHANGE `who2` `who2` VARCHAR( 64 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
-							CHANGE `author` `author` VARCHAR( 64 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
-							CHANGE `email` `email` VARCHAR( 64 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ";
-				$Qry32 = "UPDATE `$_POST[prefix]config` SET `config_value` = '1,0,0,1,1;1,1,0,1,1;1;' WHERE `xgp_config`.`config_name` = 'moderation';";
-				$Qry33 = "ALTER TABLE `$_POST[prefix]planets` CHANGE `small_protection_shield` `small_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0', CHANGE `planet_protector` `planet_protector` TINYINT( 1 ) NOT NULL DEFAULT '0', CHANGE `atom_protector` `atom_protector` TINYINT( 1 ) NOT NULL DEFAULT '0', CHANGE `big_protection_shield` `big_protection_shield` TINYINT( 1 ) NOT NULL DEFAULT '0'";
-
-				switch($_POST[modo])
+				switch($system_version)
 				{
-					case'2.3':
-						UpdateMoonID();
-						$QrysArray	= array($Qry1, $Qry2, $Qry3, $Qry4, $Qry5, $Qry6, $Qry7, $Qry8, $Qry9, $Qry10, $Qry11, $Qry12, $Qry13,
-											$Qry14, $Qry15, $Qry16, $Qry17, $Qry18, $Qry19, $Qry20, $Qry21, $Qry22, $Qry23, $Qry25, $Qry26,
-											$Qry27, $Qry28, $Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
+					case '2.9.0':
+					case '2.9.1':
+					case '2.9.2':
+						$QrysArray	= array($Qry1, $Qry2, $Qry3, $Qry4, $Qry5, $Qry6, $Qry7, $Qry8, $Qry9, $Qry10, $Qry11);
+						migrate_to_xml();
 					break;
-					case'2.4':
-						UpdateMoonID();
-						$QrysArray	= array($Qry3, $Qry4, $Qry5, $Qry6, $Qry7, $Qry8, $Qry9, $Qry10, $Qry11, $Qry12, $Qry13,
-											$Qry14, $Qry15, $Qry16, $Qry17, $Qry18, $Qry19, $Qry20, $Qry21, $Qry22, $Qry23,
-											$Qry25, $Qry26, $Qry27, $Qry28, $Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
+					case '2.9.3':
+						$QrysArray	= array($Qry1, $Qry2, $Qry6, $Qry7, $Qry8, $Qry9, $Qry10, $Qry11);
+						migrate_to_xml();
 					break;
-					case'2.5':
-						UpdateMoonID();
-						$QrysArray	= array($Qry16, $Qry17, $Qry18, $Qry19, $Qry20, $Qry21, $Qry22, $Qry23, $Qry25, $Qry26,$Qry27, $Qry28,
-											$Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
+					case '2.9.4':
+					case '2.9.5':
+					case '2.9.6':
+					case '2.9.7':
+					case '2.9.8':
+						$QrysArray	= array($Qry1, $Qry2, $Qry7, $Qry8, $Qry9, $Qry10, $Qry11);
+						migrate_to_xml();
 					break;
-					case( ( $_POST[modo] == '2.6' ) or ( $_POST[modo] == '2.7' ) ):
-						UpdateMoonID();
-						$QrysArray	= array($Qry18, $Qry19, $Qry20, $Qry21, $Qry22, $Qry23, $Qry25, $Qry26, $Qry27, $Qry28, $Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
+					case '2.9.9':
+						$QrysArray	= array($Qry1, $Qry2, $Qry9, $Qry10, $Qry11 );
+						migrate_to_xml();
 					break;
-					case'2.8':
-						UpdateMoonID();
-						$QrysArray	= array($Qry18, $Qry19, $Qry20, $Qry21, $Qry22, $Qry23, $Qry24, $Qry25, $Qry26, $Qry27, $Qry28, $Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
+					case '2.9.10':
+					case '2.9.11':
+					case '2.10.0':
+						$QrysArray	= array($Qry1, $Qry2 , $Qry10, $Qry11);
+						migrate_to_xml();
 					break;
-					case'2.9':
-						UpdateMoonID();
-						$QrysArray	= array($Qry18, $Qry19, $Qry28, $Qry29, $Qry30, $Qry31, $Qry32, $Qry33);
-					break;
-					case( ( $_POST[modo] == '2.9.1' ) or ( $_POST[modo] == '2.9.2' ) or ( $_POST[modo] == '2.9.3' ) ):
-						$QrysArray	= array($Qry18, $Qry19, $Qry30, $Qry31, $Qry32, $Qry33);
-					break;
-					case'2.9.4':
-						$QrysArray	= array($Qry18, $Qry19, $Qry33);
-					break;
-					case( ( $_POST[modo] == '2.9.5' ) or ( $_POST[modo] == '2.9.6' ) ):
-						$QrysArray	= array($Qry18, $Qry19);
+					default:
+						message("&iexcl;La versi&oacute;n de tu proyecto no es compatible con XG Proyect, o estas intentando actualizar desde una versi&oacute;n m&aacute;s nueva!", "", "", FALSE, FALSE);
 					break;
 				}
 
-				foreach ( $QrysArray as $DoQuery)
+				foreach ( $QrysArray as $DoQuery )
 				{
 					mysql_query($DoQuery);
 				}
 
-				message("XG Proyect finalizó la actualización con éxito, para finalizar borra el directorio install y luego haz <a href=\"./../\">click aqui</a>", "", "", false, false);
+				message("XG Proyect finaliz&oacute; la actualizaci&oacute;n con &eacute;xito, para finalizar borra el directorio install y luego haz <a href=\"./../\">click aqui</a>", "", "", FALSE, FALSE);
 			}
 		}
 		else
-			$frame  = parsetemplate(gettemplate('install/ins_update'), false);
+		{
+			$parse['version']	=	SYSTEM_VERSION;
+			$frame  = parsetemplate(gettemplate('install/ins_update'), $parse);
+		}
 		break;
 	default:
 }
 $parse['ins_state']    = $Page;
 $parse['ins_page']     = $frame;
 $parse['dis_ins_btn']  = "?mode=$Mode&page=$nextpage";
-display (parsetemplate (gettemplate('install/ins_body'), $parse), false, '', true, false);
+display (parsetemplate (gettemplate('install/ins_body'), $parse), FALSE, '', TRUE, FALSE);
 ?>

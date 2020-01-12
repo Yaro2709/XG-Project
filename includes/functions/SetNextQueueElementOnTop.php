@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -31,8 +18,8 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			if ($CurrentQueue != 0)
 			{
 				$QueueArray = explode ( ";", $CurrentQueue );
-				$Loop       = true;
-				while ($Loop == true)
+				$Loop       = TRUE;
+				while ($Loop == TRUE)
 				{
 					$ListIDArray         = explode ( ",", $QueueArray[0] );
 					$Element             = $ListIDArray[0];
@@ -40,26 +27,26 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 					$BuildTime           = $ListIDArray[2];
 					$BuildEndTime        = $ListIDArray[3];
 					$BuildMode           = $ListIDArray[4];
-					$HaveNoMoreLevel     = false;
+					$HaveNoMoreLevel     = FALSE;
 
 					if ($BuildMode == 'destroy')
-						$ForDestroy = true;
+						$ForDestroy = TRUE;
 					else
-						$ForDestroy = false;
+						$ForDestroy = FALSE;
 
-					$HaveRessources = IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, true, $ForDestroy);
+					$HaveRessources = IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 					if ($ForDestroy)
 					{
 						if ($CurrentPlanet[$resource[$Element]] == 0)
 						{
-							$HaveRessources  = false;
-							$HaveNoMoreLevel = true;
+							$HaveRessources  = FALSE;
+							$HaveNoMoreLevel = TRUE;
 						}
 					}
 
-					if ( $HaveRessources == true )
+					if ( $HaveRessources == TRUE )
 					{
-						$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, true, $ForDestroy);
+						$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 						$CurrentPlanet['metal']       -= $Needed['metal'];
 						$CurrentPlanet['crystal']     -= $Needed['crystal'];
 						$CurrentPlanet['deuterium']   -= $Needed['deuterium'];
@@ -70,17 +57,17 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 						if ($NewQueue == "")
 							$NewQueue                  = '0';
 
-						$Loop                          = false;
+						$Loop                          = FALSE;
 					}
 					else
 					{
 						$ElementName = $lang['tech'][$Element];
 
-						if ($HaveNoMoreLevel == true)
+						if ($HaveNoMoreLevel == TRUE)
 							$Message     = sprintf ($lang['sys_nomore_level'], $ElementName );
 						else
 						{
-							$Needed      = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, true, $ForDestroy);
+							$Needed      = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 							$Message     = sprintf ($lang['sys_notenough_money'], $ElementName,
 							pretty_number ($CurrentPlanet['metal']), $lang['Metal'],
 							pretty_number ($CurrentPlanet['crystal']), $lang['Crystal'],
@@ -98,7 +85,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 						{
 							$BuildEndTime  = '0';
 							$NewQueue      = '0';
-							$Loop          = false;
+							$Loop          = FALSE;
 						}
 					}
 				}

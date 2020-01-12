@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -54,32 +41,35 @@ class ShowBuildingsPage
 				for ($ID = 0; $ID < $NewCount ; $ID++ )
 				{
 					$ListIDArray          = explode ( ",", $QueueArray[$ID] );
+					if($ListIDArray[0] == $Element)
+						$ListIDArray[1] -= 1;
+
 					$BuildEndTime        += $ListIDArray[2];
 					$ListIDArray[3]       = $BuildEndTime;
 					$QueueArray[$ID]      = implode ( ",", $ListIDArray );
 				}
 				$NewQueue        = implode(";", $QueueArray );
-				$ReturnValue     = true;
+				$ReturnValue     = TRUE;
 				$BuildEndTime    = '0';
 			}
 			else
 			{
 				$NewQueue        = '0';
-				$ReturnValue     = false;
+				$ReturnValue     = FALSE;
 				$BuildEndTime    = '0';
 			}
 
 			if ($BuildMode == 'destroy')
 			{
-				$ForDestroy = true;
+				$ForDestroy = TRUE;
 			}
 			else
 			{
-				$ForDestroy = false;
+				$ForDestroy = FALSE;
 			}
 
-			if ( $Element != false ) {
-			$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, true, $ForDestroy);
+			if ( $Element != FALSE ) {
+			$Needed                        = GetBuildingPrice ($CurrentUser, $CurrentPlanet, $Element, TRUE, $ForDestroy);
 			$CurrentPlanet['metal']       += $Needed['metal'];
 			$CurrentPlanet['crystal']     += $Needed['crystal'];
 			$CurrentPlanet['deuterium']   += $Needed['deuterium'];
@@ -90,7 +80,7 @@ class ShowBuildingsPage
 		{
 			$NewQueue          = '0';
 			$BuildEndTime      = '0';
-			$ReturnValue       = false;
+			$ReturnValue       = FALSE;
 		}
 
 		$CurrentPlanet['b_building_id']  = $NewQueue;
@@ -104,28 +94,55 @@ class ShowBuildingsPage
 		if ($QueueID > 1)
 		{
 			$CurrentQueue  = $CurrentPlanet['b_building_id'];
-			if ($CurrentQueue != 0)
-			{
-				$QueueArray    = explode ( ";", $CurrentQueue );
-				$ActualCount   = count ( $QueueArray );
-				$ListIDArray   = explode ( ",", $QueueArray[$QueueID - 2] );
-				$BuildEndTime  = $ListIDArray[3];
-				for ($ID = $QueueID; $ID < $ActualCount; $ID++ )
+
+			if (!empty($CurrentQueue))
+            {
+                $QueueArray    = explode ( ";", $CurrentQueue );
+                $ActualCount   = count ( $QueueArray );
+                if ($ActualCount< 2)
+                   die(header("location:game.php?page=buildings"));
+
+				//  finding the buildings time
+				$ListIDArrayToDelete   = explode ( ",", $QueueArray[$QueueID - 1] );
+				$lastB	= $ListIDArrayToDelete;
+				$lastID	= $QueueID-1;
+
+				//search for biggest element
+				for ( $ID = $QueueID; $ID < $ActualCount; $ID++ )
 				{
-					$ListIDArray          = explode ( ",", $QueueArray[$ID] );
-					$BuildEndTime        += $ListIDArray[2];
-					$ListIDArray[3]       = $BuildEndTime;
-					$QueueArray[$ID - 1]  = implode ( ",", $ListIDArray );
+					//next buildings
+					$nextListIDArray     = explode ( ",", $QueueArray[$ID] );
+					//if same type of element
+					if($nextListIDArray[0] == $ListIDArrayToDelete[0])
+					{
+						$lastB=$nextListIDArray;
+						$lastID=$ID;
+					}
 				}
+
+				// update the rest of buildings queue
+				for( $ID=$lastID; $ID < $ActualCount-1; $ID++ )
+				{
+
+					$nextListIDArray		= explode ( ",", $QueueArray[$ID+1] );
+					$nextBuildEndTime    	= $nextListIDArray[3]-$lastB[2];
+					$nextListIDArray[3]  	= $nextBuildEndTime;
+					$QueueArray[$ID] 		= implode ( ",", $nextListIDArray );
+				}
+
 				unset ($QueueArray[$ActualCount - 1]);
 				$NewQueue     = implode ( ";", $QueueArray );
 			}
+
 			$CurrentPlanet['b_building_id'] = $NewQueue;
+
 		}
+
 		return $QueueID;
+
 	}
 
-	private function AddBuildingToQueue (&$CurrentPlanet, $CurrentUser, $Element, $AddMode = true)
+	private function AddBuildingToQueue (&$CurrentPlanet, $CurrentUser, $Element, $AddMode = TRUE)
 	{
 		global $resource;
 
@@ -148,7 +165,7 @@ class ShowBuildingsPage
 			$ActualCount   = 0;
 		}
 
-		if ($AddMode == true)
+		if ($AddMode == TRUE)
 		{
 			$BuildMode = 'build';
 		}
@@ -163,10 +180,10 @@ class ShowBuildingsPage
 		}
 		else
 		{
-			$QueueID      = false;
+			$QueueID      = FALSE;
 		}
 
-		if ( $QueueID != false && IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, true, false) && IsTechnologieAccessible($CurrentUser, $CurrentPlanet, $Element) )
+		if ( $QueueID != FALSE && IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, TRUE, FALSE) && IsTechnologieAccessible($CurrentUser, $CurrentPlanet, $Element) )
 		{
 			if ($QueueID > 1)
 			{
@@ -188,7 +205,7 @@ class ShowBuildingsPage
 			if ($InArray != 0)
 			{
 				$ActualLevel  = $CurrentPlanet[$resource[$Element]];
-				if ($AddMode == true)
+				if ($AddMode == TRUE)
 				{
 					$BuildLevel   = $ActualLevel + 1 + $InArray;
 					$CurrentPlanet[$resource[$Element]] += $InArray;
@@ -206,7 +223,7 @@ class ShowBuildingsPage
 			else
 			{
 				$ActualLevel  = $CurrentPlanet[$resource[$Element]];
-				if ($AddMode == true)
+				if ($AddMode == TRUE)
 				{
 					$BuildLevel   = $ActualLevel + 1;
 					$BuildTime    = GetBuildingTime($CurrentUser, $CurrentPlanet, $Element);
@@ -235,7 +252,7 @@ class ShowBuildingsPage
 		return $QueueID;
 	}
 
-	private function ShowBuildingQueue ( $CurrentPlanet, $CurrentUser )
+	private function ShowBuildingQueue ( $CurrentPlanet, $CurrentUser, &$Sprice = FALSE )
 	{
 		global $lang;
 
@@ -270,6 +287,10 @@ class ShowBuildingsPage
 					$BuildMode    = $BuildArray[4];
 					$BuildTime    = $BuildEndTime - time();
 					$ElementTitle = $lang['tech'][$Element];
+					// START FIX BY JSTAR
+					if ( $Sprice !== FALSE && $BuildLevel > $Sprice[$Element] )
+						$Sprice[$Element]	=	$BuildLevel;
+					// END FIX BY JSTAR
 
 					if ($ListID > 0)
 					{
@@ -298,6 +319,9 @@ class ShowBuildingsPage
 							$ListIDRow .= "		<strong color=\"lime\"><br><font color=\"lime\">". date("j/m H:i:s" ,$BuildEndTime) ."</font></strong>";
 						}
 						else
+
+
+
 						{
 							$ListIDRow .= "		<font color=\"red\">";
 							$ListIDRow .= "		<a href=\"game.php?page=buildings&listid=". $ListID ."&amp;cmd=remove&amp;planet=". $PlanetID ."\">".$lang['bd_cancel']."</a></font>";
@@ -317,21 +341,22 @@ class ShowBuildingsPage
 
 	public function __construct (&$CurrentPlanet, $CurrentUser)
 	{
-		global $ProdGrid, $lang, $resource, $reslist, $phpEx, $dpath, $game_config, $_GET, $xgp_root;
+		global $ProdGrid, $lang, $resource, $reslist, $_GET;
 
-		include_once($xgp_root . 'includes/functions/IsTechnologieAccessible.' . $phpEx);
-		include_once($xgp_root . 'includes/functions/GetElementPrice.' . $phpEx);
-		include_once($xgp_root . 'includes/functions/GetRestPrice.' . $phpEx);
+		include_once(XGP_ROOT . 'includes/functions/IsTechnologieAccessible.php');
+		include_once(XGP_ROOT . 'includes/functions/GetElementPrice.php');
+		include_once(XGP_ROOT . 'includes/functions/CheckPlanetUsedFields.php');
 
 		CheckPlanetUsedFields ( $CurrentPlanet );
 
 		$parse			= $lang;
-		$Allowed['1'] 	= array(  1,  2,  3,  4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 35, 44, 45);
+		$Allowed['1'] 	= array(  1,  2,  3,  4, 12, 14, 15, 21, 22, 23, 24, 31, 33, 34, 44);
 		$Allowed['3'] 	= array( 12, 14, 21, 22, 23, 24, 34, 41, 42, 43);
+
 
 		if (isset($_GET['cmd']))
 		{
-			$bDoItNow 	= false;
+			$bDoItNow 	= FALSE;
 			$TheCommand = $_GET['cmd'];
 			$Element 	= $_GET['building'];
 			$ListID 	= $_GET['listid'];
@@ -354,7 +379,7 @@ class ShowBuildingsPage
 				{
 					if (in_array( trim($Element), $Allowed[$CurrentPlanet['planet_type']]))
 					{
-						$bDoItNow = true;
+						$bDoItNow = TRUE;
 					}
 				}
 				else
@@ -364,20 +389,20 @@ class ShowBuildingsPage
 			}
 			elseif ( isset ( $ListID ))
 			{
-				$bDoItNow = true;
+				$bDoItNow = TRUE;
 			}
 
 			if ($Element == 31 && $CurrentUser["b_tech_planet"] != 0)
 			{
-				$bDoItNow = false;
+				$bDoItNow = FALSE;
 			}
 
 			if ( ( $Element == 21 or $Element == 14 or $Element == 15 ) && $CurrentPlanet["b_hangar"] != 0)
 			{
-				$bDoItNow = false;
+				$bDoItNow = FALSE;
 			}
 
-			if ($bDoItNow == true)
+			if ($bDoItNow == TRUE)
 			{
 				switch($TheCommand)
 				{
@@ -388,10 +413,10 @@ class ShowBuildingsPage
 						$this->RemoveBuildingFromQueue ($CurrentPlanet, $CurrentUser, $ListID);
 					break;
 					case 'insert':
-						$this->AddBuildingToQueue ($CurrentPlanet, $CurrentUser, $Element, true);
+						$this->AddBuildingToQueue ($CurrentPlanet, $CurrentUser, $Element, TRUE);
 					break;
 					case 'destroy':
-						$this->AddBuildingToQueue ($CurrentPlanet, $CurrentUser, $Element, false);
+						$this->AddBuildingToQueue ($CurrentPlanet, $CurrentUser, $Element, FALSE);
 					break;
 				}
 			}
@@ -407,16 +432,20 @@ class ShowBuildingsPage
 		}
 
 		SetNextQueueElementOnTop($CurrentPlanet, $CurrentUser);
-		$Queue = $this->ShowBuildingQueue($CurrentPlanet, $CurrentUser);
+		// $Queue = $this->ShowBuildingQueue($CurrentPlanet, $CurrentUser); // OLD CODE
+		// START FIX BY JSTAR
+		$Sprice	=	array();
+		$Queue 	= 	$this->ShowBuildingQueue($CurrentPlanet, $CurrentUser, $Sprice);
+		// END FIX BY JSTAR
 		$this->BuildingSavePlanetRecord($CurrentPlanet);
 
 		if ($Queue['lenght'] < (MAX_BUILDING_QUEUE_SIZE))
 		{
-			$CanBuildElement = true;
+			$CanBuildElement = TRUE;
 		}
 		else
 		{
-			$CanBuildElement = false;
+			$CanBuildElement = FALSE;
 		}
 
 		$BuildingPage        = "";
@@ -429,64 +458,40 @@ class ShowBuildingsPage
 				$CurrentMaxFields      = CalculateMaxPlanetFields($CurrentPlanet);
 				if ($CurrentPlanet["field_current"] < ($CurrentMaxFields - $Queue['lenght']))
 				{
-					$RoomIsOk = true;
+					$RoomIsOk = TRUE;
 				}
 				else
 				{
-					$RoomIsOk = false;
+					$RoomIsOk = FALSE;
 				}
 
 				if (IsTechnologieAccessible($CurrentUser, $CurrentPlanet, $Element))
 				{
-					$HaveRessources        	= IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, true, false);
+
+					$HaveRessources        	= IsElementBuyable ($CurrentUser, $CurrentPlanet, $Element, TRUE, FALSE);
 					$parse                 	= array();
 					$parse 					= $lang;
-					$parse['dpath']        	= $dpath;
+					$parse['dpath']        	= DPATH;
 					$parse['i']            	= $Element;
 					$BuildingLevel         	= $CurrentPlanet[$resource[$Element]];
 					$parse['nivel']        	= ($BuildingLevel == 0) ? "" : " (". $lang['bd_lvl'] . " " . $BuildingLevel .")";
 					$parse['n']            	= $ElementName;
 					$parse['descriptions'] 	= $lang['res']['descriptions'][$Element];
+/* OLD CODE ---------------------------------------------------- OLD CODE ------------------------------------- //
 					$ElementBuildTime      	= GetBuildingTime($CurrentUser, $CurrentPlanet, $Element);
 					$parse['time']         	= ShowBuildTime($ElementBuildTime);
 					$parse['price']        	= GetElementPrice($CurrentUser, $CurrentPlanet, $Element);
-				    $parse['rest_price']    = GetRestPrice($CurrentUser, $CurrentPlanet, $Element);
+   OLD CODE ---------------------------------------------------- OLD CODE ------------------------------------- //
+*/
+					// START FIX BY JSTAR
+					$really_lvl 			= ( isset ( $Sprice[$Element] ) ) ? $Sprice[$Element]:$BuildingLevel;
+					$ElementBuildTime 		= GetBuildingTime ( $CurrentUser , $CurrentPlanet , $Element , $really_lvl );
+					$parse['price'] 		= GetElementPrice ( $CurrentUser , $CurrentPlanet , $Element , TRUE , $really_lvl );
+					$parse['time'] 			= ShowBuildTime ( $ElementBuildTime );
+					// END FIX BY JSTAR
+
 					$parse['click']        	= '';
 					$NextBuildLevel        	= $CurrentPlanet[$resource[$Element]] + 1;
-					
-					
-// Показ кол-ва потраченой/добоавляемой энергии START
-$parse['nivel']            = ($BuildingLevel == 0) ? "" : " (". $lang['bd_lvl'] . " " . $BuildingLevel .")"; 
-                    $BuildLevelFactor     = 10;
-                    $BuildTemp            = $CurrentPlanet[ 'temp_max' ];
-                    $CurrentBuildtLvl     = $BuildingLevel;
-                    $BuildLevel           = ($CurrentBuildtLvl > 0) ? $CurrentBuildtLvl : 1;
-                    $EnergyTechLevel      = $CurrentUser["energy_tech"];
-                    $Prod[4]         = (floor(eval($ProdGrid[$Element]['formule']['energy'])    
-                                        * $game_config['resource_multiplier']) * (1 + ($CurrentUser['rpg_ingenieur'] * 0.05)));
-                    $ActualNeed     = floor($Prod[4]);
-                    $BuildLevel++;
-                    $Prod[4]         = (floor(eval($ProdGrid[$Element]['formule']['energy'])    
-                                        * $game_config['resource_multiplier']) * (1 + ($CurrentUser['rpg_ingenieur'] * 0.05)));
-                                        
-                    $EnergyNeed = colorNumber( pretty_number(floor($Prod[4] - $ActualNeed)) );           
-                    if ($Element >= 1 && $Element <= 3) {
-                         $parse['energia'] = "("."<font color=#FF0000>". $EnergyNeed." ".$lang['Energy']."</font>".")";
-                         $BuildLevel = 0;
-                    }elseif ($Element == 4 || $Element == 12) {
-                         $parse['energia'] = "("."<font color=#00FF00>+". $EnergyNeed." ".$lang['Energy']."</font>".")";
-                         $BuildLevel = 0;
-                    }
-                                  
-// Показ кол-ва потраченой/добоавляемой энергии END
-
-					// Количество полей:  Остаток полей/Общее Количество полей START
-
-         			$parse['planet_field_current']  = $CurrentPlanet['field_current'];
-			        $parse['planet_field_max'] 		= CalculateMaxPlanetFields($CurrentPlanet);
-                    $parse['field_libre']           = $parse['planet_field_max']  - $CurrentPlanet['field_current'];
-
-					// Количество полей:  Остаток полей/Общее Количество полей END
 
 					if ($RoomIsOk && $CanBuildElement)
 					{
@@ -494,45 +499,43 @@ $parse['nivel']            = ($BuildingLevel == 0) ? "" : " (". $lang['bd_lvl'] 
 						{
 							if ($NextBuildLevel == 1)
 							{
-								if ( $HaveRessources == true )
-
-								$parse['click'] = "<form action='game.php?page=buildings&cmd=insert&building=". $Element ."' method='post'><input type='submit' style='width:100px;color:lime;font-weight:bold;' value=' ".$lang['bd_build']."'></form>";
-
+								if ( $HaveRessources == TRUE )
+									$parse['click'] = "<a href=\"game.php?page=buildings&cmd=insert&building=". $Element ."\"><font color=#00FF00>".$lang['bd_build']."</font></a>";
 								else
-								    $parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ".$lang['bd_build']."'></form>";
-
-									}
+									$parse['click'] = "<font color=#FF0000>".$lang['bd_build']."</font>";
+							}
 							else
 							{
-								if ( $HaveRessources == true )
-							    	$parse['click'] = "<form action='game.php?page=buildings&cmd=insert&building=". $Element ."' method='post'><input type='submit' style='width:100px;color:lime;font-weight:bold;' value=' ". $lang['bd_build_next_level'] ."'></form>";
+								if ( $HaveRessources == TRUE )
+									$parse['click'] = "<a href=\"game.php?page=buildings&cmd=insert&building=". $Element ."\"><font color=#00FF00>". $lang['bd_build_next_level'] . $NextBuildLevel ."</font></a>";
 								else
-							    	$parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ". $lang['bd_build_next_level'] ."'></form>";
-									}
+									$parse['click'] = "<font color=#FF0000>". $lang['bd_build_next_level'] . $NextBuildLevel ."</font>";
+							}
 						}
 						else
 						{
-					    	$parse['click'] = "<form action='game.php?page=buildings&cmd=insert&building=". $Element ."' method='post'><input type='submit' style='width:100px;color:lime;font-weight:bold;' value=' ".$lang['bd_add_to_list']."'></form>";
-							}
+							$parse['click'] = "<a href=\"game.php?page=buildings&cmd=insert&building=". $Element ."\"><font color=#00FF00>".$lang['bd_add_to_list']."</font></a>";
+						}
 					}
 					elseif ($RoomIsOk && !$CanBuildElement)
 					{
 						if ($NextBuildLevel == 1)
-						    $parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ".$lang['bd_build'] ."'></form>";
-							else
-					    	$parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ". $lang['bd_build_next_level'] ."'></form>";
-							}
+							$parse['click'] = "<font color=#FF0000>".$lang['bd_build']."</font>";
+						else
+							$parse['click'] = "<font color=#FF0000>". $lang['bd_build_next_level'] . $NextBuildLevel ."</font>";
+					}
 					else
-						$parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ".$lang['bd_no_more_fields'] ."'></form>";
+						$parse['click'] = "<font color=#FF0000>".$lang['bd_no_more_fields']."</font>";
+
 					if ($Element == 31 && $CurrentUser["b_tech_planet"] != 0)
 					{
-						$parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ".$lang['bd_working'] ."'></form>";
-						}
+						$parse['click'] = "<font color=#FF0000>".$lang['bd_working']."</font>";
+					}
 
 					if ( ( $Element == 21 or $Element == 14 or $Element == 15 ) && $CurrentPlanet["b_hangar"] != 0)
 					{
-						$parse['click'] = "<form action='' method='post'><input type='submit' style='width:100px;color:red;font-weight:bold;' value=' ".$lang['bd_working'] ."'></form>";
-						}
+						$parse['click'] = "<font color=#FF0000>".$lang['bd_working']."</font>";
+					}
 
 					$BuildingPage .= parsetemplate(gettemplate('buildings/buildings_builds_row'), $parse);
 				}
@@ -541,7 +544,7 @@ $parse['nivel']            = ($BuildingLevel == 0) ? "" : " (". $lang['bd_lvl'] 
 
 		if ($Queue['lenght'] > 0)
 		{
-			include($xgp_root . 'includes/functions/InsertBuildListScript.' . $phpEx);
+			include(XGP_ROOT . 'includes/functions/InsertBuildListScript.php');
 
 			$parse['BuildListScript']  = InsertBuildListScript ("buildings");
 			$parse['BuildList']        = $Queue['buildlist'];
@@ -549,7 +552,7 @@ $parse['nivel']            = ($BuildingLevel == 0) ? "" : " (". $lang['bd_lvl'] 
 		else
 		{
 			$parse['BuildListScript']  = "";
-		    $parse['BuildList']        = "<th colspan='3'><font color=gold><blink>Очередь построек пуста!</blink></font></th>";
+			$parse['BuildList']        = "";
 		}
 
 		$parse['BuildingsList']        = $BuildingPage;

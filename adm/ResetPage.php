@@ -1,31 +1,17 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.'.$phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($user['authlevel'] != 3) die(message ($lang['404_page']));
 
@@ -34,8 +20,6 @@ $parse	=	$lang;
 
 function ResetUniverse ( $CurrentUser )
 {
-	global $phpEx;
-
 		doquery( "RENAME TABLE {{table}} TO {{table}}_s", 'planets' );
 		doquery( "RENAME TABLE {{table}} TO {{table}}_s", 'users' );
 
@@ -61,7 +45,7 @@ function ResetUniverse ( $CurrentUser )
 		{
 			if ( $TheUser['onlinetime'] > $LimitTime )
 			{
-				$UserPlanet     = doquery ("SELECT `name` FROM {{table}} WHERE `id` = '". $TheUser['id_planet']."';", 'planets_s', true);
+				$UserPlanet     = doquery ("SELECT `name` FROM {{table}} WHERE `id` = '". $TheUser['id_planet']."';", 'planets_s', TRUE);
 				if ($UserPlanet['name'] != "")
 				{
 					$Time	=	time();
@@ -82,12 +66,13 @@ function ResetUniverse ( $CurrentUser )
 					doquery( $QryInsertUser, 'users');
 					doquery("UPDATE {{table}} SET `bana` = '0' WHERE `id` > '1'", "users");
 
-					$NewUser        = doquery("SELECT `id` FROM {{table}} WHERE `username` = '". $TheUser['username'] ."' LIMIT 1;", 'users', true);
+					$NewUser        = doquery("SELECT `id` FROM {{table}} WHERE `username` = '". $TheUser['username'] ."' LIMIT 1;", 'users', TRUE);
 
-					CreateOnePlanetRecord ($TheUser['galaxy'], $TheUser['system'], $TheUser['planet'], $NewUser['id'], $UserPlanet['name'], true);
+					CreateOnePlanetRecord ($TheUser['galaxy'], $TheUser['system'], $TheUser['planet'], $NewUser['id'], $UserPlanet['name'], TRUE);
+
 
 					doquery("UPDATE {{table}} SET `id_level` = '".$TheUser['authlevel']."' WHERE `id_owner` = '".$NewUser['id']."'", "planets");
-					$PlanetID       = doquery("SELECT `id` FROM {{table}} WHERE `id_owner` = '". $NewUser['id'] ."' LIMIT 1;", 'planets', true);
+					$PlanetID       = doquery("SELECT `id` FROM {{table}} WHERE `id_owner` = '". $NewUser['id'] ."' LIMIT 1;", 'planets', TRUE);
 
 					$QryUpdateUser  = "UPDATE {{table}} SET ";
 					$QryUpdateUser .= "`id_planet` = '".      $PlanetID['id'] ."', ";
@@ -99,7 +84,8 @@ function ResetUniverse ( $CurrentUser )
 				}
 			}
 		}
-		doquery("UPDATE {{table}} SET `config_value` = '". $TransUser ."' WHERE `config_name` = 'users_amount' LIMIT 1;", 'config');
+
+		update_config ( 'users_amount' , $TransUser );
 		doquery("DROP TABLE {{table}}", 'planets_s');
 		doquery("DROP TABLE {{table}}", 'users_s');
 }
@@ -114,7 +100,7 @@ if ($_POST)
 	if ($_POST['defenses']	==	'on'){
 		doquery("UPDATE {{table}} SET `misil_launcher` = '0', `small_laser` = '0', `big_laser` = '0',
 									`gauss_canyon` = '0', `ionic_canyon` = '0', `buster_canyon` = '0',
-									`small_protection_shield` = '0', `planet_protector` = '0', `big_protection_shield` = '0',
+									`small_protection_shield` = '0', `big_protection_shield` = '0',
 									`interceptor_misil` = '0', `interplanetary_misil` = '0'", "planets");
 		$Log	.=	$lang['log_defenses']."\n";}
 
@@ -123,7 +109,7 @@ if ($_POST)
 									`heavy_hunter` = '0', `crusher` = '0', `battle_ship` = '0',
 									`colonizer` = '0', `recycler` = '0', `spy_sonde` = '0',
 									`bomber_ship` = '0', `solar_satelit` = '0', `destructor` = '0',
-									`dearth_star` = '0', `battleship` = '0', `supernova` = '0'", "planets");
+									`dearth_star` = '0', `battleship` = '0'", "planets");
 		$Log	.=	$lang['log_ships']."\n";}
 
 	if ($_POST['h_d']	==	'on'){
@@ -166,8 +152,7 @@ if ($_POST)
 
 	if ($_POST['ofis']	==	'on'){
 		doquery("UPDATE {{table}} SET `rpg_geologue` = '0', `rpg_amiral` = '0', `rpg_ingenieur` = '0',
-									`rpg_technocrate` = '0', `rpg_espion` = '0', `rpg_constructeur` = '0',
-									`rpg_scientifique` = '0', `rpg_commandant` = '0', `rpg_stockeur` = '0'", "users");
+									`rpg_technocrate` = '0'", "users");
 		$Log	.=	$lang['log_officiers']."\n";}
 
 	if ($_POST['inves_c']	==	'on'){
@@ -246,5 +231,5 @@ if ($_POST)
 }
 
 
-display(parsetemplate(gettemplate('adm/ResetBody'), $parse), false, '', true, false);
+display(parsetemplate(gettemplate('adm/ResetBody'), $parse), FALSE, '', TRUE, FALSE);
 ?>

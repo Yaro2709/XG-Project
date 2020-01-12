@@ -1,31 +1,17 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By Neko from xgproyect.net	         #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2012
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($Observation != 1) die(message ($lang['404_page']));
 
@@ -36,7 +22,7 @@ $parse	=	$lang;
 
 function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialSpecify, $Order, $OrderBY, $Limit, $Table, $Page, $NameLang, $ArrayOSec, $Minimize, $SName)
 {
-	global $user, $phpEx, $xgp_root, $lang, $EditUsers;
+	global $user, $lang, $EditUsers;
 
 	$parse	=	$lang;
 
@@ -66,7 +52,7 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 	$QueryCSearch	 =	"SELECT COUNT(".$ArrayEx[0].") AS `total` FROM {{table}} ";
 	$QueryCSearch	.=	$WhereItem." ";
 	$QueryCSearch	.=	$SpecifyWhere." ".$SpecialSpecify." ";
-	$CountQuery		=	doquery($QueryCSearch, $Table, true);
+	$CountQuery		=	doquery($QueryCSearch, $Table, TRUE);
 
 	if ($CountQuery['total'] > 0)
 	{
@@ -192,7 +178,7 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 
 				if($_GET['search'] == 'planet')
 				{
-				$QueryForMoons	=	doquery("SELECT id_luna FROM {{table}} WHERE id_planet = '".$WhileResult[0]."'", "galaxy", true);
+				$QueryForMoons	=	doquery("SELECT id_luna FROM {{table}} WHERE id_planet = '".$WhileResult[0]."'", "galaxy", TRUE);
 				(($QueryForMoons['id_luna'] > '0')	? $QueryForMoons2 = "<font color=lime>".$lang['one_is_yes'][1]."</font>" : $QueryForMoons2 = $lang['one_is_yes'][0]);
 				$Search['LIST']	.=	"<th>".$QueryForMoons2."</th>";}
 
@@ -227,7 +213,7 @@ function MyCrazyLittleSearch($SpecifyItems, $WhereItem, $SpecifyWhere, $SpecialS
 }
 
 // BORRADO
-include_once($xgp_root . 'includes/functions/DeleteSelectedUser.' . $phpEx);
+include_once(XGP_ROOT . 'includes/functions/DeleteSelectedUser.php');
 if ($_GET['delete'] == 'user'){
 	DeleteSelectedUser ($_GET['user']);
 	$Log	.=	"\n".$lang['log_searchindb_del1'].$_GET['user'].$lang['log_searchindb_del2'].$user['username']."\n";
@@ -436,5 +422,5 @@ $Time_Two 					= 	(($Micro[1] + $Micro[0]) - $Time_One);
 $parse['TimeToCreatePage']	=	$lang['se_time_of_page'].$Time_Two."&nbsp;".$lang['time_seconds'];
 
 
-display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 ?>

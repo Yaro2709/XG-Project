@@ -181,12 +181,12 @@ a:hover {
 
 #copyright {
     position: absolute;
-    top: 110px;
-    left: -100px;
+    top: 170px;
+    left: 0px;
     font-size: 10px;
     color:#666666;
     text-align: left;
-    width: 370px;
+    width: 200px;
 }
 
 .image {

@@ -1,33 +1,25 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
-	function PlanetResourceUpdate ( $CurrentUser, &$CurrentPlanet, $UpdateTime, $Simul = false )
+	function PlanetResourceUpdate ( $CurrentUser, &$CurrentPlanet, $UpdateTime, $Simul = FALSE )
 	{
-		global $ProdGrid, $resource, $reslist, $game_config;
+		global $ProdGrid, $resource, $reslist;
 
-		$CurrentPlanet['metal_max']		=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[22] ])) -1)) * (1 + ($CurrentUser['rpg_stockeur'] * STOCKEUR));
-		$CurrentPlanet['crystal_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[23] ])) -1)) * (1 + ($CurrentUser['rpg_stockeur'] * STOCKEUR));
-		$CurrentPlanet['deuterium_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[24] ])) -1)) * (1 + ($CurrentUser['rpg_stockeur'] * STOCKEUR));
+		$game_resource_multiplier		=	read_config ( 'resource_multiplier' );
+		$game_metal_basic_income		=	read_config ( 'metal_basic_income' );
+		$game_crystal_basic_income		=	read_config ( 'crystal_basic_income' );
+		$game_deuterium_basic_income	=	read_config ( 'deuterium_basic_income' );
+
+		$CurrentPlanet['metal_max']		=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[22] ])) -1));
+		$CurrentPlanet['crystal_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[23] ])) -1));
+		$CurrentPlanet['deuterium_max']	=	(BASE_STORAGE_SIZE + 50000 * (roundUp(pow(1.6,$CurrentPlanet[ $resource[24] ])) -1));
 
 		$MaxMetalStorage                = $CurrentPlanet['metal_max']     * MAX_OVERFLOW;
 		$MaxCristalStorage              = $CurrentPlanet['crystal_max']   * MAX_OVERFLOW;
@@ -62,30 +54,30 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			{
 				$BuildLevelFactor = $CurrentPlanet[ $resource[$ProdID]."_porcent" ];
 				$BuildLevel = $CurrentPlanet[ $resource[$ProdID] ];
-				$Caps['metal_perhour']     += floor( eval ( $ProdGrid[$ProdID]['formule']['metal'] )     * (0.01 * $post_porcent) * ( $game_config['resource_multiplier'] ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
-				$Caps['crystal_perhour']   += floor( eval ( $ProdGrid[$ProdID]['formule']['crystal'] )   * (0.01 * $post_porcent) * ( $game_config['resource_multiplier'] ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
+				$Caps['metal_perhour']     += floor( eval ( $ProdGrid[$ProdID]['formule']['metal'] )     * (0.01 * $post_porcent) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
+				$Caps['crystal_perhour']   += floor( eval ( $ProdGrid[$ProdID]['formule']['crystal'] )   * (0.01 * $post_porcent) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
 
 				if ($ProdID < 4)
 				{
-					$Caps['deuterium_perhour'] += floor( eval ( $ProdGrid[$ProdID]['formule']['deuterium'] ) * (0.01 * $post_porcent) * ( $game_config['resource_multiplier'] ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
-					$Caps['energy_used']   +=  floor( eval  ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_config['resource_multiplier'] ) );
+					$Caps['deuterium_perhour'] += floor( eval ( $ProdGrid[$ProdID]['formule']['deuterium'] ) * (0.01 * $post_porcent) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
+					$Caps['energy_used']   +=  floor( eval  ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_resource_multiplier ) );
 				}
 				elseif ($ProdID >= 4 )
 				{
 					if($ProdID == 12 && $CurrentPlanet['deuterium'] == 0)
 						continue;
 
-					$Caps['deuterium_perhour'] += floor( eval ( $ProdGrid[$ProdID]['formule']['deuterium'] ) * (0.01 * $post_porcent) * ( $game_config['resource_multiplier'] ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
-					$Caps['energy_max']    +=  floor( eval  ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_config['resource_multiplier'] ) * ( 1 + ( $CurrentUser['rpg_ingenieur'] * INGENIEUR ) ) );
+					$Caps['deuterium_perhour'] += floor( eval ( $ProdGrid[$ProdID]['formule']['deuterium'] ) * (0.01 * $post_porcent) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_geologue'] * GEOLOGUE ) ) );
+					$Caps['energy_max']    +=  floor( eval  ( $ProdGrid[$ProdID]['formule']['energy']    ) * ( $game_resource_multiplier ) * ( 1 + ( $CurrentUser['rpg_ingenieur'] * ENGINEER_ENERGY ) ) );
 				}
 			}
 		}
 
 		if ($CurrentPlanet['planet_type'] == 3)
 		{
-			$game_config['metal_basic_income']     = 0;
-			$game_config['crystal_basic_income']   = 0;
-			$game_config['deuterium_basic_income'] = 0;
+			$game_metal_basic_income     = 0;
+			$game_crystal_basic_income   = 0;
+			$game_deuterium_basic_income = 0;
 			$CurrentPlanet['metal_perhour']        = 0;
 			$CurrentPlanet['crystal_perhour']      = 0;
 			$CurrentPlanet['deuterium_perhour']    = 0;
@@ -106,9 +98,9 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 
 		if ($CurrentPlanet['energy_max'] == 0)
 		{
-			$CurrentPlanet['metal_perhour']     = $game_config['metal_basic_income'];
-			$CurrentPlanet['crystal_perhour']   = $game_config['crystal_basic_income'];
-			$CurrentPlanet['deuterium_perhour'] = $game_config['deuterium_basic_income'];
+			$CurrentPlanet['metal_perhour']     = $game_metal_basic_income;
+			$CurrentPlanet['crystal_perhour']   = $game_crystal_basic_income;
+			$CurrentPlanet['deuterium_perhour'] = $game_deuterium_basic_income;
 			$production_level            = 100;
 		}
 		elseif ($CurrentPlanet["energy_max"] >= $CurrentPlanet["energy_used"])
@@ -131,7 +123,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		if ( $CurrentPlanet['metal'] <= $MaxMetalStorage )
 		{
 			$MetalProduction = (($ProductionTime * ($CurrentPlanet['metal_perhour'] / 3600))) * (0.01 * $production_level);
-			$MetalBaseProduc = (($ProductionTime * ($game_config['metal_basic_income'] / 3600 )));
+			$MetalBaseProduc = (($ProductionTime * ($game_metal_basic_income / 3600 )));
 			$MetalTheorical  = $CurrentPlanet['metal'] + $MetalProduction  +  $MetalBaseProduc;
 			if ( $MetalTheorical <= $MaxMetalStorage )
 			{
@@ -146,7 +138,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		if ( $CurrentPlanet['crystal'] <= $MaxCristalStorage )
 		{
 			$CristalProduction = (($ProductionTime * ($CurrentPlanet['crystal_perhour'] / 3600))) * (0.01 * $production_level);
-			$CristalBaseProduc = (($ProductionTime * ($game_config['crystal_basic_income'] / 3600 )));
+			$CristalBaseProduc = (($ProductionTime * ($game_crystal_basic_income / 3600 )));
 			$CristalTheorical  = $CurrentPlanet['crystal'] + $CristalProduction  +  $CristalBaseProduc;
 			if ( $CristalTheorical <= $MaxCristalStorage )
 			{
@@ -161,7 +153,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		if ( $CurrentPlanet['deuterium'] <= $MaxDeuteriumStorage )
 		{
 			$DeuteriumProduction = (($ProductionTime * ($CurrentPlanet['deuterium_perhour'] / 3600))) * (0.01 * $production_level);
-			$DeuteriumBaseProduc = (($ProductionTime * ($game_config['deuterium_basic_income'] / 3600 )));
+			$DeuteriumBaseProduc = (($ProductionTime * ($game_deuterium_basic_income / 3600 )));
 			$DeuteriumTheorical  = $CurrentPlanet['deuterium'] + $DeuteriumProduction  +  $DeuteriumBaseProduc;
 			if ( $DeuteriumTheorical <= $MaxDeuteriumStorage )
 			{
@@ -188,7 +180,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 			$CurrentPlanet['deuterium']  = 0;
 		}
 
-		if ($Simul == false)
+		if ($Simul == FALSE)
 		{
 			$Builded          = HandleElementBuildingQueue ( $CurrentUser, $CurrentPlanet, $ProductionTime );
 

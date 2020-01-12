@@ -1,194 +1,24 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
-include_once($xgp_root . 'includes/classes/class.GalaxyRows.' . $phpEx);
+include_once(XGP_ROOT . 'includes/classes/class.GalaxyRows.php');
 
 class ShowGalaxyPage extends GalaxyRows
 {
-	private function InsertGalaxyScripts ($CurrentPlanet)
-	{
-		$Script  = "<div style=\"top: 10px;\" id=\"content\">";
-		$Script .= "<script language=\"JavaScript\">\n";
-		$Script .= "function galaxy_submit(value) {\n";
-		$Script .= "	document.getElementById('auto').name = value;\n";
-		$Script .= "	document.getElementById('galaxy_form').submit();\n";
-		$Script .= "}\n\n";
-		$Script .= "function fenster(target_url,win_name) {\n";
-		$Script .= "	var new_win = window.open(target_url,win_name,'resizable=yes,scrollbars=yes,menubar=no,toolbar=no,width=640,height=480,top=0,left=0');\n";
-		$Script .= "	new_win.focus();\n";
-		$Script .= "}\n";
-		$Script .= "</script>\n";
-		$Script .= "<script language=\"JavaScript\" src=\"scripts/tw-sack.js\"></script>\n";
-		$Script .= "<script type=\"text/javascript\">\n\n";
-		$Script .= "var ajax = new sack();\n";
-		$Script .= "var strInfo = \"\";\n";
-		$Script .= "function whenResponse () {\n";
-		$Script .= "	retVals   = this.response.split(\"|\");\n";
-		$Script .= "	Message   = retVals[0];\n";
-		$Script .= "	Infos     = retVals[1];\n";
-		$Script .= "	retVals   = Infos.split(\" \");\n";
-		$Script .= "	UsedSlots = retVals[0];\n";
-		$Script .= "	SpyProbes = retVals[1];\n";
-		$Script .= "	Recyclers = retVals[2];\n";
-		$Script .= "	Missiles  = retVals[3];\n";
-		$Script .= "	retVals   = Message.split(\";\");\n";
-		$Script .= "	CmdCode   = retVals[0];\n";
-		$Script .= "	strInfo   = retVals[1];\n";
-		$Script .= "	addToTable(\"done\", \"success\");\n";
-		$Script .= "	changeSlots( UsedSlots );\n";
-		$Script .= "	setShips(\"probes\", SpyProbes );\n";
-		$Script .= "	setShips(\"recyclers\", Recyclers );\n";
-		$Script .= "	setShips(\"missiles\", Missiles );\n";
-		$Script .= "}\n\n";
-		$Script .= "function doit (order, galaxy, system, planet, planettype, shipcount) {\n";
-		$Script .= "	ajax.requestFile = \"FleetAjax.php?action=send\";\n";
-		$Script .= "	ajax.runResponse = whenResponse;\n";
-		$Script .= "	ajax.execute = true;\n\n";
-		$Script .= "	ajax.setVar(\"thisgalaxy\", ". $CurrentPlanet["galaxy"] .");\n";
-		$Script .= "	ajax.setVar(\"thissystem\", ". $CurrentPlanet["system"] .");\n";
-		$Script .= "	ajax.setVar(\"thisplanet\", ". $CurrentPlanet["planet"] .");\n";
-		$Script .= "	ajax.setVar(\"thisplanettype\", ". $CurrentPlanet["planet_type"] .");\n";
-		$Script .= "	ajax.setVar(\"mission\", order);\n";
-		$Script .= "	ajax.setVar(\"galaxy\", galaxy);\n";
-		$Script .= "	ajax.setVar(\"system\", system);\n";
-		$Script .= "	ajax.setVar(\"planet\", planet);\n";
-		$Script .= "	ajax.setVar(\"planettype\", planettype);\n";
-		$Script .= "	if (order == 6)\n";
-		$Script .= "		ajax.setVar(\"ship210\", shipcount);\n";
-		$Script .= "	if (order == 7) {\n";
-		$Script .= "		ajax.setVar(\"ship208\", 1);\n\n";
-		$Script .= "		ajax.setVar(\"ship203\", 2);\n\n";
-		$Script .= "	}\n";
-		$Script .= "	if (order == 8)\n";
-		$Script .= "		ajax.setVar(\"ship209\", shipcount);\n\n";
-		$Script .= "	ajax.runAJAX();\n";
-		$Script .= "}\n\n";
-		$Script .= "function addToTable(strDataResult, strClass) {\n";
-		$Script .= "	var e = document.getElementById('fleetstatusrow');\n";
-		$Script .= "	var e2 = document.getElementById('fleetstatustable');\n";
-		$Script .= "	e.style.display = '';\n";
-		$Script .= "	if(e2.rows.length > 2) {\n";
-		$Script .= "		e2.deleteRow(2);\n";
-		$Script .= "	}\n";
-		$Script .= "	var row = e2.insertRow(0);\n";
-		$Script .= "	var td1 = document.createElement(\"td\");\n";
-		$Script .= "	var td1text = document.createTextNode(strInfo);\n";
-		$Script .= "	td1.appendChild(td1text);\n";
-		$Script .= "	var td2 = document.createElement(\"td\");\n";
-		$Script .= "	var span = document.createElement(\"span\");\n";
-		$Script .= "	var spantext = document.createTextNode(strDataResult);\n";
-		$Script .= "	var spanclass = document.createAttribute(\"class\");\n";
-		$Script .= "	spanclass.nodeValue = strClass;\n";
-		$Script .= "	span.setAttributeNode(spanclass);\n";
-		$Script .= "	span.appendChild(spantext);\n";
-		$Script .= "	td2.appendChild(span);\n";
-		$Script .= "	row.appendChild(td1);\n";
-		$Script .= "	row.appendChild(td2);\n";
-		$Script .= "}\n\n";
-		$Script .= "function changeSlots(slotsInUse) {\n";
-		$Script .= "	var e = document.getElementById('slots');\n";
-		$Script .= "	e.innerHTML = slotsInUse;\n";
-		$Script .= "}\n\n";
-		$Script .= "function setShips(ship, count) {\n";
-		$Script .= "	var e = document.getElementById(ship);\n";
-		$Script .= "	e.innerHTML = count;\n";
-		$Script .= "}\n";
-		$Script .= "</script>\n";
-
-		return $Script;
-	}
-
-	private function ShowGalaxyRows($Galaxy, $System, $HavePhalanx, $CurrentGalaxy, $CurrentSystem, $CurrentRC, $CurrentMIP)
-	{
-		global $planetcount, $dpath, $user, $xgp_root, $phpEx;
-
-		$UserPoints    = doquery("SELECT * FROM {{table}} WHERE `stat_type` = '1' AND `stat_code` = '1' AND `id_owner` = '". intval($user['id']) ."';", 'statpoints', true);
-
-		$Result = "";
-		for ($Planet = 1; $Planet < 1+(MAX_PLANET_IN_SYSTEM); $Planet++)
-		{
-			unset($GalaxyRowPlanet);
-			unset($GalaxyRowMoon);
-			unset($GalaxyRowPlayer);
-			unset($GalaxyRowAlly);
-
-			$GalaxyRow = doquery("SELECT * FROM {{table}} WHERE `galaxy` = '".$Galaxy."' AND `system` = '".$System."' AND `planet` = '".$Planet."';", 'galaxy', true);
-
-			$Result .= "\n";
-			$Result .= "<tr>";
-
-			if ($GalaxyRow)
-			{
-				if ($GalaxyRow["id_planet"] != 0)
-				{
-					$GalaxyRowPlanet = doquery("SELECT * FROM {{table}} WHERE `id` = '". $GalaxyRow["id_planet"] ."';", 'planets', true);
-
-					if ($GalaxyRowPlanet['destruyed'] != 0 && $GalaxyRowPlanet['id_owner'] != '' && $GalaxyRow["id_planet"] != '')
-					{
-						$this->CheckAbandonPlanetState ($GalaxyRowPlanet);
-					}
-					else
-					{
-						$planetcount++;
-						$GalaxyRowPlayer = doquery("SELECT * FROM {{table}} WHERE `id` = '". $GalaxyRowPlanet["id_owner"] ."';", 'users', true);
-					}
-
-					if ($GalaxyRow["id_luna"] != 0)
-					{
-						$GalaxyRowMoon   = doquery("SELECT * FROM {{table}} WHERE `id` = '". $GalaxyRow["id_luna"] ."' AND planet_type='3';", 'planets', true);
-
-						if ($GalaxyRowMoon["destruyed"] != 0)
-						{
-							$this->CheckAbandonMoonState ($GalaxyRowMoon);
-						}
-					}
-
-					if ($GalaxyRowPlanet['id_owner'] <> 0)
-						$GalaxyRowUser     = doquery("SELECT * FROM {{table}} WHERE `id` = '". $GalaxyRowPlanet['id_owner'] ."';", 'users', true);
-					else
-						$GalaxyRowUser     = array();
-
-				}
-			}
-
-			$Result .= $this->GalaxyRowPos        ( $GalaxyRow, $Galaxy, $System, $Planet, 1 );
-			$Result .= $this->GalaxyRowPlanet     ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 1, $HavePhalanx, $CurrentGalaxy, $CurrentSystem);
-			$Result .= $this->GalaxyRowPlanetName ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 1, $HavePhalanx, $CurrentGalaxy, $CurrentSystem);
-			$Result .= $this->GalaxyRowMoon       ( $GalaxyRow, $GalaxyRowMoon  , $GalaxyRowPlayer, $Galaxy, $System, $Planet, 3 );
-			$Result .= $this->GalaxyRowDebris     ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 2, $CurrentRC);
-			$Result .= $this->GalaxyRowUser       ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 0, $UserPoints );
-			$Result .= $this->GalaxyRowAlly       ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 0 );
-			$Result .= $this->GalaxyRowActions    ( $GalaxyRow, $GalaxyRowPlanet, $GalaxyRowPlayer, $Galaxy, $System, $Planet, 0, $CurrentGalaxy, $CurrentSystem, $CurrentMIP);
-			$Result .= "</tr>";
-		}
-		return $Result;
-	}
+	private $planet_count = 0;
 
 	public function __construct($CurrentUser, $CurrentPlanet)
 	{
-		global $xgp_root, $phpEx, $dpath, $resource, $lang, $planetcount;
+		global $resource, $lang;
 
-		$fleetmax      	= ($CurrentUser['computer_tech'] + 1) + ($CurrentUser['rpg_commandant'] * COMMANDANT);
+		$fleetmax      	= get_max_fleets ( $CurrentUser['computer_tech'] , $CurrentUser['rpg_amiral'] );
 		$CurrentPlID   	= $CurrentPlanet['id'];
 		$CurrentMIP    	= $CurrentPlanet['interplanetary_misil'];
 		$CurrentRC     	= $CurrentPlanet['recycler'];
@@ -223,7 +53,8 @@ class ShowGalaxyPage extends GalaxyRows
 		{
 			if (intval($_POST["galaxy"]))
 			{
-				$_POST["galaxy"] = ereg_replace("[^0-9]","",$_POST["galaxy"]);
+				// ereg_replace REEMPLAZADO POR preg_replace PARA PHP MAYORES A 5.3.0
+				$_POST["galaxy"] = preg_replace("[^0-9]","",$_POST["galaxy"]);
 			}
 			else
 			{
@@ -232,7 +63,8 @@ class ShowGalaxyPage extends GalaxyRows
 
 			if (intval($_POST["system"]))
 			{
-				$_POST["system"] = ereg_replace("[^0-9]","",$_POST["system"]);
+				// ereg_replace REEMPLAZADO POR preg_replace PARA PHP MAYORES A 5.3.0
+				$_POST["system"] = preg_replace("[^0-9]","",$_POST["system"]);
 			}
 			else
 			{
@@ -336,27 +168,40 @@ class ShowGalaxyPage extends GalaxyRows
 			$system        = intval($_GET['system']);
 		}
 		else
+
 		{
 			$galaxy        = 1;
 			$system        = 1;
 		}
 
-		if ( ( $CurrentPlanet['system'] != ( $_POST["system"] - 1 ) ) && ( $mode != 0 ) && ( $CurrentPlanet['deuterium'] < 10 ) )
+		// START FIX BY alivan
+		if ($mode != 2)
 		{
-			die (message($lang['gl_no_deuterium_to_view_galaxy'], "game.php?page=galaxy&mode=0", 2));
+			if ( ( $CurrentPlanet['system'] != ( $_POST["system"] - 1 ) ) && ( $CurrentPlanet['system'] != $_GET['system'] or $CurrentPlanet['galaxy'] != $_GET['galaxy'] ) && ( $mode != 0 ) && ( $CurrentPlanet['deuterium'] < 10 ) )
+			{
+				die (message($lang['gl_no_deuterium_to_view_galaxy'], "game.php?page=galaxy&mode=0", 2));
+			}
+			elseif( ( $CurrentPlanet['system'] != ( $_POST["system"] - 1 ) ) && ( $CurrentPlanet['system'] != $_GET['system'] or $CurrentPlanet['galaxy'] != $_GET['galaxy'] ) && ( $mode != 0 ) )
+			{
+				$QryGalaxyDeuterium   = "UPDATE {{table}} SET ";
+				$QryGalaxyDeuterium  .= "`deuterium` = `deuterium` -  10 ";
+				$QryGalaxyDeuterium  .= "WHERE ";
+				$QryGalaxyDeuterium  .= "`id` = '". $CurrentPlanet['id'] ."' ";
+				$QryGalaxyDeuterium  .= "LIMIT 1;";
+				doquery($QryGalaxyDeuterium, 'planets');
+			}
 		}
-		elseif( ( $CurrentPlanet['system'] != ( $_POST["system"] - 1 ) ) && ( $mode != 0 ) )
+		elseif ($mode == 2 && $CurrentPlanet['interplanetary_misil'] < 1)
 		{
-			$QryGalaxyDeuterium   = "UPDATE {{table}} SET ";
-			$QryGalaxyDeuterium  .= "`deuterium` = `deuterium` -  10 ";
-			$QryGalaxyDeuterium  .= "WHERE ";
-			$QryGalaxyDeuterium  .= "`id` = '". $CurrentPlanet['id'] ."' ";
-			$QryGalaxyDeuterium  .= "LIMIT 1;";
-			doquery($QryGalaxyDeuterium, 'planets');
+			die (message($lang['ma_no_missiles'], "game.php?page=galaxy&mode=0", 2));
 		}
+		// END FIX BY alivan
 
-		$planetcount = 0;
-		$lunacount   = 0;
+		$GalaxyInfo = doquery( "SELECT {{table}}galaxy.metal, {{table}}galaxy.crystal, {{table}}galaxy.id_luna, {{table}}galaxy.id_planet, {{table}}planets.galaxy, {{table}}planets.system, {{table}}planets.planet, {{table}}planets.destruyed, {{table}}planets.name, {{table}}planets.image, {{table}}planets.last_update,{{table}}planets.id_owner,{{table}}users.id, {{table}}users.ally_id, {{table}}users.bana, {{table}}users.urlaubs_modus, {{table}}users.onlinetime, {{table}}users.username,{{table}}statpoints.stat_type, {{table}}statpoints.stat_code, {{table}}statpoints.total_rank, {{table}}statpoints.total_points, {{table}}moons.diameter, {{table}}moons.temp_min, {{table}}moons.destruyed AS destruyed_moon, {{table}}moons.name AS name_moon, {{table}}alliance.ally_name, {{table}}alliance.ally_tag, {{table}}alliance.ally_web, {{table}}alliance.ally_members,{{table}}buddy.owner AS friends_owner,{{table}}buddy.sender AS friends_sender
+			FROM {{table}}alliance RIGHT JOIN ({{table}}planets AS {{table}}moons RIGHT JOIN ({{table}}statpoints RIGHT JOIN ((({{table}}planets INNER JOIN {{table}}users ON {{table}}planets.id_owner = {{table}}users.id ) INNER JOIN {{table}}galaxy ON {{table}}planets.id = {{table}}galaxy.id_planet ) LEFT JOIN {{table}}buddy ON ({{table}}buddy.owner = {{table}}planets.id_owner OR {{table}}buddy.sender = {{table}}planets.id_owner ))  ON {{table}}statpoints.id_owner={{table}}users.id AND {{table}}statpoints.stat_code=1 AND {{table}}statpoints.stat_type=1 ) ON {{table}}moons.id = {{table}}galaxy.id_luna) ON {{table}}alliance.id = {{table}}users.ally_id
+			WHERE ({{table}}galaxy.galaxy='".$galaxy."' AND {{table}}galaxy.system='".$system."' AND ({{table}}galaxy.planet>'0' AND {{table}}galaxy.planet<='".MAX_PLANET_IN_SYSTEM."'))
+			GROUP BY `id_planet`
+			ORDER BY {{table}}planets.planet; " , '' );
 
 		$parse						= $lang;
 		$parse['galaxy']			= $galaxy;
@@ -374,17 +219,97 @@ class ShowGalaxyPage extends GalaxyRows
 		$parse['current_planet']	= $CurrentPlanet["planet"];
 		$parse['planet_type'] 		= $CurrentPlanet["planet_type"];
 
-		$page['galaxyscripts']		= $this->InsertGalaxyScripts ($CurrentPlanet);
+		$page['galaxyscripts']		= parsetemplate(gettemplate('galaxy/galaxy_script'), $parse);
 		$page['galaxyselector']		= parsetemplate(gettemplate('galaxy/galaxy_selector'), $parse);
 		($mode == 2) ? $page['mip'] = parsetemplate(gettemplate('galaxy/galaxy_missile_selector'), $parse) : " ";
 		$page['galaxytitles'] 		= parsetemplate(gettemplate('galaxy/galaxy_titles'), $parse);
-		$page['galaxyrows'] 		= $this->ShowGalaxyRows   ($galaxy, $system, $HavePhalanx, $CurrentGalaxy, $CurrentSystem, $CurrentRC, $CurrentMIP);
+		$page['galaxyrows'] 		= $this->ShowGalaxyRows   ($GalaxyInfo, $galaxy, $system, $HavePhalanx, $CurrentGalaxy, $CurrentSystem, $CurrentRC, $CurrentMIP);
 
-		$parse['planetcount'] 		= $planetcount ." ". $lang['gl_populed_planets'];
+		$parse['planetcount'] 		= $this->planet_count ." ". $lang['gl_populed_planets'];
 
 		$page['galaxyfooter'] 		= parsetemplate(gettemplate('galaxy/galaxy_footer'), $parse);
 
-		return display(parsetemplate(gettemplate('galaxy/galaxy_body'), $page), false);
+		return display(parsetemplate(gettemplate('galaxy/galaxy_body'), $page), FALSE);
+	}
+
+	private function ShowGalaxyRows($GalaxyQuery, $Galaxy, $System, $HavePhalanx, $CurrentGalaxy, $CurrentSystem, $CurrentRC, $CurrentMIP)
+	{
+		$rows		= '';
+		$start		= 1;
+		$template	=	gettemplate('galaxy/galaxy_row');
+
+		while ( $GalaxyInfo = mysql_fetch_array ( $GalaxyQuery ) )
+		{
+			for ($Planet = $start; $Planet < 1+(MAX_PLANET_IN_SYSTEM); $Planet++)
+			{
+				$parcialCount++;
+
+				if ( $GalaxyInfo['galaxy'] == $Galaxy && $GalaxyInfo['system'] == $System && $GalaxyInfo['planet'] == $Planet )
+				{
+					if ($GalaxyInfo["id_planet"] != 0)
+					{
+						if ($GalaxyInfo['destruyed'] != 0 && $GalaxyInfo['id_owner'] != '' && $GalaxyInfo["id_planet"] != '')
+						{
+							$this->CheckAbandonPlanetState ($GalaxyInfo);
+						}
+						else
+						{
+							$this->planet_count++;
+						}
+
+						if ($GalaxyInfo["id_luna"] != 0 && $GalaxyInfo["destruyed_moon"] != 0)
+						{
+							$this->CheckAbandonMoonState ($GalaxyInfo);
+						}
+					}
+
+					$parse['pos']  	   		= $Planet;
+					$parse['planet'] 		= $this->GalaxyRowPlanet     ( $GalaxyInfo, $Galaxy, $System, $Planet, 1, $HavePhalanx, $CurrentGalaxy, $CurrentSystem);
+					$parse['planetname'] 	= $this->GalaxyRowPlanetName ( $GalaxyInfo, $Galaxy, $System, $Planet, 1, $HavePhalanx, $CurrentGalaxy, $CurrentSystem);
+					$parse['moon'] 			= $this->GalaxyRowMoon       ( $GalaxyInfo, $Galaxy, $System, $Planet, 3 );
+					$parse['debris'] 		= $this->GalaxyRowDebris     ( $GalaxyInfo, $Galaxy, $System, $Planet, 2, $CurrentRC);
+					$parse['username'] 		= $this->GalaxyRowUser       ( $GalaxyInfo, $Galaxy, $System, $Planet );
+					$parse['alliance'] 		= $this->GalaxyRowAlly       ( $GalaxyInfo, $Galaxy, $System, $Planet );
+					$parse['actions'] 		= $this->GalaxyRowActions    ( $GalaxyInfo, $Galaxy, $System, $Planet, $CurrentGalaxy, $CurrentSystem, $CurrentMIP);
+
+					$rows	.= parsetemplate($template, $parse);
+
+					$start++;
+					break;
+				}
+				else
+				{
+					$parse['pos']			= $start;
+					$parse['planet'] 		= '';
+					$parse['planetname'] 	= '';
+					$parse['moon'] 			= '';
+					$parse['debris'] 		= '';
+					$parse['username'] 		= '';
+					$parse['alliance'] 		= '';
+					$parse['actions'] 		= '';
+
+					$rows 	.= parsetemplate($template, $parse);
+					$start++;
+				}
+			}
+		}
+
+		for ( $i = $start; $i <= MAX_PLANET_IN_SYSTEM; $i++ )
+		{
+			$parse['pos']			= $i;
+			$parse['planet'] 		= '';
+			$parse['planetname'] 	= '';
+			$parse['moon'] 			= '';
+			$parse['debris'] 		= '';
+			$parse['username'] 		= '';
+			$parse['alliance'] 		= '';
+			$parse['actions'] 		= '';
+			$rows .= parsetemplate($template, $parse);
+		}
+
+		unset($GalaxyInfo);
+
+		return	$rows;
 	}
 }
 ?>

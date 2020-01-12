@@ -1,32 +1,18 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By Neko from xgproyect.net	         #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
-include('AdminFunctions/Autorization.' . $phpEx);
+include(XGP_ROOT . 'global.php');
+include('AdminFunctions/Autorization.php');
 
 if ($Observation != 1) die();
 
@@ -89,7 +75,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -150,7 +136,7 @@ switch($_POST[search])
 	{
 		$parse['error']	=	$lang['se_no_data'];
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -202,7 +188,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "planets", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "planets", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -235,7 +221,7 @@ switch($_POST[search])
 			$s			=	$planet['system'];
 			$p			=	$planet['planet'];
 
-			$QueryFiind	=	doquery("SELECT `id_luna` FROM {{table}} WHERE `galaxy` = '".$g."' AND `system` = '".$s."' AND `planet` = '".$p."'", "galaxy", true);
+			$QueryFiind	=	doquery("SELECT `id_luna` FROM {{table}} WHERE `galaxy` = '".$g."' AND `system` = '".$s."' AND `planet` = '".$p."'", "galaxy", TRUE);
 
 			if ($QueryFiind['id_luna']	!=	'0')
 				$moons	=	"<font color=lime>".$lang['se_yes']."</font>";
@@ -254,7 +240,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_planett']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -306,7 +292,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "planets", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "planets", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -351,7 +337,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_moonn']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	// ALIANZAS ####################################################################
@@ -402,7 +388,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "alliance", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "alliance", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -448,7 +434,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_allyy']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -492,7 +478,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -544,7 +530,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_vacatii']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -588,7 +574,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "banned", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "banned", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -636,7 +622,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_susss']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -680,7 +666,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -704,6 +690,7 @@ switch($_POST[search])
 	}
 	else
 	{
+
 		while ($admin	=	mysql_fetch_array($search))
 		{
 			$id			=	$admin['id'];
@@ -732,7 +719,7 @@ switch($_POST[search])
 			$parse['table3']	 =	"<tr><th colspan=\"20\">".$lang['se_input_hay'].$cnt.$lang['se_input_admm']."</th></tr></table>";
 		}
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 
@@ -774,7 +761,7 @@ switch($_POST[search])
 				</tr>
 				</table>';
 
-	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", true);
+	$QueryFind	=	doquery("SELECT * FROM {{table}}", "users", TRUE);
 	$ORDERBY	=	$_POST['key_order'];
 	$ORDERBY2	=	$_POST['key_acc'];
 	if (!$ORDERBY || !$QueryFind[$ORDERBY])
@@ -830,10 +817,10 @@ switch($_POST[search])
 		}
 
 	}
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 	break;
 
 	default:
-	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/SearchInDBBody'), $parse), FALSE, '', TRUE, FALSE);
 }
 ?>

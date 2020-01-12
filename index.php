@@ -1,48 +1,34 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from Xtreme-gameZ.com.ar	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('LOGIN'   , true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('LOGIN'   , TRUE);
+define('XGP_ROOT',	'./');
 
-$InLogin = true;
+$InLogin = TRUE;
 
-$xgp_root = './';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
-includeLang('PUBLIC');
+includeLang ( 'PUBLIC' );
 $parse = $lang;
-switch($_GET[page])
+switch ( $_GET[page] )
 {
 	case'lostpassword':
 		function sendnewpassword($mail)
 		{
 			global $lang;
 
-			$ExistMail = doquery("SELECT `email` FROM {{table}} WHERE `email` = '". $mail ."' LIMIT 1;", 'users', true);
+			$ExistMail = doquery("SELECT `email` FROM {{table}} WHERE `email` = '". $mail ."' LIMIT 1;", 'users', TRUE);
 
 			if (empty($ExistMail['email']))
 			{
-				message($lang['mail_not_exist'], "index.php?modo=claveperdida",2, false, false);
+				message($lang['mail_not_exist'], "index.php?modo=claveperdida",2, FALSE, FALSE);
 			}
 			else
 			{
@@ -68,21 +54,22 @@ switch($_GET[page])
 			}
 		}
 
-		if($_POST)
+		if ( $_POST )
 		{
-			sendnewpassword($_POST['email']);
-			message($lang['mail_sended'], "./",2, false, false);
+			sendnewpassword ( $_POST['email'] );
+			message ( $lang['mail_sended'] , "./" , 2 , FALSE , FALSE );
 		}
 		else
 		{
-			$parse['forum_url']    = $game_config['forum_url'];
-			display(parsetemplate(gettemplate('public/lostpassword'), $parse), false, '',false, false);
+			$parse['version']	   = VERSION;
+			$parse['forum_url']    = read_config ( 'forum_url' );
+			display ( parsetemplate ( gettemplate ( 'public/lostpassword' ) , $parse ) , FALSE , '' , FALSE , FALSE );
 		}
 	break;
 	default:
 		if ($_POST)
 		{
-			$login = doquery("SELECT `id`,`username`,`password`,`banaday` FROM {{table}} WHERE `username` = '" . mysql_escape_string($_POST['username']) . "' AND `password` = '" . md5($_POST['password']) . "' LIMIT 1", "users", true);
+			$login = doquery("SELECT `id`,`username`,`password`,`banaday` FROM {{table}} WHERE `username` = '" . mysql_escape_string($_POST['username']) . "' AND `password` = '" . md5($_POST['password']) . "' LIMIT 1", "users", TRUE);
 
 			if($login['banaday'] <= time() && $login['banaday'] != '0')
 			{
@@ -105,32 +92,26 @@ switch($_GET[page])
 
 				@include('config.php');
 				$cookie = $login["id"] . "/%/" . $login["username"] . "/%/" . md5($login["password"] . "--" . $dbsettings["secretword"]) . "/%/" . $rememberme;
-				setcookie($game_config['COOKIE_NAME'], $cookie, $expiretime, "/", "", 0);
+				setcookie(read_config ( 'cookie_name' ), $cookie, $expiretime, "/", "", 0);
 
 				doquery("UPDATE `{{table}}` SET `current_planet` = `id_planet` WHERE `id` ='".$login["id"]."'", 'users');
 
-				unset($dbsettings);
-				header("Location: ./game.php?page=overview");
+				unset ( $dbsettings );
+				header ( 'location:game.php?page=overview' );
 				exit;
 			}
 			else
 			{
-				message($lang['login_error'], "./", 2, false, false);
+				message ( $lang['login_error'] , "./" , 2 , FALSE , FALSE );
 			}
 		}
 		else
 		{
-		
-		    $query = doquery('SELECT username FROM {{table}} ORDER BY register_time DESC', 'users', true);
-		    $parse['last_user'] = $query['username'];
-		    $query = doquery("SELECT COUNT(DISTINCT(id)) FROM {{table}} WHERE onlinetime>" . (time()-900), 'users', true);
-		    $parse['online_users'] = $query[0];
-		    $parse['users_amount'] = $game_config['users_amount'];
-			$parse['servername']   = $game_config['game_name'];
-			$parse['forum_url']    = $game_config['forum_url'];
+			$parse['version']	   = VERSION;
+			$parse['servername']   = read_config ( 'game_name' );
+			$parse['forum_url']    = read_config ( 'forum_url' );
 
-
-			display(parsetemplate(gettemplate('public/index_body'), $parse), false, '',false, false);
+			display ( parsetemplate ( gettemplate ( 'public/index_body' ) , $parse ) , FALSE , '' , FALSE , FALSE );
 		}
 }
 ?>

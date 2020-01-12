@@ -1,64 +1,48 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-$_POST 		=	array_map ( 'deep' , $_POST );
-$_POST 		= 	array_map ( 'addslashes_deep' , $_POST );
-$_GET 		= 	array_map ( 'deep' ,  $_GET );
-$_GET 		= 	array_map ( 'addslashes_deep' , $_GET );
-$_REQUEST 	=  	array_map ( 'deep' , $_REQUEST );
-$_REQUEST 	= 	array_map ( 'addslashes_deep' ,  $_REQUEST );
-$_SERVER 	= 	array_map ( 'deep' , $_SERVER );
-$_SERVER	=  	array_map ( 'addslashes_deep' , $_SERVER );
-$_COOKIE 	= 	array_map ( 'deep' , $_COOKIE );
-$_COOKIE	= 	array_map ( 'addslashes_deep' , $_COOKIE );
-
-function deep ( $value )
+function unset_vars ( $prefix )
 {
-	$value = is_array($value) ? array_map('deep', $value) :  addslashes(trim( nl2br( strip_tags($value ) ) ));
-	return $value;
-}
+	$vars = array_keys ( $GLOBALS );
 
-function  addslashes_deep ( $value )
-{
-	$value = is_array($value) ?  array_map('addslashes_deep', $value) : addslashes($value);
-	return $value;
-}
-
-function unset_vars( $prefix )
-{
-	$vars = array_keys($GLOBALS);
 	for( $n = 0, $i = 0;  $i < count($vars);  $i ++ )
-		if( strpos($vars[$i], $prefix) === 0 )
+	{
+		if ( strpos ( $vars[$i] , $prefix ) === 0 )
 		{
-			unset($GLOBALS[$vars[$i]]);
+			unset ( $GLOBALS[$vars[$i]] );
+
 			$n ++;
 		}
+	}
 
 	return  $n;
 }
 
-function update_config( $config_name, $config_value )
+function read_config ( $config_name = '' , $all = FALSE )
 {
-	global $game_config;
-	doquery("UPDATE {{table}} SET `config_value` = '".$config_value."' WHERE `config_name` = '".$config_name."';",'config');
+	$configs		= new xml ( 'config.xml' );
+
+	if ( $all )
+	{
+		return $configs->get_configs ();
+	}
+	else
+	{
+		return $configs->get_config ( $config_name );
+	}
+
+}
+
+function update_config ( $config_name, $config_value )
+{
+	$configs		= new xml ( 'config.xml' );
+
+	$configs->write_config ( $config_name , $config_value );
 }
 
 function is_email($email)
@@ -66,26 +50,26 @@ function is_email($email)
 	return(preg_match("/^[-_.[:alnum:]]+@((([[:alnum:]]|[[:alnum:]][[:alnum:]-]*[[:alnum:]])\.)+(ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|at|au|aw|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cs|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|in|info|int|io|iq|ir|is|it|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nt|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)$|(([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5]))$/i", $email));
 }
 
-function message ($mes, $dest = "", $time = "3", $topnav = false, $menu = true)
+function message ($mes, $dest = "", $time = "3", $topnav = FALSE, $menu = TRUE)
 {
 	$parse['mes']   = $mes;
 
-	$page .= parsetemplate(gettemplate('message_body'), $parse);
+	$page .= parsetemplate(gettemplate('general/message_body'), $parse);
 
 	if (!defined('IN_ADMIN'))
 	{
-		display ($page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), false, $menu);
+		display ($page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), FALSE, $menu);
 	}
 	else
 	{
-		display ($page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), true, false);
+		display ($page, $topnav, (($dest != "") ? "<meta http-equiv=\"refresh\" content=\"$time;URL=$dest\">" : ""), TRUE, FALSE);
 	}
 
 }
 
-function display ($page, $topnav = true, $metatags = '', $AdminPage = false, $menu = true)
+function display ($page, $topnav = TRUE, $metatags = '', $AdminPage = FALSE, $menu = TRUE)
 {
-	global $link, $game_config, $debug, $user, $planetrow, $xgp_root, $phpEx;
+	global $link, $debug, $user, $planetrow;
 
 	if (!$AdminPage)
 		$DisplayPage  = StdUserHeader($metatags);
@@ -94,27 +78,27 @@ function display ($page, $topnav = true, $metatags = '', $AdminPage = false, $me
 
 	if ($topnav)
 	{
-		include_once($xgp_root . 'includes/functions/ShowTopNavigationBar.' . $phpEx);
+		include_once(XGP_ROOT . 'includes/functions/ShowTopNavigationBar.php');
 		$DisplayPage .= ShowTopNavigationBar( $user, $planetrow );
 	}
 
 	if ($menu && !$AdminPage)
 	{
-		include_once($xgp_root . 'includes/functions/ShowLeftMenu.' . $phpEx);
-		$DisplayPage .= ShowLeftMenu ($user['authlevel']);
+		include_once(XGP_ROOT . 'includes/functions/ShowLeftMenu.php');
+		$DisplayPage .= ShowLeftMenu ($user);
 	}
 
 	$DisplayPage .= "\n<center>\n". $page ."\n</center>\n";
 
 	if(!defined('LOGIN') && $_GET['page'] != 'galaxy')
-		$DisplayPage .= parsetemplate(gettemplate('footer'), $parse);
+		$DisplayPage .= parsetemplate(gettemplate('general/footer'), $parse);
 
 	if ($link)
 	{
 		mysql_close($link);
 	}
 
-	if ( $user['authlevel'] == 3 && $game_config['debug'] == 1 && !$AdminPage )
+	if ( $user['authlevel'] == 3 && read_config ( 'debug' ) == 1 && !$AdminPage )
 	{
 		// Convertir a objeto dom
 		$DisplayPage = str_get_html($DisplayPage);
@@ -128,7 +112,7 @@ function display ($page, $topnav = true, $metatags = '', $AdminPage = false, $me
 
 	echo $DisplayPage;
 
-	if ( $user['authlevel'] == 3 && $game_config['debug'] == 1 && $AdminPage)
+	if ( $user['authlevel'] == 3 && read_config ( 'debug' ) == 1 && $AdminPage)
 	{
 
 		echo "<center>";
@@ -141,17 +125,17 @@ function display ($page, $topnav = true, $metatags = '', $AdminPage = false, $me
 
 function StdUserHeader ($metatags = '')
 {
-	global $dpath, $game_config;
-
-	$parse['-title-'] 	.= $game_config['game_name'];
+	$parse['-title-'] 	.= read_config ( 'game_name' );
 	$parse['-favi-']	.= "<link rel=\"shortcut icon\" href=\"./favicon.ico\">\n";
-	$parse['-meta-']	.= "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=cp1251\">\n";
+	$parse['-meta-']	.= "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=UTF-8\">\n";
+	$parse['-meta-']	.= "<meta name=\"generator\" content=\"XG Proyect " . VERSION . "\" />\n";
 
 	if(!defined('LOGIN'))
 	{
 		$parse['-style-']  	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/css/default.css\">\n";
 		$parse['-style-']  	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"styles/css/formate.css\">\n";
-		$parse['-style-'] 	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"". $dpath ."formate.css\" />\n";
+		$parse['-style-'] 	.= "<link rel=\"stylesheet\" type=\"text/css\" href=\"". DPATH ."formate.css\" />\n";
+		$parse['-meta-']	.= "<script type=\"text/javascript\" src=\"js/overlib-min.js\"></script>\n";
 	}
 	else
 	{
@@ -159,24 +143,27 @@ function StdUserHeader ($metatags = '')
 	}
 
 	$parse['-meta-']	.= ($metatags) ? $metatags : "";
-	$parse['-meta-']	.= "<script type=\"text/javascript\" src=\"scripts/overlib.js\"></script>\n";
 
-	return parsetemplate(gettemplate('simple_header'), $parse);
+	return parsetemplate(gettemplate('general/simple_header'), $parse);
 }
 
 function AdminUserHeader ($metatags = '')
 {
-	global $game_config;
-
 	if (!defined('IN_ADMIN'))
+	{
 		$parse['-title-'] 	.= 	"XG Proyect - Install";
+	}
 	else
-		$parse['-title-'] 	.= 	$game_config['game_name'] . " - Admin CP";
+	{
+		$parse['-title-'] 	.= 	read_config ( 'game_name' ) . " - Admin CP";
+	}
+
 
 	$parse['-favi-']	.= 	"<link rel=\"shortcut icon\" href=\"./../favicon.ico\">\n";
 	$parse['-style-']	.=	"<link rel=\"stylesheet\" type=\"text/css\" href=\"./../styles/css/admin.css\">\n";
-	$parse['-meta-']	.= 	"<script type=\"text/javascript\" src=\"./../scripts/overlib.js\"></script>\n";
+	$parse['-meta-']	.= 	"<script type=\"text/javascript\" src=\"./../js/overlib-min.js\"></script>\n";
 	$parse['-meta-'] 	.= ($metatags) ? $metatags : "";
+
 	return parsetemplate(gettemplate('adm/simple_header'), $parse);
 }
 
@@ -211,8 +198,7 @@ function GetMissionDuration ($GameSpeed, $MaxFleetSpeed, $Distance, $SpeedFactor
 
 function GetGameSpeedFactor ()
 {
-	global $game_config;
-	return $game_config['fleet_speed'] / 2500;
+	return read_config ( 'fleet_speed' ) / 2500;
 }
 
 function GetFleetMaxSpeed ($FleetArray, $Fleet, $Player)
@@ -245,7 +231,7 @@ function GetFleetMaxSpeed ($FleetArray, $Fleet, $Player)
 				$speedalls[$Ship] = $pricelist[$Ship]['speed']  + (($pricelist[$Ship]['speed'] * $Player['impulse_motor_tech']) * 0.2);
 		}
 
-		if ($Ship == 207 or $Ship == 213 or $Ship == 214 or $Ship == 215 or $Ship == 216)
+		if ($Ship == 207 or $Ship == 213 or $Ship == 214 or $Ship == 215)
 			$speedalls[$Ship] = $pricelist[$Ship]['speed'] + (($pricelist[$Ship]['speed'] * $Player['hyperspace_motor_tech']) * 0.3);
 	}
 
@@ -304,10 +290,10 @@ function pretty_time ($seconds)
 	if ($sr < 10) { $ss = "0" . $sr; } else { $ss = $sr; }
 
 	$time = '';
-	if ($day != 0) { $time .= $day . 'день '; }
-	if ($hs  != 0) { $time .= $hh . 'час. ';  } else { $time .= '00час. '; }
-	if ($ms  != 0) { $time .= $mm . 'мин. ';  } else { $time .= '00мин. '; }
-	$time .= $ss . 'сек.';
+	if ($day != 0) { $time .= $day . 'd '; }
+	if ($hs  != 0) { $time .= $hh . 'h ';  } else { $time .= '00h '; }
+	if ($ms  != 0) { $time .= $mm . 'm ';  } else { $time .= '00m '; }
+	$time .= $ss . 's';
 
 	return $time;
 }
@@ -326,22 +312,26 @@ function ShowBuildTime($time)
 	return "<br>". $lang['fgf_time'] . pretty_time($time);
 }
 
-function parsetemplate ($template, $array)
+function get_max_fleets ( $computer_tech , $amiral_level )
 {
-	return preg_replace('#\{([a-zа-я0-9\-_]*?)\}#Ssie', '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );', $template);
+	return ( 1 + $computer_tech + ( $amiral_level * AMIRAL ) );
 }
 
-function gettemplate ($templatename)
+function parsetemplate ( $template , $array )
 {
-	global $xgp_root;
-	return @file_get_contents($xgp_root . TEMPLATE_DIR . '/' . $templatename . ".tpl");
+	return preg_replace ( '#\{([a-z0-9\-_]*?)\}#Ssie' , '( ( isset($array[\'\1\']) ) ? $array[\'\1\'] : \'\' );' , $template );
 }
 
-function includeLang ($filename, $ext = '.mo')
+function gettemplate ( $templatename )
 {
-	global $xgp_root, $lang;
+	return @file_get_contents ( XGP_ROOT . TEMPLATE_DIR . '/' . $templatename . '.php' );
+}
 
-	include ($xgp_root . "language/". DEFAULT_LANG ."/". $filename.$ext);
+function includeLang ( $filename )
+{
+	global $lang;
+
+	include ( XGP_ROOT . "language/" . DEFAULT_LANG ."/". $filename . '.php' );
 }
 
 function GetStartAdressLink ( $FleetRow, $FleetType )
@@ -365,33 +355,44 @@ function BuildPlanetAdressLink ( $CurrentPlanet )
 	return $Link;
 }
 
-function doquery($query, $table, $fetch = false)
+function doquery($query, $table, $fetch = FALSE)
 {
-	global $link, $debug, $xgp_root;
+	global $link, $debug;
 
-	require($xgp_root.'config.php');
+	require ( XGP_ROOT . 'config.php' );
 
 	if(!$link)
 	{
-		$link = mysql_connect($dbsettings["server"], $dbsettings["user"], $dbsettings["pass"]) or $debug->error(mysql_error()."<br />$query","SQL Error");
-		mysql_select_db($dbsettings["name"]) or $debug->error(mysql_error()."<br />$query","SQL Error");
+		$link = mysql_connect	(
+									$dbsettings["server"],
+									$dbsettings["user"],
+									$dbsettings["pass"]
+								) or $debug->error ( mysql_error() . "<br />$query" , "SQL Error" );
+
+		mysql_select_db ( $dbsettings["name"] ) or $debug->error ( mysql_error() . "<br />$query" , "SQL Error" );
+
 		echo mysql_error();
 	}
 
-	$sql 		= str_replace("{{table}}", $dbsettings["prefix"].$table, $query);
-	$sqlquery 	= mysql_query($sql) or $debug->error(mysql_error()."<br />$sql<br />","SQL Error");
+	$sql 		= str_replace ( "{{table}}" , $dbsettings["prefix"] . $table , $query );
+	$sqlquery 	= mysql_query ( $sql ) or $debug->error ( mysql_error() . "<br />$sql<br />" , "SQL Error" );
 
-	unset($dbsettings);
+	unset ( $dbsettings );
 
 	global $numqueries,$debug;
 	$numqueries++;
 
-	$debug->add("<tr><th>Query $numqueries: </th><th>$query</th><th>$table</th><th>$fetch</th></tr>");
+	$debug->add ( "<tr><th>Query $numqueries: </th><th>$query</th><th>$table</th><th>$fetch</th></tr>");
 
-	if($fetch)
-		return mysql_fetch_array($sqlquery);
+	if ( $fetch )
+	{
+		return mysql_fetch_array ( $sqlquery );
+	}
 	else
+	{
 		return $sqlquery;
+	}
+
 }
 
 function colorNumber($n, $s = '')
@@ -425,7 +426,7 @@ function colorGreen($n)
 	return '<font color="#00ff00">' . $n . '</font>';
 }
 
-function pretty_number($n, $floor = true)
+function pretty_number($n, $floor = TRUE)
 {
 	if ($floor)
 		$n = floor($n);
@@ -460,9 +461,24 @@ function shortly_number($number)
 		return pretty_number($number);
 }
 
-function floattostring($Numeric, $Pro = 0, $Output = false)
+function floattostring($Numeric, $Pro = 0, $Output = FALSE)
 {
 	return ($Output) ? str_replace(",",".", sprintf("%.".$Pro."f", $Numeric)) : sprintf("%.".$Pro."f", $Numeric);
+}
+
+function roundUp($value, $precision = 0)
+{
+	if ( $precision == 0 )
+	{
+		$precisionFactor = 1;
+	}
+
+	else
+	{
+		$precisionFactor = pow( 10, $precision );
+	}
+
+	return ceil( $value * $precisionFactor )/$precisionFactor;
 }
 
 ?>

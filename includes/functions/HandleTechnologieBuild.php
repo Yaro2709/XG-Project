@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -28,7 +15,7 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 		if ($CurrentUser['b_tech_planet'] != 0)
 		{
 			if ($CurrentUser['b_tech_planet'] != $CurrentPlanet['id'])
-				$WorkingPlanet = doquery("SELECT * FROM {{table}} WHERE `id` = '". intval($CurrentUser['b_tech_planet']) ."';", 'planets', true);
+				$WorkingPlanet = doquery("SELECT * FROM {{table}} WHERE `id` = '". intval($CurrentUser['b_tech_planet']) ."';", 'planets', TRUE);
 
 			if ($WorkingPlanet)
 				$ThePlanet = $WorkingPlanet;
@@ -61,24 +48,24 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 					$CurrentPlanet = $ThePlanet;
 
 				$Result['WorkOn'] = "";
-				$Result['OnWork'] = false;
+				$Result['OnWork'] = FALSE;
 			}
 			elseif ($ThePlanet["b_tech_id"] == 0)
 			{
 				doquery("UPDATE {{table}} SET `b_tech_planet` = '0'  WHERE `id` = '". intval($CurrentUser['id']) ."';", 'users');
 				$Result['WorkOn'] = "";
-				$Result['OnWork'] = false;
+				$Result['OnWork'] = FALSE;
 			}
 			else
 			{
 				$Result['WorkOn'] = $ThePlanet;
-				$Result['OnWork'] = true;
+				$Result['OnWork'] = TRUE;
 			}
 		}
 		else
 		{
 			$Result['WorkOn'] = "";
-			$Result['OnWork'] = false;
+			$Result['OnWork'] = FALSE;
 		}
 
 		return $Result;

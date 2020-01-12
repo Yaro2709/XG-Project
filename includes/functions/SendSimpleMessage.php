@@ -1,23 +1,10 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
 if(!defined('INSIDE')){ die(header("location:../../"));}
 
@@ -25,16 +12,21 @@ if(!defined('INSIDE')){ die(header("location:../../"));}
 	{
 
 		if ($Time == '')
+		{
 			$Time = time();
+		}
+
+		$Message = (strpos($Message, "/adm/") === FALSE ) ? $Message : "";
 
 		$QryInsertMessage  = "INSERT INTO {{table}} SET ";
-		$QryInsertMessage .= "`message_owner` = '". $Owner ."', ";
-		$QryInsertMessage .= "`message_sender` = '". $Sender ."', ";
-		$QryInsertMessage .= "`message_time` = '" . $Time . "', ";
-		$QryInsertMessage .= "`message_type` = '". $Type ."', ";
-		$QryInsertMessage .= "`message_from` = '". addslashes( $From ) ."', ";
-		$QryInsertMessage .= "`message_subject` = '". addslashes( $Subject ) ."', ";
-		$QryInsertMessage .= "`message_text` = '". addslashes( $Message ) ."';";
+		$QryInsertMessage .= "`message_owner` 	= '". $Owner 	."', ";
+		$QryInsertMessage .= "`message_sender` 	= '". $Sender 	."', ";
+		$QryInsertMessage .= "`message_time` 	= '". $Time 	."', ";
+		$QryInsertMessage .= "`message_type` 	= '". $Type 	."', ";
+		$QryInsertMessage .= "`message_from` 	= '". $From 	."', ";
+		$QryInsertMessage .= "`message_subject` = '".  $Subject ."', ";
+		$QryInsertMessage .= "`message_text` 	= '". $Message 	."';";
+
 		doquery( $QryInsertMessage, 'messages');
 
 		$QryUpdateUser  = "UPDATE `{{table}}` SET ";

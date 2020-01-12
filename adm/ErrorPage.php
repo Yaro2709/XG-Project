@@ -1,38 +1,24 @@
 <?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = '../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.' . $phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($ConfigGame != 1) die(message ($lang['404_page']));
 
 	$parse = $lang;
 
 	extract($_GET);
-	
+
 	$query = doquery("SELECT * FROM {{table}}", 'errors');
 
 	$i = 0;
@@ -51,21 +37,25 @@ if ($ConfigGame != 1) die(message ($lang['404_page']));
 	}
 
 	$parse['errors_list'] .= "<tr><th class=b colspan=5>". $i . $lang['er_errors'] ."</th></tr>";
-	
-	
-	if (isset($delete)){
+
+
+	if (isset($delete))
+	{
 		doquery("DELETE FROM {{table}} WHERE `error_id`=$delete", 'errors');
 		$Log	.=	"\n".$lang['log_errores_title']."\n";
 		$Log	.=	$lang['log_the_user'].$user['username']." ".$lang['log_delete_errors']."\n";
 		LogFunction($Log, "GeneralLog", $LogCanWork);
-		header ("Location: ErrorPage.php");}
-	elseif ($deleteall == 'yes'){
+		header ( 'location:ErrorPage.php' );
+	}
+	elseif ($deleteall == 'yes')
+	{
 		doquery("TRUNCATE TABLE {{table}}", 'errors');
 		$Log	.=	"\n".$lang['log_errores_title']."\n";
 		$Log	.=	$lang['log_the_user'].$user['username']." ".$lang['log_delete_all_errors']."\n";
 		LogFunction($Log, "GeneralLog", $LogCanWork);
-		header ("Location: ErrorPage.php");}
+		header ( 'location:ErrorPage.php' );
+	}
 
-	display(parsetemplate(gettemplate('adm/ErrorMessagesBody'), $parse), false, '', true, false);
+	display(parsetemplate(gettemplate('adm/ErrorMessagesBody'), $parse), FALSE, '', TRUE, FALSE);
 
 ?>

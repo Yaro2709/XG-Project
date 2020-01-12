@@ -1,31 +1,17 @@
-<?PHP
+<?php
 
-##############################################################################
-# *																			 #
-# * XG PROYECT																 #
-# *  																		 #
-# * @copyright Copyright (C) 2008 - 2009 By lucky from xgproyect.net      	 #
-# *																			 #
-# *																			 #
-# *  This program is free software: you can redistribute it and/or modify    #
-# *  it under the terms of the GNU General Public License as published by    #
-# *  the Free Software Foundation, either version 3 of the License, or       #
-# *  (at your option) any later version.									 #
-# *																			 #
-# *  This program is distributed in the hope that it will be useful,		 #
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of			 #
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the			 #
-# *  GNU General Public License for more details.							 #
-# *																			 #
-##############################################################################
+/**
+ * @project XG Proyect
+ * @version 2.10.x build 0000
+ * @copyright Copyright (C) 2008 - 2016
+ */
 
-define('INSIDE'  , true);
-define('INSTALL' , false);
-define('IN_ADMIN', true);
+define('INSIDE'  , TRUE);
+define('INSTALL' , FALSE);
+define('IN_ADMIN', TRUE);
+define('XGP_ROOT', './../');
 
-$xgp_root = './../';
-include($xgp_root . 'extension.inc.php');
-include($xgp_root . 'common.'.$phpEx);
+include(XGP_ROOT . 'global.php');
 
 if ($user['authlevel'] < 1) die(message ($lang['404_page']));
 
@@ -56,9 +42,9 @@ $ConfigTable	=
         	<th ".$onMouseOverIE." class=\"ForIE\"><a href=\"ConfigStatsPage.php\" target=\"Hauptframe\">".$lang['mu_stats_options']."</a></th>
     	</tr>
 		</table>";
-		
-		
-$EditTable	= 
+
+
+$EditTable	=
 		"<table width=\"150\" class=\"s\">
     	<tr>
         	<td colspan=\"2\" class=\"t\">".$lang['mu_users_settings']."</td>
@@ -73,7 +59,9 @@ $EditTable	=
         	<th ".$onMouseOverIE." class=\"ForIE\"><a href=\"BanPage.php\" target=\"Hauptframe\">".$lang['mu_ban_options']."</a></th>
     	</tr>
 		</table>";
-		
+
+
+
 $ViewTable	=
 		"<table width=\"150\" class=\"s\">
     	<tr>
@@ -107,18 +95,13 @@ $ViewTable	=
         	<th ".$onMouseOverIE." class=\"ForIE\"><a href=\"SearchingPage.php\" target=\"Hauptframe\">".$lang['mu_search_page']."</a></th>
     	</tr>
 		</table>";
-		
-		
+
+
 $ToolsTable	=
 		"<table width=\"150\" class=\"s\">
     	<tr>
         	<td colspan=\"2\" class=\"t\">".$lang['mu_tools']."</td>
     	</tr>
-
-		<tr>
-        	<th ".$onMouseOverIE." class=\"ForIE\"><a href=\"chat.php\" target=\"Hauptframe\">".$lang['chat_title']."</a></th>
-    	</tr>
-
 		<tr>
         	<th ".$onMouseOverIE." class=\"ForIE\"><a href=\"GlobalMessagePage.php\" target=\"Hauptframe\">".$lang['mu_global_message']."</a></th>
     	</tr>
@@ -144,7 +127,7 @@ if($user['authlevel'] == 1)
 // OPERADORES
 if($user['authlevel'] == 2)
 {
-	if($Observation == 1) $parse['ViewTable']	=	$ViewTable; 
+	if($Observation == 1) $parse['ViewTable']	=	$ViewTable;
 	if($EditUsers 	== 1) $parse['EditTable']	=	$EditTable;
 	if($ConfigGame 	== 1) $parse['ConfigTable']	=	$ConfigTable;
 	if($ToolsCanUse == 1) $parse['ToolsTable']	=	$ToolsTable;
@@ -161,5 +144,5 @@ if($user['authlevel'] == 3)
 
 
 
-display( parsetemplate(gettemplate('adm/menu'), $parse), false, '', true, false);
+display( parsetemplate(gettemplate('adm/menu'), $parse), FALSE, '', TRUE, FALSE);
 ?>
